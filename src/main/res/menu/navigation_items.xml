@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".WeatherActivity">
+
+    <item
+        android:id="@+id/account"
+        android:icon="@drawable/lemons"
+        android:title="@string/account" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/lemons"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/cart"
+        android:icon="@drawable/lemons"
+        android:title="@string/cart" />
+
+</menu>
