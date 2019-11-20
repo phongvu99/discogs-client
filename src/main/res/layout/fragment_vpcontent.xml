@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    tools:context=".VPContentFragment">
+
+    <ImageView
+        android:id="@+id/img1"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="40dp"
+        android:layout_toLeftOf="@id/img2"
+        android:src="@drawable/weather_icon_002_sunny" />
+
+    <TextView
+        android:id="@+id/txt1"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img1"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="40dp"
+        android:layout_toLeftOf="@id/txt2"
+        android:text="A"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:id="@+id/img2"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/weather_icon_004_rainy" />
+
+    <TextView
+        android:id="@+id/txt2"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img2"
+        android:layout_centerInParent="true"
+        android:text="B"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:id="@+id/img3"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="40dp"
+        android:layout_toRightOf="@id/img2"
+        android:src="@drawable/weather_icon_005_heavy_rain" />
+
+    <TextView
+        android:id="@+id/txt3"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img3"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="40dp"
+        android:layout_toRightOf="@id/txt2"
+        android:text="C"
+        android:textAlignment="center" />
+
+</RelativeLayout>
