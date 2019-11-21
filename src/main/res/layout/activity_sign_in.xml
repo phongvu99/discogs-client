@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SignIn">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text11"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/text5"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/username1"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:inputType="text"
+            android:text=""
+            android:autofillHints="@string/text5"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/text7"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/password1"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:inputType="textPassword"
+            android:text=""
+            android:autofillHints="@string/text5"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/create_account1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text12"
+        android:layout_marginTop="10dp"
+        android:background="@color/green"
+        android:textColor="@color/white"
+        android:layout_marginHorizontal="20dp"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/text4"
+        android:textAlignment="center"
+        android:textColor="@color/black"/>
+
+    <Button
+        android:id="@+id/facebook1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:text="@string/text13"
+        android:textSize="15dp"
+        android:textColor="@color/white"
+        android:background="@color/blue"/>
+
+    <Button
+        android:id="@+id/google1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/red"
+        android:text="@string/text14"
+        android:textColor="@color/white"
+        android:textSize="15dp" />
+
+</LinearLayout>
