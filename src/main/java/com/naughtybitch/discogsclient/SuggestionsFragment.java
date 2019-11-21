@@ -1,7 +1,5 @@
-package vn.edu.usth.mobileapplicationdevelopment;
+package com.naughtybitch.discogsclient;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class VPContentFragment extends Fragment {
+public class SuggestionsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -23,11 +21,11 @@ public class VPContentFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public VPContentFragment() {
+    public SuggestionsFragment() {
         // Required empty public constructor
     }
-    public static VPContentFragment newInstance(String param1, String param2) {
-        VPContentFragment fragment = new VPContentFragment();
+    public static SuggestionsFragment newInstance(String param1, String param2) {
+        SuggestionsFragment fragment = new SuggestionsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -47,8 +45,6 @@ public class VPContentFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_vpcontent, container, false);
-        return v;
+        return inflater.inflate(R.layout.fragment_suggestions, container, false);
     }
 }

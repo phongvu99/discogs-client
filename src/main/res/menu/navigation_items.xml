@@ -5,16 +5,16 @@
     tools:context=".WeatherActivity">
 
     <item
-        android:id="@+id/account"
+        android:id="@+id/home"
         android:icon="@drawable/lemons"
-        android:title="@string/account" />
+        android:title="@string/home" />
+    <item
+        android:id="@+id/market"
+        android:icon="@drawable/lemons"
+        android:title="@string/market" />
     <item
         android:id="@+id/settings"
         android:icon="@drawable/lemons"
         android:title="@string/settings" />
-    <item
-        android:id="@+id/cart"
-        android:icon="@drawable/lemons"
-        android:title="@string/cart" />
 
 </menu>

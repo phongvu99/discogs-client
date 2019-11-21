@@ -8,7 +8,7 @@
     tools:context=".DiscogsActivity">
 
     <fragment
-        class="vn.edu.usth.mobileapplicationdevelopment.RecommendationFragment"
+        class="com.naughtybitch.discogsclient.DetailsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>
