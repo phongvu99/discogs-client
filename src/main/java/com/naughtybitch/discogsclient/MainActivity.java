@@ -99,12 +99,6 @@ public class MainActivity extends AppCompatActivity
         // Add the fragment to the 'fragment_container' FrameLayout
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
 
-        // HomeFragmentPagerAdapter
-//        HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager());
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-//        viewPager.setOffscreenPageLimit(3);
-//        viewPager.setAdapter(pagerAdapter);
-
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
