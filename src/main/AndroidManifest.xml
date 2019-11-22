@@ -9,11 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".LoginActivity">
-
-        </activity>
-        <activity android:name=".SignUp" />
-        <activity android:name=".SignIn" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".SignInActivity" />
         <activity android:name=".SearchQuery" />
         <activity android:name=".SearchableActivity">
             <intent-filter>

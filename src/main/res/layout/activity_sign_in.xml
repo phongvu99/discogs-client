@@ -4,16 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SignIn">
+    tools:context=".SignInActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/discogs_logo_simplified">
+
+    </ImageView>
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="@string/text11"
         android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textColor="@color/light_black"
+        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,23 +32,23 @@
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/text5"
-            android:textColor="@color/black" />
+            android:textColor="@color/light_black" />
 
         <EditText
             android:id="@+id/username1"
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="2"
             android:autofillHints="@string/text5"
             android:hint="@string/text5"
-            android:inputType="text"
-            android:text="" />
+            android:inputType="text" />
 
     </LinearLayout>
 
@@ -51,28 +60,29 @@
 
         <TextView
             android:id="@+id/textView8"
-            android:layout_width="70dp"
-            android:layout_height="35dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/text7"
-            android:textColor="@color/black" />
+            android:textColor="@color/light_black" />
 
         <EditText
             android:id="@+id/password1"
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:autofillHints="@string/text5"
-            android:hint="@string/text5"
-            android:inputType="textPassword"
-            android:text="" />
+            android:layout_weight="2"
+            android:autofillHints="@string/text7"
+            android:hint="@string/text7"
+            android:inputType="textPassword" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/create_account1"
+        style="?attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -89,10 +99,11 @@
         android:layout_marginTop="10dp"
         android:text="@string/text4"
         android:textAlignment="center"
-        android:textColor="@color/black" />
+        android:textColor="@color/dark_black" />
 
     <Button
         android:id="@+id/facebook"
+        style="?attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -101,18 +112,19 @@
         android:background="@color/blue"
         android:text="@string/text13"
         android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/google"
+        style="?attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:background="@color/red"
+        android:background="@color/blue_sky"
         android:text="@string/text14"
         android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:textSize="12sp" />
 
 </LinearLayout>

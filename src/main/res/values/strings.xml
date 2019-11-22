@@ -9,8 +9,9 @@
     <string name="home">Home</string>
     <string name="market">Market</string>
     <string name="cart">Cart</string>
+    <string name="headline">Bad New For Music Industry!!!</string>
+    <string name="headline2">Smash Mouth release All Star Director Cut</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
@@ -21,4 +22,22 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <!-- Sign in + Sign up -->
+    <string name="text1">Register Using Facebook</string>
+    <string name="text2">Register Using Google</string>
+    <string name="text3">We do not post anything to Facebook or Google without your permission</string>
+    <string name="text4">OR</string>
+    <string name="text5">Username</string>
+    <string name="text6">Email Address</string>
+    <string name="text7">Password</string>
+    <string name="text8">Confirm Password</string>
+    <string name="text9">I accept the Privacy Policy and I agree to the Terms of Service, including minimum and age requirements</string>
+    <string name="text10">Create Account</string>
+    <string name="text11">Log In to Discogs</string>
+    <string name="text12">Log In</string>
+    <string name="text13">Facebook Log In</string>
+    <string name="text14">Google Log In</string>
+    <string name="text15">Sign In</string>
+    <string name="text16">Sign Up</string>
 </resources>

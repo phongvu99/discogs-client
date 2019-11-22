@@ -11,7 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
+
 
 import android.content.Intent;
 import android.net.Uri;
@@ -127,6 +127,16 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+    }
+
+    public void signIn (View view){
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
+    }
+
+    public void signUp (View view){
+        Intent intent1 = new Intent(this, SignUpActivity.class);
+        startActivity(intent1);
     }
 
     @Override

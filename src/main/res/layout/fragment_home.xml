@@ -16,6 +16,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <include
+                layout="@layout/fragment_new_feeds"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </include>
+
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
@@ -24,6 +31,13 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             </androidx.viewpager.widget.ViewPager>
+
+            <include
+                layout="@layout/fragment_get_started"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </include>
 
             <ImageView
                 android:layout_width="match_parent"

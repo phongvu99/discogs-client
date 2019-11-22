@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class SignUp extends AppCompatActivity {
-
+public class SignInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_sign_in);
 
         Button f = (Button) findViewById(R.id.facebook);
         f.setOnClickListener(new View.OnClickListener() {
@@ -31,12 +30,11 @@ public class SignUp extends AppCompatActivity {
         g.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url1 = "http://www.gmail.com";
-                Intent i1 = new Intent(Intent.ACTION_VIEW);
-                i1.setData(Uri.parse(url1));
-                startActivity(i1);
+                String url = "http://www.google.com/ncr";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
         });
-
     }
 }
