@@ -14,12 +14,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewFeeds.OnFragmentInteractionListener} interface
+ * {@link NewFeedsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewFeeds#newInstance} factory method to
+ * Use the {@link NewFeedsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewFeeds extends Fragment {
+public class NewFeedsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +31,7 @@ public class NewFeeds extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public NewFeeds() {
+    public NewFeedsFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +41,11 @@ public class NewFeeds extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewFeeds.
+     * @return A new instance of fragment NewFeedsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewFeeds newInstance(String param1, String param2) {
-        NewFeeds fragment = new NewFeeds();
+    public static NewFeedsFragment newInstance(String param1, String param2) {
+        NewFeedsFragment fragment = new NewFeedsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

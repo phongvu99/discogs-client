@@ -26,11 +26,22 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="400dp"
                 android:background="@drawable/moonlit_asteroid"
+                android:fitsSystemWindows="true"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             </androidx.viewpager.widget.ViewPager>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="@string/get_started"
+                android:textSize="24sp">
+
+            </TextView>
 
             <include
                 layout="@layout/fragment_get_started"

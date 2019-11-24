@@ -11,6 +11,11 @@
     <string name="cart">Cart</string>
     <string name="headline">Bad New For Music Industry!!!</string>
     <string name="headline2">Smash Mouth release All Star Director Cut</string>
+    <string name="a" translatable="false">A</string>
+    <string name="b" translatable="false">B</string>
+    <string name="c" translatable="false">C</string>
+    <string name="lemon">Lemon</string>
+    <string name="get_started">Get Started</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>
@@ -29,15 +34,24 @@
     <string name="text3">We do not post anything to Facebook or Google without your permission</string>
     <string name="text4">OR</string>
     <string name="text5">Username</string>
-    <string name="text6">Email Address</string>
+    <string name="text6">"Email "</string>
     <string name="text7">Password</string>
     <string name="text8">Confirm Password</string>
     <string name="text9">I accept the Privacy Policy and I agree to the Terms of Service, including minimum and age requirements</string>
     <string name="text10">Create Account</string>
-    <string name="text11">Log In to Discogs</string>
-    <string name="text12">Log In</string>
-    <string name="text13">Facebook Log In</string>
-    <string name="text14">Google Log In</string>
+    <string name="text11">Login to Discogs</string>
+    <string name="text12">Login</string>
+    <string name="text13">Facebook Login</string>
+    <string name="text14">Google Login</string>
     <string name="text15">Sign In</string>
     <string name="text16">Sign Up</string>
+
+    <!-- Album info fragment -->
+    <string name="bio">Bio:</string>
+    <string name="cd">CD:</string>
+    <string name="year">Year:</string>
+    <string name="artist">Artist:</string>
+    <string name="genre">Genre:</string>
+    <string name="more_by">More by this artist:</string>
+
 </resources>
