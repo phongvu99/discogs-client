@@ -81,7 +81,7 @@ public class MarketFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onSettingsFragmentInteraction(uri);
+            mListener.onMarketFragmentInteraction(uri);
         }
     }
 
@@ -114,6 +114,6 @@ public class MarketFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onSettingsFragmentInteraction(Uri uri);
+        void onMarketFragmentInteraction(Uri uri);
     }
 }

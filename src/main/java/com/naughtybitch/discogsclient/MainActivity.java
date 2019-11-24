@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         // TODO: Implement into SearchableActivity
         searchQueries = new String[]{"TextView", "ListView", "SearchView",
                 "RatingBar", "ToolBar", "Button", "EditText", "ToggleButton",
-                "ImageView", "SlidingDrawer", "Android"};
+                 "ImageView", "SlidingDrawer", "Android"};
 
         list = (ListView) findViewById(R.id.list_view);
         for (String searchQuery : searchQueries) {
@@ -129,12 +129,12 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void signIn (View view){
+    public void signIn(View view) {
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
     }
 
-    public void signUp (View view){
+    public void signUp(View view) {
         Intent intent1 = new Intent(this, SignUpActivity.class);
         startActivity(intent1);
     }
@@ -155,17 +155,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAccountFragmentInteraction(Uri uri) {
+    public void onHomeFragmentInteraction(Uri uri) {
         // Do stuff
     }
 
     @Override
-    public void onSettingsFragmentInteraction(Uri uri) {
+    public void onMarketFragmentInteraction(Uri uri) {
         // Do different stuff
     }
 
     @Override
-    public void onCartFragmentInteraction(Uri uri) {
+    public void onSettingsFragmentInteraction(Uri uri) {
         // Do something
     }
 

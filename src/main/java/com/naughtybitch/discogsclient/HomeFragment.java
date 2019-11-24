@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onAccountFragmentInteraction(uri);
+            mListener.onHomeFragmentInteraction(uri);
         }
     }
 
@@ -120,6 +120,6 @@ public class HomeFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onAccountFragmentInteraction(Uri uri);
+        void onHomeFragmentInteraction(Uri uri);
     }
 }

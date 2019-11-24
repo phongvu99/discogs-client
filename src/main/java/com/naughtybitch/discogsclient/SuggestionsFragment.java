@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,43 +51,42 @@ public class SuggestionsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_suggestions, container, false);
-        ImageButton imgbtn = (ImageButton) v.findViewById(R.id.img1);
-        ImageButton imgbtnact = (ImageButton) v.findViewById(R.id.img2);
-        ImageButton imgbtn2 = (ImageButton) v.findViewById(R.id.img3);
-        imgbtn2.setOnClickListener(new View.OnClickListener() {
+        ImageButton img_btn = (ImageButton) v.findViewById(R.id.img1);
+        ImageButton img_btn_act = (ImageButton) v.findViewById(R.id.img2);
+        ImageButton img_btn2 = (ImageButton) v.findViewById(R.id.img3);
+        img_btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Click", "Clicked #3 image");
-                startActivity(new Intent(getActivity(), SuggestionActivity.class));
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
             }
         });
-        imgbtnact.setOnClickListener(new View.OnClickListener() {
+        img_btn_act.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Click", "Clicked #2 image");
-                startActivity(new Intent(getActivity(), SuggestionActivity.class));
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
             }
         });
 
-        imgbtn.setOnClickListener(new View.OnClickListener() {
+        img_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Click", "Clicked #1 image");
-                startActivity(new Intent(getActivity(), SuggestionActivity.class));
-////                 Create new fragment and transaction
-//                Fragment newFragment = new RecommendationFragment();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//
-//// Replace whatever is in the fragment_container view with this fragment,
-//// and add the transaction to the back stack
-//                transaction.replace(R.id.rl_container, newFragment);
-//                transaction.addToBackStack(null);
-//
-//// Commit the transaction
-//                transaction.commit();
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+                ////                 Create new fragment and transaction
+                //                Fragment newFragment = new RecommendationFragment();
+                //                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                //
+                //// Replace whatever is in the fragment_container view with this fragment,
+                //// and add the transaction to the back stack
+                //                transaction.replace(R.id.rl_container, newFragment);
+                //                transaction.addToBackStack(null);
+                //
+                //// Commit the transaction
+                //                transaction.commit();
             }
         });
         return v;
     }
-
 }
