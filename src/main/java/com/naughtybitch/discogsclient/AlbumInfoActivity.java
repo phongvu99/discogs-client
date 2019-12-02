@@ -13,7 +13,7 @@ public class AlbumInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_album_info);
+        setContentView(R.layout.activity_album_info);
         PagerAdapter adapter = new HomeFragmentPagerAdapter(getSupportFragmentManager());
         ImageAdapter adapter1 = new ImageAdapter(this);
         ViewPager pager1 = (ViewPager) findViewById(R.id.pager1);

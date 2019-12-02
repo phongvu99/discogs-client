@@ -16,6 +16,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:editTextColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
+        <item name="android:windowBackground">@drawable/bg_launcher</item>
     </style>
 
 </resources>

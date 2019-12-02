@@ -16,6 +16,8 @@
     <string name="c" translatable="false">C</string>
     <string name="lemon">Lemon</string>
     <string name="get_started">Get Started</string>
+    <string name="logo">Logo</string>
+    <string name="get_started_desc">Discover music on Discogs, the largest online music database. Buy and sell music with collectors in the Marketplace.</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>
@@ -45,6 +47,7 @@
     <string name="text14">Google Login</string>
     <string name="text15">Sign In</string>
     <string name="text16">Sign Up</string>
+    <string name="guest_login">Guest Login</string>
 
     <!-- Album info fragment -->
     <string name="bio">Bio:</string>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".AlbumInfoFragment">
+    tools:context=".AlbumInfoActivity">
 
     <LinearLayout
         android:id="@+id/linear_container"

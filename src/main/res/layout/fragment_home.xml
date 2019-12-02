@@ -33,23 +33,6 @@
 
             </androidx.viewpager.widget.ViewPager>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:text="@string/get_started"
-                android:textSize="24sp">
-
-            </TextView>
-
-            <include
-                layout="@layout/fragment_get_started"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </include>
-
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

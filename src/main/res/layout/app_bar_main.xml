@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/light_black"
+        android:clipToPadding="false"
         android:paddingTop="25dp"
         android:paddingBottom="10dp"
         android:theme="@style/CustomTheme">
@@ -18,6 +19,8 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="10dp"
             android:elevation="4dp">
 
         </androidx.appcompat.widget.Toolbar>

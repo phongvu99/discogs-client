@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class AlbumInfoFragment extends Fragment {
-    public AlbumInfoFragment() {
+public class AlbumInfoFragment_TODO extends Fragment {
+    public AlbumInfoFragment_TODO() {
         // Required empty public constructor
     }
 
@@ -19,7 +19,7 @@ public class AlbumInfoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_album_info, container, false);
+        View v = inflater.inflate(R.layout.activity_main, container, false);
 //        ImageButton imgbtn = (ImageButton)v.findViewById(R.id.img1);
 //        ImageButton imgbtnact = (ImageButton)v.findViewById(R.id.img2);
 //        ImageButton imgbtn2 = (ImageButton)v.findViewById(R.id.img3);

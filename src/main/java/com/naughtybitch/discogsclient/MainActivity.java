@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         // TODO: Implement into SearchableActivity
         searchQueries = new String[]{"TextView", "ListView", "SearchView",
                 "RatingBar", "ToolBar", "Button", "EditText", "ToggleButton",
-                 "ImageView", "SlidingDrawer", "Android"};
+                "ImageView", "SlidingDrawer", "Android"};
 
         list = (ListView) findViewById(R.id.list_view);
         for (String searchQuery : searchQueries) {
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
         }
@@ -129,16 +130,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void signIn(View view) {
-        Intent intent = new Intent(this, SignInActivity.class);
-        startActivity(intent);
-    }
-
-    public void signUp(View view) {
-        Intent intent1 = new Intent(this, SignUpActivity.class);
-        startActivity(intent1);
-    }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -151,7 +142,10 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         if (drawerLayout.isDrawerVisible(GravityCompat.START))
             this.drawerLayout.closeDrawer(GravityCompat.START);
-        else super.onBackPressed();
+        else {
+            super.onBackPressed();
+            finish();
+        }
     }
 
     @Override
