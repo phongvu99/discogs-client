@@ -15,20 +15,13 @@ import android.widget.ImageButton;
 
 
 public class SuggestionsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public SuggestionsFragment() {
-        // Required empty public constructor
     }
 
-    public static SuggestionsFragment newInstance(String param1, String param2) {
+    static SuggestionsFragment newInstance(String param1, String param2) {
         SuggestionsFragment fragment = new SuggestionsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -37,54 +30,107 @@ public class SuggestionsFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_suggestions, container, false);
-        ImageButton img_btn = (ImageButton) v.findViewById(R.id.img1);
-        ImageButton img_btn_act = (ImageButton) v.findViewById(R.id.img2);
-        ImageButton img_btn2 = (ImageButton) v.findViewById(R.id.img3);
-        img_btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #3 image");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_act.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #2 image");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
+        ImageButton img_btn_1 = v.findViewById(R.id.img1);
+        ImageButton img_btn_2 = v.findViewById(R.id.img2);
+        ImageButton img_btn_3 = v.findViewById(R.id.img3);
+        ImageButton img_btn_4 = v.findViewById(R.id.img4);
+        ImageButton img_btn_5 = v.findViewById(R.id.img5);
+        ImageButton img_btn_6 = v.findViewById(R.id.img6);
+        ImageButton img_btn_7 = v.findViewById(R.id.img7);
+        ImageButton img_btn_8 = v.findViewById(R.id.img8);
+        ImageButton img_btn_9 = v.findViewById(R.id.img9);
+        ImageButton img_btn_10 = v.findViewById(R.id.img10);
+        ImageButton img_btn_11 = v.findViewById(R.id.img11);
+        ImageButton img_btn_view_all = v.findViewById(R.id.img_view_all);
 
-        img_btn.setOnClickListener(new View.OnClickListener() {
+
+        img_btn_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Click", "Clicked #1 image");
+                Log.d("Click", "Clicked #1 album");
                 startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-                ////                 Create new fragment and transaction
-                //                Fragment newFragment = new RecommendationFragment();
-                //                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                //
-                //// Replace whatever is in the fragment_container view with this fragment,
-                //// and add the transaction to the back stack
-                //                transaction.replace(R.id.rl_container, newFragment);
-                //                transaction.addToBackStack(null);
-                //
-                //// Commit the transaction
-                //                transaction.commit();
+            }
+        });
+        img_btn_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #2 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #3 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #4 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #5 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #6 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #7 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #8 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #9 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #10 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked #11 album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
+            }
+        });
+        img_btn_view_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "Clicked view all album");
+                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
             }
         });
         return v;

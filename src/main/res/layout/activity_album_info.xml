@@ -62,10 +62,11 @@
                 android:textSize="24sp" />
         </LinearLayout>
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/pager"
+        <fragment
+            android:id="@+id/suggestion"
+            class="com.naughtybitch.discogsclient.SuggestionsFragment"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/test_img"
