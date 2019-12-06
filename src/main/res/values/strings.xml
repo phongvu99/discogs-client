@@ -57,4 +57,15 @@
     <string name="genre">Genre:</string>
     <string name="more_by">More by this artist:</string>
 
+    <!-- Profile -->
+    <string name="val">Collection Value</string>
+    <string name="minimum">$0</string>
+    <string name="median">$0</string>
+    <string name="maximum">$0</string>
+    <string name="lists">Lists</string>
+    <string name="purchases">Purchases</string>
+    <string name="orders">Orders</string>
+    <string name="contributions">Contributions</string>
+    <string name="description">Description</string>
+
 </resources>
