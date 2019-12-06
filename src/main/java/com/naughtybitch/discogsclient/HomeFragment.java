@@ -5,11 +5,26 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -20,7 +35,7 @@ import android.view.ViewGroup;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,6 +46,75 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    public void buttonOnClickListener(View v) {
+        Button send_request = v.findViewById(R.id.send_request);
+        send_request.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case (R.id.send_request):
+                Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
+                sendRequest();
+        }
+    }
+
+    public void sendRequest() {
+        // 1) create a java calendar instance
+        Calendar calendar = Calendar.getInstance();
+
+        // 2) get a java.util.Date from the calendar instance.
+        //    this date will represent the current instant, or "now".
+        java.util.Date now = calendar.getTime();
+
+        // 3) a java current time (now) instance
+        final java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
+        Log.i("time_stamp", currentTimestamp.toString());
+
+        String tag_string_request = "string_request";
+        String tag_json_object = "json_object_request";
+        final TextView textView = (TextView) getActivity().findViewById(R.id.response);
+        // Instantiate the RequestQueue
+        String url = "https://api.discogs.com/database/search?release_title=everyday+life&artist=coldplay&per_page=3&page=1";
+
+        // Request a string response from the provide URL.
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i("response", "Response is " + response);
+                        textView.setText("Response is: " + response.toString().substring(0, 500));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                textView.setText("That didn't work!");
+                textView.setText("Response is: " + error);
+            }
+
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+//                headers.put("Content-Type:", "application/x-www-form-urlencoded");
+//                headers.put("Authorization:",
+//                        "OAuth oauth_consumer_key=\"zrNFOdbKoUvMXDxixdPY\", " +
+//                                "oauth_nonce=\"" + currentTimestamp.toString() + "\", " +
+//                                "oauth_signature=\"NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ&\", " +
+//                                "oauth_signature_method=\"PLAINTEXT\", " +
+//                                "oauth_timestamp=\"" + currentTimestamp.toString() + "\", " +
+//                                "oauth_callback=\"none\"");
+//                headers.put("User-Agent:", "Discogsnect/0.1 +http://discogsnect.com");
+                headers.put("Authorization", "Discogs key=zrNFOdbKoUvMXDxixdPY" + "," + "secret=NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ");
+                return headers;
+            }
+        };
+        // Add the request to the RequestQueue
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_object);
+    }
 
     public HomeFragment() {
         // Required empty public constructor
@@ -64,9 +148,7 @@ public class HomeFragment extends Fragment {
     }
 
     public static HomeFragment newInstance() {
-        
         Bundle args = new Bundle();
-        
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
@@ -76,18 +158,15 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getChildFragmentManager());
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        viewPager.setOffscreenPageLimit(3);
-        viewPager.setAdapter(pagerAdapter);
+        buttonOnClickListener(view);
         return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onHomeFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -120,6 +199,6 @@ public class HomeFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onHomeFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 }

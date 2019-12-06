@@ -3,18 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".WeatherActivity">
+    <group
+        android:id="@+id/group_divider"
+        android:checkableBehavior="single"
+        android:menuCategory="container">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/lemons"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/market"
+            android:icon="@drawable/lemons"
+            android:title="@string/market" />
+        <item
+            android:id="@+id/explore"
+            android:icon="@drawable/icon_search"
+            android:title="@string/explore" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/lemons"
+            android:title="@string/settings" />
+    </group>
 
-    <item
-        android:id="@+id/home"
-        android:icon="@drawable/lemons"
-        android:title="@string/home" />
-    <item
-        android:id="@+id/market"
-        android:icon="@drawable/lemons"
-        android:title="@string/market" />
-    <item
-        android:id="@+id/settings"
-        android:icon="@drawable/lemons"
-        android:title="@string/settings" />
 
 </menu>

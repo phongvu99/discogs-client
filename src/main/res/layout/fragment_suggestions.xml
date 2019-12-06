@@ -1,83 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/delicate"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
     tools:context=".SuggestionsFragment">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+    <include
+        layout="@layout/suggestion_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/img1"
-            style="?attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/lemon"
-            android:scaleType="fitCenter"
-            android:src="@drawable/weather_icon_002_sunny" />
+    </include>
 
-        <TextView
-            android:id="@+id/txt1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/a"
-            android:textAlignment="center" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/img2"
-            style="?attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/lemon"
-            android:scaleType="fitCenter"
-            android:src="@drawable/weather_icon_004_rainy" />
-
-        <TextView
-            android:id="@+id/txt2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/b"
-            android:textAlignment="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/img3"
-            style="?attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/lemon"
-            android:scaleType="fitCenter"
-            android:src="@drawable/weather_icon_005_heavy_rain" />
-
-        <TextView
-            android:id="@+id/txt3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/c"
-            android:textAlignment="center" />
-    </LinearLayout>
-
-</LinearLayout>
+</HorizontalScrollView>
