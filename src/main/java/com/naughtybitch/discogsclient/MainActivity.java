@@ -122,8 +122,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        navigateToFragment(SettingsFragment.newInstance());
-                        Toast.makeText(MainActivity.this, "SettingsFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
                     case R.id.explore:
                         Intent intent = new Intent(MainActivity.this, SearchActivity.class);
