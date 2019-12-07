@@ -5,24 +5,23 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity"
-    android:clipToPadding="true">
+    tools:context=".MainActivity">
 
-    <include
-        layout="@layout/app_bar_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <include layout="@layout/app_bar_main">
 
     </include>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start|left"
+        android:layout_gravity="start"
+        android:background="@color/light_black"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/navigation_header"
+        app:itemTextColor="@color/white"
         app:menu="@menu/navigation_items"
         tools:ignore="RtlHardcoded">
 

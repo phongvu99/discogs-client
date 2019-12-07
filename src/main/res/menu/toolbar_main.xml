@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:orderInCategory="150"
+        android:id="@+id/search"
+        android:icon="@drawable/icon_search"
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
+    <item
+        android:orderInCategory="100"
+        android:id="@+id/cart"
+        android:icon="@drawable/icon_cart"
+        android:title="@string/cart"
+        app:showAsAction="ifRoom" />
+
+</menu>

@@ -9,125 +9,139 @@
     android:orientation="vertical"
     tools:context=".SignInActivity">
 
-    <ImageView
+    <include
+        layout="@layout/app_bar_main"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/discogs_logo_simplified">
+        android:layout_height="wrap_content">
 
-    </ImageView>
+    </include>
 
-    <TextView
-        android:id="@+id/textView7"
+    <WebView
+        android:id="@+id/web_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/text11"
-        android:textAlignment="center"
-        android:textColor="@color/light_black"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+    </WebView>
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/text5"
-            android:textColor="@color/light_black" />
+<!--    <ImageView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:src="@drawable/discogs_logo_simplified">-->
 
-        <EditText
-            android:id="@+id/username1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="2"
-            android:autofillHints="@string/text5"
-            android:hint="@string/text5"
-            android:inputType="text" />
+<!--    </ImageView>-->
 
-    </LinearLayout>
+<!--    <TextView-->
+<!--        android:id="@+id/textView7"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:text="@string/text11"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="@color/light_black"-->
+<!--        android:textSize="24sp" />-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:orientation="horizontal">-->
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/text7"
-            android:textColor="@color/light_black" />
+<!--        <TextView-->
+<!--            android:id="@+id/textView3"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/text5"-->
+<!--            android:textColor="@color/light_black" />-->
 
-        <EditText
-            android:id="@+id/password1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="2"
-            android:autofillHints="@string/text7"
-            android:hint="@string/text7"
-            android:inputType="textPassword" />
+<!--        <EditText-->
+<!--            android:id="@+id/username1"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_weight="2"-->
+<!--            android:autofillHints="@string/text5"-->
+<!--            android:hint="@string/text5"-->
+<!--            android:inputType="text" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
-    <Button
-        android:id="@+id/create_account1"
-        style="?attr/buttonBarButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@color/green"
-        android:text="@string/text12"
-        android:textColor="@color/white" />
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:orientation="horizontal">-->
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/text4"
-        android:textAlignment="center"
-        android:textColor="@color/dark_black" />
+<!--        <TextView-->
+<!--            android:id="@+id/textView8"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/text7"-->
+<!--            android:textColor="@color/light_black" />-->
 
-    <Button
-        android:id="@+id/facebook"
-        style="?attr/buttonBarButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@color/blue"
-        android:text="@string/text13"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
+<!--        <EditText-->
+<!--            android:id="@+id/password1"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_weight="2"-->
+<!--            android:autofillHints="@string/text7"-->
+<!--            android:hint="@string/text7"-->
+<!--            android:inputType="textPassword" />-->
 
-    <Button
-        android:id="@+id/google"
-        style="?attr/buttonBarButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:background="@color/blue_sky"
-        android:text="@string/text14"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
+<!--    </LinearLayout>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/create_account1"-->
+<!--        style="?attr/buttonBarButtonStyle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:background="@color/green"-->
+<!--        android:text="@string/text12"-->
+<!--        android:textColor="@color/white" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:text="@string/text4"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="@color/dark_black" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/facebook"-->
+<!--        style="?attr/buttonBarButtonStyle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:background="@color/blue"-->
+<!--        android:text="@string/text13"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="12sp" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/google"-->
+<!--        style="?attr/buttonBarButtonStyle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:background="@color/blue_sky"-->
+<!--        android:text="@string/text14"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="12sp" />-->
 
 </LinearLayout>

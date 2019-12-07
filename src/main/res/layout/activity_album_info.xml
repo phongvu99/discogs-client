@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/pager1"
+            android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="420dp"
             android:background="@color/light_black" />
@@ -62,10 +62,13 @@
                 android:textSize="24sp" />
         </LinearLayout>
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/pager"
+        <fragment
+            android:id="@+id/more_by"
+            android:name="com.naughtybitch.discogsclient.SuggestionsFragment"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="wrap_content">
+
+        </fragment>
 
         <ImageView
             android:id="@+id/test_img"
