@@ -19,9 +19,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -30,12 +33,14 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements HomeFragment.OnFragmentInteractionListener,
         MarketFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener {
+        SettingsFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private MenuItem searchItem;
+    private ImageView imageView;
 
     // Declare Variables
     ListView list;
@@ -50,7 +55,29 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // Custom ActionBar
+        ImageView imageView = (ImageView) findViewById(R.id.toolbar_background_image);
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.background));
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    collapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
         setSupportActionBar(myToolbar);
 
         // TODO: Implement into SearchableActivity
@@ -117,6 +144,10 @@ public class MainActivity extends AppCompatActivity
                         navigateToFragment(HomeFragment.newInstance());
                         Toast.makeText(MainActivity.this, "HomeFragment", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.profile:
+                        navigateToFragment(ProfileFragment.newInstance());
+                        Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.market:
                         navigateToFragment(MarketFragment.newInstance());
                         Toast.makeText(MainActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
@@ -129,6 +160,12 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                         Toast.makeText(MainActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.explore:
+                        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                        startActivity(intent);
+                        Toast.makeText(MainActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+
                     default:
                         return true;
                 }

@@ -23,7 +23,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class SearchActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
         MarketFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener, ExploreFragment.OnFragmentInteractionListener {
+        SettingsFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener, ExploreFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -80,7 +80,6 @@ public class SearchActivity extends AppCompatActivity implements HomeFragment.On
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.search:
                 navigateToFragment(ExploreFragment.newInstance());
@@ -105,6 +104,10 @@ public class SearchActivity extends AppCompatActivity implements HomeFragment.On
                         Intent intent_main = new Intent(SearchActivity.this, MainActivity.class);
                         Toast.makeText(SearchActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
                         startActivity(intent_main);
+                        break;
+                    case R.id.profile:
+                        navigateToFragment(ProfileFragment.newInstance());
+                        Toast.makeText(SearchActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.market:
                         navigateToFragment(MarketFragment.newInstance());
