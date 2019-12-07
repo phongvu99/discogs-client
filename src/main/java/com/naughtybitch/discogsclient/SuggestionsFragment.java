@@ -13,8 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-
-public class SuggestionsFragment extends Fragment {
+public class SuggestionsFragment extends Fragment implements View.OnClickListener {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -34,7 +35,12 @@ public class SuggestionsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_suggestions, container, false);
+        View view = inflater.inflate(R.layout.fragment_suggestions, container, false);
+        buttonOnClickListener(view);
+        return view;
+    }
+
+    private void buttonOnClickListener(View v) {
         ImageButton img_btn_1 = v.findViewById(R.id.img1);
         ImageButton img_btn_2 = v.findViewById(R.id.img2);
         ImageButton img_btn_3 = v.findViewById(R.id.img3);
@@ -44,95 +50,54 @@ public class SuggestionsFragment extends Fragment {
         ImageButton img_btn_7 = v.findViewById(R.id.img7);
         ImageButton img_btn_8 = v.findViewById(R.id.img8);
         ImageButton img_btn_9 = v.findViewById(R.id.img9);
-        ImageButton img_btn_10 = v.findViewById(R.id.img10);
-        ImageButton img_btn_11 = v.findViewById(R.id.img11);
-        ImageButton img_btn_view_all = v.findViewById(R.id.img_view_all);
+        ImageButton img_btn_view_all = v.findViewById(R.id.view_all);
+        img_btn_1.setOnClickListener(this);
+        img_btn_2.setOnClickListener(this);
+        img_btn_3.setOnClickListener(this);
+        img_btn_4.setOnClickListener(this);
+        img_btn_5.setOnClickListener(this);
+        img_btn_6.setOnClickListener(this);
+        img_btn_7.setOnClickListener(this);
+        img_btn_8.setOnClickListener(this);
+        img_btn_9.setOnClickListener(this);
+        img_btn_view_all.setOnClickListener(this);
+    }
 
-
-        img_btn_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #1 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #2 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #3 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #4 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #5 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #6 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #7 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #8 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #9 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #10 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked #11 album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        img_btn_view_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Click", "Clicked view all album");
-                startActivity(new Intent(getActivity(), AlbumInfoActivity.class));
-            }
-        });
-        return v;
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getActivity(), AlbumInfoActivity.class);
+        switch (v.getId()) {
+            case (R.id.img1):
+                Log.i("test", "test");
+                startActivity(intent);
+                break;
+            case (R.id.img2):
+                startActivity(intent);
+                break;
+            case (R.id.img3):
+                startActivity(intent);
+                break;
+            case (R.id.img4):
+                startActivity(intent);
+                break;
+            case (R.id.img5):
+                startActivity(intent);
+                break;
+            case (R.id.img6):
+                startActivity(intent);
+                break;
+            case (R.id.img7):
+                startActivity(intent);
+                break;
+            case (R.id.img8):
+                startActivity(intent);
+                break;
+            case (R.id.img9):
+                startActivity(intent);
+                break;
+            case (R.id.view_all):
+                startActivity(intent);
+                break;
+        }
     }
 }
