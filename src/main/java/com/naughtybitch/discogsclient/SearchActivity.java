@@ -17,23 +17,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class SearchActivity extends AppCompatActivity implements
-        HomeFragment.OnFragmentInteractionListener,
+public class SearchActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
         MarketFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener,
-        ExploreFragment.OnFragmentInteractionListener,
-        ProfileFragment.OnFragmentInteractionListener {
+        SettingsFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener, ExploreFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private MenuItem searchItem;
-    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +80,11 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
+        switch (item.getItemId()) {
+            case R.id.search:
+                navigateToFragment(ExploreFragment.newInstance());
+                break;
+        }
         if (toggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -115,8 +114,8 @@ public class SearchActivity extends AppCompatActivity implements
                         Toast.makeText(SearchActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        navigateToFragment(SettingsFragment.newInstance());
-                        Toast.makeText(SearchActivity.this, "SettingsFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SearchActivity.this, SettingsActivity.class));
+                        Toast.makeText(SearchActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         navigateToFragment(ExploreFragment.newInstance());

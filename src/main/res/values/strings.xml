@@ -71,4 +71,39 @@
     <string name="contributions">Contributions</string>
     <string name="description">Description</string>
 
+    <!-- Preference Header -->
+    <string name="profile_settings_header">Profile settings</string>
+    <string name="legal_information_header">Legal information</string>
+    <string name="dark_mode">Dark mode</string>
+
+    <!-- Profile Settings Preferences -->
+    <string name="account_settings">Account settings</string>
+    <string name="search_history">Search history</string>
+    <string name="recently_viewed">Recently viewed</string>
+    <string name="privacy">Privacy</string>
+    <string name="buyer_settings">Buyer settings</string>
+    <string name="seller_settings">Seller settings</string>
+
+    <!-- Account Settings Preferences -->
+    <string name="change_email">Change email</string>
+    <string name="name">Name</string>
+    <string name="location">Location</string>
+    <string name="currency">Currency</string>
+    <string name="buying_ship_address">Buying shipping address</string>
+    <string name="notification">Notification</string>
+
+    <!-- Buying Shipping Address -->
+    <string name="full_name">Full name</string>
+    <string name="address">Address</string>
+    <string name="city_town">City/Town</string>
+    <string name="country">Country</string>
+    <string name="region_state">Region/State</string>
+    <string name="postal_code">Postal code</string>
+    <string name="phone">Contact phone number</string>
+    <string name="paypal">Paypal email address</string>
+
+    <!-- Legal Information Preferences -->
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="term_of_service">Term of Service</string>
+  
 </resources>
