@@ -81,6 +81,11 @@ public class SearchActivity extends AppCompatActivity implements HomeFragment.On
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        switch (item.getItemId()) {
+            case R.id.search:
+                navigateToFragment(ExploreFragment.newInstance());
+                break;
+        }
         if (toggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -106,8 +111,8 @@ public class SearchActivity extends AppCompatActivity implements HomeFragment.On
                         Toast.makeText(SearchActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        navigateToFragment(SettingsFragment.newInstance());
-                        Toast.makeText(SearchActivity.this, "SettingsFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SearchActivity.this, SettingsActivity.class));
+                        Toast.makeText(SearchActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         navigateToFragment(ExploreFragment.newInstance());

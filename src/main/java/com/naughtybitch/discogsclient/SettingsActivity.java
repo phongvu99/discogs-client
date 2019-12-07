@@ -3,13 +3,16 @@ package com.naughtybitch.discogsclient;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -79,6 +82,12 @@ public class SettingsActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        switch (item.getItemId()) {
+            case R.id.search:
+                startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
+                break;
+        }
+
         if (toggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -89,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity implements
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
-        navigationView.setCheckedItem(R.id.explore);
+        navigationView.setCheckedItem(R.id.settings);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -104,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity implements
                         Toast.makeText(SettingsActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        navigateToFragment(SettingsFragment.newInstance());
+                        startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
                         Toast.makeText(SettingsActivity.this, "SettingsFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:

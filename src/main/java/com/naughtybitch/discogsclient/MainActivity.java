@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                         Toast.makeText(MainActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
-
                     default:
                         return true;
                 }
