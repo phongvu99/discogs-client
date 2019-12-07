@@ -50,7 +50,7 @@
         app:fragment="com.naughtybitch.discogsclient.SettingsActivity$BuyingShippingAddressFragment"
         app:iconSpaceReserved="false"
         app:key="buy_ship_address"
-        app:title="@string/buy_ship_address" />
+        app:title="@string/buying_ship_address" />
 
     <Preference
         app:iconSpaceReserved="false"

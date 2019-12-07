@@ -77,8 +77,7 @@
     <string name="name">Name</string>
     <string name="location">Location</string>
     <string name="currency">Currency</string>
-    <string name="description">Description</string>
-    <string name="buy_ship_address">Buy shipping address</string>
+    <string name="buying_ship_address">Buying shipping address</string>
     <string name="notification">Notification</string>
 
     <!-- Buying Shipping Address -->
