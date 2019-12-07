@@ -1,6 +1,7 @@
 package com.naughtybitch.discogsclient;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +20,16 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -76,30 +82,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         String tag_string_request = "string_request";
         String tag_json_object = "json_object_request";
         final TextView textView = (TextView) getActivity().findViewById(R.id.response);
-        // Instantiate the RequestQueue
-        String url = "https://api.discogs.com/database/search?release_title=everyday+life&artist=coldplay&per_page=3&page=1";
+        final ImageView coverImage = (ImageView) getActivity().findViewById(R.id.album_cover);
 
-        // Request a string response from the provide URL.
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Display the first 500 characters of the response string.
-                        Log.i("response", "Response is " + response);
-                        textView.setText("Response is: " + response.toString().substring(0, 500));
-                    }
-                }, new Response.ErrorListener() {
+        // Instantiate the RequestQueue
+        String api_base_url = "https://api.discogs.com";
+        String search_url = api_base_url + "/database/search?release_title=everyday+life&artist=coldplay&per_page=3&page=1";
+        CustomRequest customRequest = new CustomRequest(Request.Method.GET, search_url, SearchResponse.class, new Response.Listener<SearchResponse>() {
+            @Override
+            public void onResponse(SearchResponse response) {
+                // Display the first 500 characters of the response string.
+                String tag_image_request = "image_request";
+                Log.i("response", "Response is " + response);
+                List<Result> list = response.getResults();
+                String coverImage_url = list.get(0).getCoverImage();
+                textView.setText("CoverImage url: " + coverImage_url + "\nHave a look at this amazing album cover by Coldplay!");
+                Glide.with(getActivity()).load(coverImage_url).fitCenter().placeholder(R.drawable.bigpump).crossFade().into(coverImage);
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 textView.setText("That didn't work!");
                 textView.setText("Response is: " + error);
             }
-
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
-//                headers.put("Content-Type:", "application/x-www-form-urlencoded");
+                headers.put("Content-Type:", "application/x-www-form-urlencoded");
 //                headers.put("Authorization:",
 //                        "OAuth oauth_consumer_key=\"zrNFOdbKoUvMXDxixdPY\", " +
 //                                "oauth_nonce=\"" + currentTimestamp.toString() + "\", " +
@@ -112,8 +121,41 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 return headers;
             }
         };
+//        // Request a string response from the provide URL.
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, search_url, null,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        // Display the first 500 characters of the response string.
+//                        Log.i("response", "Response is " + response);
+//                        textView.setText("Response is: " + response);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                textView.setText("That didn't work!");
+//                textView.setText("Response is: " + error);
+//            }
+//
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<>();
+////                headers.put("Content-Type:", "application/x-www-form-urlencoded");
+////                headers.put("Authorization:",
+////                        "OAuth oauth_consumer_key=\"zrNFOdbKoUvMXDxixdPY\", " +
+////                                "oauth_nonce=\"" + currentTimestamp.toString() + "\", " +
+////                                "oauth_signature=\"NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ&\", " +
+////                                "oauth_signature_method=\"PLAINTEXT\", " +
+////                                "oauth_timestamp=\"" + currentTimestamp.toString() + "\", " +
+////                                "oauth_callback=\"none\"");
+////                headers.put("User-Agent:", "Discogsnect/0.1 +http://discogsnect.com");
+//                headers.put("Authorization", "Discogs key=zrNFOdbKoUvMXDxixdPY" + "," + "secret=NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ");
+//                return headers;
+//            }
+//        };
         // Add the request to the RequestQueue
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_object);
+        AppController.getInstance().addToRequestQueue(customRequest, tag_json_object);
     }
 
     public HomeFragment() {

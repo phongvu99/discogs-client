@@ -108,17 +108,21 @@ public class SettingsActivity extends AppCompatActivity implements
                         Toast.makeText(SettingsActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
                         startActivity(intent_main);
                         break;
+                    case R.id.profile:
+                        navigateToFragment(ProfileFragment.newInstance());
+                        Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.market:
                         navigateToFragment(MarketFragment.newInstance());
                         Toast.makeText(SettingsActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
-                        Toast.makeText(SettingsActivity.this, "SettingsFragment", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SettingsActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        navigateToFragment(ExploreFragment.newInstance());
-                        Toast.makeText(SettingsActivity.this, "ExploreFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
+                        Toast.makeText(SettingsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;
@@ -142,7 +146,7 @@ public class SettingsActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_search, menu);
+        inflater.inflate(R.menu.toolbar_main, menu);
         return true;
     }
 

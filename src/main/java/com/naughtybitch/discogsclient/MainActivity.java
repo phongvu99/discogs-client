@@ -154,18 +154,12 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case R.id.settings:
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        Toast.makeText(MainActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(MainActivity.this, SearchActivity.class));
                         Toast.makeText(MainActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.explore:
-                        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                        startActivity(intent);
-                        Toast.makeText(MainActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
-                        break;
-
                     default:
                         return true;
                 }
