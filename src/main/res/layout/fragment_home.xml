@@ -25,18 +25,27 @@
 
             </Button>
 
-            <TextView
+            <Button
+                android:id="@+id/token_request"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Touch me!">
+
+            </Button>
+
+            <EditText
                 android:id="@+id/response"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/a"
                 android:textAlignment="center">
 
-            </TextView>
+            </EditText>
 
             <ImageView
                 android:id="@+id/album_cover"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/lemons">
 

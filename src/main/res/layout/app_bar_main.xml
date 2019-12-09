@@ -9,6 +9,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/light_black"
         android:clipToPadding="false"
         android:theme="@style/CustomTheme">
 
@@ -16,8 +17,8 @@
             android:id="@+id/collapse_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/light_black"
             android:background="@android:color/transparent"
+            app:contentScrim="@color/light_black"
             app:expandedTitleGravity="top"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 

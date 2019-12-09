@@ -30,6 +30,7 @@ import com.google.android.material.navigation.NavigationView;
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
         HomeFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener,
         MarketFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, ExploreFragment.OnFragmentInteractionListener {
 
@@ -59,7 +60,6 @@ public class SettingsActivity extends AppCompatActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
         }
-        navigationViewHandler();
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -77,6 +77,7 @@ public class SettingsActivity extends AppCompatActivity implements
                         }
                     }
                 });
+        navigationViewHandler();
     }
 
     @Override

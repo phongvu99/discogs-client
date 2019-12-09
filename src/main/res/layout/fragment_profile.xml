@@ -1,228 +1,171 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.naughtybitch.discogsclient.ProfileFragment">
+    android:orientation="vertical"
+    tools:context=".ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="419dp"
-        android:src="@drawable/background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/description"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <ImageView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:src="@drawable/background"-->
+<!--        android:contentDescription="@string/description" />-->
 
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="155dp"
-        android:layout_marginLeft="155dp"
-        android:layout_marginTop="284dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginRight="156dp"
-        android:layout_marginBottom="347dp"
-        android:src="@drawable/avatar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_gravity="center_horizontal"
         android:contentDescription="@string/description"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/avatar" />
 
     <TextView
         android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="164dp"
-        android:layout_marginLeft="164dp"
-        android:layout_marginTop="403dp"
-        android:layout_marginEnd="247dp"
-        android:layout_marginRight="247dp"
-        android:layout_marginBottom="274dp"
+        android:layout_gravity="center_horizontal"
         android:text="Fake name"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.229"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:textSize="40sp" />
+
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="284dp"
-        android:layout_height="67dp"
-        android:layout_marginStart="101dp"
-        android:layout_marginLeft="101dp"
-        android:layout_marginTop="468dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginRight="26dp"
-        android:layout_marginBottom="196dp"
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="@string/val"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/textView11"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="527dp"
-        android:layout_marginEnd="382dp"
-        android:layout_marginRight="382dp"
-        android:layout_marginBottom="185dp"
-        android:text="@string/minimum"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
 
-    <TextView
-        android:id="@+id/textView12"
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/minimum" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:text="@string/median" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="220dp"
+            android:text="@string/maximum" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="180dp"
-        android:layout_marginLeft="180dp"
-        android:layout_marginTop="527dp"
-        android:layout_marginEnd="215dp"
-        android:layout_marginRight="215dp"
-        android:layout_marginBottom="185dp"
-        android:text="@string/median"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="80dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textView13"
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/list"
+            android:contentDescription="@string/description" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_marginLeft="20dp"
+            android:layout_width="352dp"
+            android:layout_height="20dp"
+            android:background="#FFFFFF"
+            android:text="@string/lists"
+            android:layout_gravity="start"
+            android:textAlignment="textStart"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="336dp"
-        android:layout_marginLeft="336dp"
-        android:layout_marginEnd="59dp"
-        android:layout_marginRight="59dp"
-        android:layout_marginBottom="185dp"
-        android:text="@string/maximum"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginLeft="9dp"
-        android:layout_marginTop="567dp"
-        android:layout_marginEnd="382dp"
-        android:layout_marginRight="382dp"
-        android:layout_marginBottom="144dp"
-        android:src="@drawable/list"
-        android:contentDescription="@string/description"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:contentDescription="@string/description"
+            android:src="@drawable/purchases" />
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginLeft="9dp"
-        android:layout_marginTop="606dp"
-        android:layout_marginEnd="382dp"
-        android:layout_marginRight="382dp"
-        android:layout_marginBottom="105dp"
-        android:contentDescription="@string/description"
-        android:src="@drawable/purchases"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="352dp"
+            android:layout_height="20dp"
+            android:background="#FFFFFF"
+            android:layout_marginLeft="20dp"
+            android:text="@string/purchases"
+            android:layout_gravity="start"
+            android:textAlignment="textStart"
+            android:textColor="#000000" />
+    </LinearLayout>
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginLeft="9dp"
-        android:layout_marginTop="646dp"
-        android:layout_marginEnd="382dp"
-        android:layout_marginRight="382dp"
-        android:layout_marginBottom="65dp"
-        android:src="@drawable/purchase"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginLeft="9dp"
-        android:layout_marginTop="684dp"
-        android:layout_marginEnd="382dp"
-        android:layout_marginRight="382dp"
-        android:layout_marginBottom="27dp"
-        android:src="@drawable/contribution"
-        android:contentDescription="@string/description"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:contentDescription="@string/description"
+            android:src="@drawable/purchase" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="352dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="@string/lists"
-        android:textAlignment="textStart"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="559dp" />
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="352dp"
+            android:layout_height="20dp"
+            android:background="#FFFFFF"
+            android:text="@string/orders"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="start"
+            android:textAlignment="textStart"
+            android:textColor="#000000" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="352dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="@string/purchases"
-        android:textAlignment="textStart"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="597dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="352dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="@string/orders"
-        android:textAlignment="textStart"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="635dp" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/contribution"
+            android:contentDescription="@string/description" />
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="352dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="@string/contributions"
-        android:textAlignment="textStart"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="673dp" />
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="352dp"
+            android:layout_height="20dp"
+            android:background="#FFFFFF"
+            android:text="@string/contributions"
+            android:layout_gravity="start"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:layout_marginLeft="20dp" />
+
+    </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

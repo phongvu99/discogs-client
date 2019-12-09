@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 public class CustomRequest extends Request {
     private Response.Listener listener;
     /**
-     * Declare a gson variable which will be used to convert the json response
+     * Declare a Gson variable which will be used to convert the json response
      * to POJO
      **/
     private Gson gson;
@@ -27,13 +27,12 @@ public class CustomRequest extends Request {
     private Class responseClass;
 
     /**
-     * Constructer for your custom class
-     * // @param Request Method- GET,POST
-     * // @param Request URL
-     * // @param Java Object which you want as response
-     * // @param Response listener to notify success response
-     * // @param Error listener to notify error response
-     **/
+     ** Constructor for your custom class
+     *  @param Request Method- GET,POST
+     *  @param Request URL
+     *  @param Java Object which you want as response
+     *  @param Response listener to notify success response
+     *  @param Error listener to notify error response **/
     public CustomRequest(int method, String url, Class responseClass, Response.Listener listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         gson = new Gson();
