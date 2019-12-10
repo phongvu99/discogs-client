@@ -132,6 +132,15 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onStop() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        if (navigationView != null) {
+            navigationView.getCheckedItem().setCheckable(false);
+        }
+        super.onStop();
+    }
+
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);

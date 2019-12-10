@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.naughtybitch.discogsclient">
-  
-    <uses-permission android:name="android.permission.INTERNET">
 
-    </uses-permission>
-  
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
     <application
-        android:fullBackupContent="true"
         android:name=".AppController"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -23,12 +21,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".SearchActivity">
-
-        </activity>
-        <activity android:name=".GetStartedActivity">
-
-        </activity>
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".GetStartedActivity"></activity>
         <activity
             android:name=".SplashActivity"
             android:theme="@style/CustomTheme">
@@ -40,7 +34,20 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".SignInActivity" />
+        <activity android:name=".SignInActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="localhost:8000"
+                    android:scheme="http">
+
+                </data>
+            </intent-filter>
+        </activity>
         <activity android:name=".SearchQuery" />
         <activity android:name=".SearchableActivity">
             <intent-filter>
@@ -51,13 +58,8 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
-        <activity android:name=".AlbumInfoActivity">
-
-        </activity>
-
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".AlbumInfoActivity"></activity>
     </application>
 
 </manifest>

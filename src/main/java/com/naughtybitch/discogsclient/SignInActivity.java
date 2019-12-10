@@ -1,5 +1,6 @@
 package com.naughtybitch.discogsclient;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,32 +10,44 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import java.net.URI;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
-public class SignInActivity extends AppCompatActivity {
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private Menu menu;
     private WebView webView;
-    private ProgressDialog progressBar;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_sign_in);
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle("Login");
+//        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+//        collapsingToolbarLayout.setTitle("Discogs Authorization");
+        myToolbar.setTitle("Authorization");
         setSupportActionBar(myToolbar);
 
         WebView webView = (WebView) findViewById(R.id.web_view);
@@ -42,8 +55,9 @@ public class SignInActivity extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        progressBar = ProgressDialog.show(SignInActivity.this, "Discogs Login", "Loading...");
-        String url = "https://auth.discogs.com/login?service=https%3A//www.discogs.com/login%3Freturn_to%3D%252Fmy";
+        progressDialog = ProgressDialog.show(SignInActivity.this, "Discogs Login", "Loading...");
+        String url = DiscogsClient.getInstance().getAuthorize_url();
+        Toast.makeText(this, "URL " + url, Toast.LENGTH_LONG).show();
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -57,43 +71,97 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                if (progressBar.isShowing()) {
-                    progressBar.dismiss();
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
                 }
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                startActivity(intent);
                 super.onPageFinished(view, url);
             }
         });
         webView.loadUrl(url);
+        buttonOnClickListener();
+    }
 
-//        EditText editText = (EditText) findViewById(R.id.username1);
-//
-//        if(editText.requestFocus()) {
-//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//        }
-//
-//        Button f = (Button) findViewById(R.id.facebook);
-//        f.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String url = "http://www.facebook.com";
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(url));
-//                startActivity(i);
-//            }
-//        });
-//
-//        Button g = (Button) findViewById(R.id.google);
-//        g.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String url = "http://www.google.com/ncr";
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(url));
-//                startActivity(i);
-//            }
-//        });
-//    }
+    private void buttonOnClickListener() {
+        Button button = findViewById(R.id.oauth_verify);
+        button.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.oauth_verify:
+                // Get credentials
+                final DiscogsClient instance = DiscogsClient.getInstance();
+                String client_id = instance.getConsumer_key();
+                String client_secret = instance.getConsumer_secret();
+                EditText editText = findViewById(R.id.verfier_code);
+                String oauth_verifier = editText.getText().toString();
+                instance.setOauth_verifier(oauth_verifier);
+                instance.setOauth_verifier(editText.getText().toString());
+                progressDialog = ProgressDialog.show(this, "Sending request", "Please wait");
+                instance.accessToken(client_id, client_secret, new DiscogsClient.VolleyCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        progressDialog.dismiss();
+                        Pattern pattern = Pattern.compile(Pattern.quote("&"));
+                        String[] temp = pattern.split(result);
+                        ArrayList<String> access_token_response = new ArrayList<>();
+                        for (String s : temp) {
+                            Pattern pattern1 = Pattern.compile(Pattern.quote("="));
+                            String[] test = pattern1.split(s);
+                            access_token_response.add(test[1]);
+                        }
+                        instance.setAccess_token(access_token_response.get(0));
+                        instance.setAccess_token_secret(access_token_response.get(1));
+                        Toast.makeText(SignInActivity.this, "Successfully authorized, redirecting to your profile", Toast.LENGTH_SHORT).show();
+                        Log.i("access_token", "Access_token " + instance.getAccess_token());
+                        Log.i("access_token_secret", "Access_token_secret " + instance.getAccess_token_secret());
+                        instance.identityRequest(new DiscogsClient.VolleyCallback_JSON() {
+                            @Override
+                            public void onSuccess(JSONObject object) {
+                                Log.i("who_am_i", "Authorized as " + object);
+                            }
+
+                            @Override
+                            public void onError(String result) {
+                                Log.i("who_am_i", "Error " + result);
+                            }
+                        });
+                        MenuItem item = menu.findItem(R.id.authorize);
+                        item.setVisible(true);
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(String result) {
+                        progressDialog.dismiss();
+                        Toast.makeText(SignInActivity.this, "Failed to authenticate(No internet?)", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.authorize:
+                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_login, menu);
+        this.menu = menu;
+        return true;
     }
 }

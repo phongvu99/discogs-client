@@ -19,6 +19,7 @@
     <string name="lemon">Lemon</string>
     <string name="view_all">View all</string>
     <string name="get_started">Get Started</string>
+    <string name="authorize">Check Authorize</string>
     <string name="logo">Logo</string>
     <string name="get_started_desc">Discover music on Discogs, the largest online music database. Buy and sell music with collectors in the Marketplace.</string>
 
@@ -34,6 +35,9 @@
     <string name="login_failed">"Login failed"</string>
 
     <!-- Sign in + Sign up -->
+    <string name="verification_code">Verification code</string>
+    <string name="code_hint">e.g. abcdefghi</string>
+    <string name="check">Here we go!</string>
     <string name="text1">Register Using Facebook</string>
     <string name="text2">Register Using Google</string>
     <string name="text3">We do not post anything to Facebook or Google without your permission</string>
@@ -59,8 +63,8 @@
     <string name="artist">Artist:</string>
     <string name="genre">Genre:</string>
     <string name="more_by">More by this artist:</string>
-	
-	    <!-- Profile -->
+
+    <!-- Profile -->
     <string name="val">Collection Value</string>
     <string name="minimum">$0</string>
     <string name="median">$0</string>
@@ -105,5 +109,5 @@
     <!-- Legal Information Preferences -->
     <string name="privacy_policy">Privacy Policy</string>
     <string name="term_of_service">Term of Service</string>
-  
+
 </resources>

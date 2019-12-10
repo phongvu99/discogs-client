@@ -68,17 +68,4 @@
             android:text="@string/text16" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/guest_login"
-        style="?attr/buttonBarButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:background="@color/white"
-        android:onClick="guestLogin"
-        android:text="@string/guest_login">
-
-    </Button>
-
-
 </LinearLayout>
