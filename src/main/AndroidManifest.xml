@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.naughtybitch.discogsclient">
+  
+    <uses-permission android:name="android.permission.INTERNET">
 
+    </uses-permission>
+  
     <application
+        android:fullBackupContent="true"
+        android:name=".AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,18 +17,24 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
+            android:label="@string/settings"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.naughtybitch.discogsclient.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
-        <activity android:name=".GetStartedActivity" />
+        <activity android:name=".SearchActivity">
+
+        </activity>
+        <activity android:name=".GetStartedActivity">
+
+        </activity>
         <activity
             android:name=".SplashActivity"
             android:theme="@style/CustomTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -40,15 +52,12 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".MainActivity">
-            <intent-filter>
 
-                <!-- <action android:name="android.intent.action.MAIN" /> -->
-                <action android:name="android.intent.action.VIEW" />
-
-                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            </intent-filter>
         </activity>
-        <activity android:name=".AlbumInfoActivity" />
+        <activity android:name=".AlbumInfoActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

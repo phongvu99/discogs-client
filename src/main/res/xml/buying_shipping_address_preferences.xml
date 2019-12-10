@@ -23,42 +23,49 @@
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="address"
         app:title="@string/address"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="city_town"
         app:title="@string/city_town"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="country"
         app:title="@string/country"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="region_state"
         app:title="@string/region_state"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="postal_code"
         app:title="@string/postal_code"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="phone"
         app:title="@string/phone"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="paypal"
         app:title="@string/paypal"

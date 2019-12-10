@@ -1,15 +1,38 @@
 package com.naughtybitch.discogsclient;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -20,7 +43,7 @@ import android.view.ViewGroup;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,6 +54,114 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    public void buttonOnClickListener(View v) {
+        Button send_request = v.findViewById(R.id.send_request);
+        Button token_request = v.findViewById(R.id.token_request);
+        send_request.setOnClickListener(this);
+        token_request.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case (R.id.send_request):
+                Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
+                sendRequest();
+                break;
+            case (R.id.token_request):
+                Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
+                tokenRequest();
+                break;
+        }
+    }
+
+    public void sendRequest() {
+        String tag_json_object = "json_object_request";
+        final EditText editText = (EditText) getActivity().findViewById(R.id.response);
+        final ImageView coverImage = (ImageView) getActivity().findViewById(R.id.album_cover);
+
+        String api_base_url = "https://api.discogs.com";
+        String search_url = api_base_url + "/database/search?release_title=everyday+life&artist=coldplay&per_page=3&page=1";
+        CustomRequest customRequest = new CustomRequest(Request.Method.GET, search_url, SearchResponse.class, new Response.Listener<SearchResponse>() {
+            @Override
+            public void onResponse(SearchResponse response) {
+                Log.i("response", "Response is " + response);
+                List<Result> list = response.getResults();
+                String coverImage_url = list.get(0).getCoverImage();
+                editText.setText("CoverImage url: " + coverImage_url + "\nHave a look at this amazing album cover by Coldplay!", TextView.BufferType.EDITABLE);
+                Glide.with(getActivity()).load(coverImage_url).fitCenter().placeholder(R.drawable.bigpump).crossFade().into(coverImage);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                editText.setText("That didn't work!");
+                editText.setText("Response is: " + error);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+//                headers.put("Authorization", "Discogs key=zrNFOdbKoUvMXDxixdPY" + "," + "secret=NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ");
+                headers.put("Authorization", "Discogs token=mbAGeTxLGrWvJLiEEYOUZSwxkiVJyFYDiqEoNyxt");
+                return headers;
+            }
+        };
+        // Add the request to the RequestQueue
+        AppController.getInstance().addToRequestQueue(customRequest, tag_json_object);
+    }
+
+    public void tokenRequest() {
+        final EditText editText = (EditText) getActivity().findViewById(R.id.response);
+
+        String api_base_url = "https://api.discogs.com";
+        String search_url = api_base_url + "/database/search?q=everyday+life+coldplay&release_title=everyday+life&artist=coldplay&per_page=3&page=1";
+        String request_token_url = api_base_url + "/oauth/request_token";
+
+        // 1) create a java calendar instance
+        Calendar calendar = Calendar.getInstance();
+
+        // 2) get a java.util.Date from the calendar instance.
+        //    this date will represent the current instant, or "now".
+        java.util.Date now = calendar.getTime();
+
+        // 3) a java current time (now) instance
+        final java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
+        Log.i("time_stamp", currentTimestamp.toString());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, search_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("response", "Response is " + response);
+                editText.setText("Response is " + response, TextView.BufferType.EDITABLE);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("response", "Response is " + error);
+                editText.setText("Response is " + error);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                headers.put("Authorization",
+                        "OAuth oauth_consumer_key=zrNFOdbKoUvMXDxixdPY, " +
+                                "oauth_nonce=" + currentTimestamp.toString() + ", " +
+                                "oauth_signature=NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ&, " +
+                                "oauth_signature_method=PLAINTEXT, " +
+                                "oauth_timestamp=" + currentTimestamp.toString() + ", " +
+                                "oauth_callback=https://www.discogs.com");
+                headers.put("User-Agent", "Discogsnect/0.1 +http://discogsnect.com");
+//                headers.put("Authorization", "Discogs token=mbAGeTxLGrWvJLiEEYOUZSwxkiVJyFYDiqEoNyxt");
+                Log.i("headers", "Header is " + headers);
+                return headers;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -64,9 +195,7 @@ public class HomeFragment extends Fragment {
     }
 
     public static HomeFragment newInstance() {
-        
         Bundle args = new Bundle();
-        
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
@@ -76,18 +205,15 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getChildFragmentManager());
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        viewPager.setOffscreenPageLimit(3);
-        viewPager.setAdapter(pagerAdapter);
+        buttonOnClickListener(view);
         return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onHomeFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -120,6 +246,6 @@ public class HomeFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onHomeFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 }

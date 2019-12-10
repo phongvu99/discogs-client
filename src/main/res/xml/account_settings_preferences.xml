@@ -14,45 +14,58 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:title="@string/account_settings"
+        app:iconSpaceReserved="false" />
 
     <EditTextPreference
+        app:dialogTitle="@string/change_email"
         app:iconSpaceReserved="false"
         app:key="email"
-        app:title="@string/change_email"
+        app:title="@string/email"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="name"
         app:title="@string/name"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="location"
         app:title="@string/location"
         app:useSimpleSummaryProvider="true" />
 
-    <EditTextPreference
+    <ListPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="currency"
         app:title="@string/currency"
         app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="description"
         app:title="@string/description"
         app:useSimpleSummaryProvider="true" />
 
     <Preference
+        app:allowDividerAbove="true"
         app:fragment="com.naughtybitch.discogsclient.SettingsActivity$BuyingShippingAddressFragment"
         app:iconSpaceReserved="false"
         app:key="buy_ship_address"
-        app:title="@string/buy_ship_address" />
+        app:title="@string/buying_ship_address" />
 
     <Preference
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
         app:iconSpaceReserved="false"
         app:key="notification"
         app:title="@string/notification" />

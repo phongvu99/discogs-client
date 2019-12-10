@@ -8,6 +8,8 @@
     <string name="settings">Settings</string>
     <string name="home">Home</string>
     <string name="market">Market</string>
+    <string name="explore">Explore</string>
+    <string name="profile">Profile</string>
     <string name="cart">Cart</string>
     <string name="headline">Bad New For Music Industry!!!</string>
     <string name="headline2">Smash Mouth release All Star Director Cut</string>
@@ -15,6 +17,7 @@
     <string name="b" translatable="false">B</string>
     <string name="c" translatable="false">C</string>
     <string name="lemon">Lemon</string>
+    <string name="view_all">View all</string>
     <string name="get_started">Get Started</string>
     <string name="logo">Logo</string>
     <string name="get_started_desc">Discover music on Discogs, the largest online music database. Buy and sell music with collectors in the Marketplace.</string>
@@ -56,7 +59,17 @@
     <string name="artist">Artist:</string>
     <string name="genre">Genre:</string>
     <string name="more_by">More by this artist:</string>
-    <string name="title_activity_settings">Settings</string>
+	
+	    <!-- Profile -->
+    <string name="val">Collection Value</string>
+    <string name="minimum">$0</string>
+    <string name="median">$0</string>
+    <string name="maximum">$0</string>
+    <string name="lists">Lists</string>
+    <string name="purchases">Purchases</string>
+    <string name="orders">Orders</string>
+    <string name="contributions">Contributions</string>
+    <string name="description">Description</string>
 
     <!-- Preference Header -->
     <string name="profile_settings_header">Profile settings</string>
@@ -72,12 +85,11 @@
     <string name="seller_settings">Seller settings</string>
 
     <!-- Account Settings Preferences -->
-    <string name="change_email">Change email</string>
+    <string name="email">Email</string>
     <string name="name">Name</string>
     <string name="location">Location</string>
     <string name="currency">Currency</string>
-    <string name="description">Description</string>
-    <string name="buy_ship_address">Buy shipping address</string>
+    <string name="buying_ship_address">Buying shipping address</string>
     <string name="notification">Notification</string>
 
     <!-- Buying Shipping Address -->
@@ -93,5 +105,21 @@
     <!-- Legal Information Preferences -->
     <string name="privacy_policy">Privacy Policy</string>
     <string name="term_of_service">Term of Service</string>
+
+    <!-- Else -->
+    <string name="offer_i_made">Offer I made</string>
+    <string name="detailed_wishlist">Detailed wishlist</string>
+    <string name="dark_mode_off">Dark mode is disable</string>
+    <string name="dark_mode_on">Dark mode is enable</string>
+    <string name="profile_settings_summary">Change general profile settings</string>
+    <string name="pp_tos_summary">Privacy Policy and Term Of Service</string>
+    <string name="account_settings_summary">Change settings related to your account</string>
+    <string name="search_history_summary">View your search history</string>
+    <string name="recently_viewed_summary">View your most recently viewed items</string>
+    <string name="buyer_settings_summary">You must fill in these fields before you can purchase items for sale.</string>
+    <string name="seller_settings_summary">You must fill in these fields before you can post items for sale.</string>
+    <string name="change_email">Edit email</string>
+    <string name="save">save</string>
+    <string name="cancel">cancel</string>
 
 </resources>

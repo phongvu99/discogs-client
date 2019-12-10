@@ -17,6 +17,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory app:title="Legal information"
+        app:iconSpaceReserved="false"/>
+
     <Preference
         app:iconSpaceReserved="false"
         app:key="privacy_policy"
@@ -27,6 +30,7 @@
     </Preference>
 
     <Preference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="term_of_service"
         app:title="@string/term_of_service">

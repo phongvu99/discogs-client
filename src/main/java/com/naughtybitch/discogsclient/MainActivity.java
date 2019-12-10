@@ -19,10 +19,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -31,12 +33,14 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements HomeFragment.OnFragmentInteractionListener,
         MarketFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener {
+        SettingsFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private MenuItem searchItem;
+    private ImageView imageView;
 
     // Declare Variables
     ListView list;
@@ -51,7 +55,29 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // Custom ActionBar
+        ImageView imageView = (ImageView) findViewById(R.id.toolbar_background_image);
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.background));
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    collapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
         setSupportActionBar(myToolbar);
 
         // TODO: Implement into SearchableActivity
@@ -102,17 +128,25 @@ public class MainActivity extends AppCompatActivity
         // Add the fragment to the 'fragment_container' FrameLayout
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
 
+        navigationViewHandler();
+
+    }
+
+    public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
+        navigationView.setCheckedItem(R.id.home);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int id = menuItem.getItemId();
-                drawerLayout.closeDrawers();
-                switch (id) {
+                switch (menuItem.getItemId()) {
                     case R.id.home:
                         navigateToFragment(HomeFragment.newInstance());
                         Toast.makeText(MainActivity.this, "HomeFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.profile:
+                        navigateToFragment(ProfileFragment.newInstance());
+                        Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.market:
                         navigateToFragment(MarketFragment.newInstance());
@@ -120,10 +154,17 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case R.id.settings:
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        Toast.makeText(MainActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.explore:
+                        startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                        Toast.makeText(MainActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;
                 }
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
@@ -132,7 +173,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if (toggle.onOptionsItemSelected(item)) return true;
+        switch (item.getItemId()) {
+            case R.id.search:
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+                break;
+        }
+
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -143,23 +193,12 @@ public class MainActivity extends AppCompatActivity
             this.drawerLayout.closeDrawer(GravityCompat.START);
         else {
             super.onBackPressed();
-            finish();
         }
     }
 
     @Override
-    public void onHomeFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(Uri uri) {
         // Do stuff
-    }
-
-    @Override
-    public void onMarketFragmentInteraction(Uri uri) {
-        // Do different stuff
-    }
-
-    @Override
-    public void onSettingsFragmentInteraction(Uri uri) {
-        // Do something
     }
 
     private void navigateToFragment(Fragment fragment) {
@@ -174,25 +213,25 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_menu, menu);
+        inflater.inflate(R.menu.toolbar_main, menu);
 
-        // TODO: Implement into SearchableActivity
-        searchItem = menu.findItem(R.id.search_bar);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint(getResources().getText(R.string.search_hint));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.filter(newText);
-                return false;
-            }
-        });
+//        // TODO: Implement into SearchableActivity
+//        searchItem = menu.findItem(R.id.search_bar);
+//        final SearchView searchView = (SearchView) searchItem.getActionView();
+//        searchView.setQueryHint(getResources().getText(R.string.search_hint));
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                searchView.clearFocus();
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                adapter.filter(newText);
+//                return false;
+//            }
+//        });
 
         return true;
     }

@@ -63,9 +63,7 @@ public class MarketFragment extends Fragment {
     }
 
     public static MarketFragment newInstance() {
-
         Bundle args = new Bundle();
-
         MarketFragment fragment = new MarketFragment();
         fragment.setArguments(args);
         return fragment;
@@ -81,7 +79,7 @@ public class MarketFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onMarketFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -114,6 +112,6 @@ public class MarketFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onMarketFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 }
