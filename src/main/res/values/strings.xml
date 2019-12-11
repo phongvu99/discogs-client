@@ -59,8 +59,8 @@
     <string name="artist">Artist:</string>
     <string name="genre">Genre:</string>
     <string name="more_by">More by this artist:</string>
-	
-	    <!-- Profile -->
+
+    <!-- Profile -->
     <string name="val">Collection Value</string>
     <string name="minimum">$0</string>
     <string name="median">$0</string>
