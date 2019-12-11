@@ -1,5 +1,6 @@
 package com.naughtybitch.discogsclient;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -8,6 +9,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 /**
  * Create a class which extend the Volley Request<T> class
@@ -33,7 +35,7 @@ public class CustomRequest extends Request {
      *  @param Java Object which you want as response
      *  @param Response listener to notify success response
      *  @param Error listener to notify error response **/
-    public CustomRequest(int method, String url, Class responseClass, Response.Listener listener, Response.ErrorListener errorListener) {
+    public <T> CustomRequest(int method, String url, Class responseClass, Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         gson = new Gson();
         this.listener = listener;
@@ -63,6 +65,11 @@ public class CustomRequest extends Request {
             e.printStackTrace();
             return Response.error(new ParseError(e));
         }
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        return super.getHeaders();
     }
 
     /**

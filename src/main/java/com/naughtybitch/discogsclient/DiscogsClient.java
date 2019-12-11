@@ -1,8 +1,11 @@
 package com.naughtybitch.discogsclient;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -13,6 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.JsonObject;
 
+
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
@@ -20,9 +24,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DiscogsClient {
+public class DiscogsClient extends AppCompatActivity {
 
     private int status_code;
+
+    private SharedPreferences user_preferences;
 
     private final String consumer_key = "zrNFOdbKoUvMXDxixdPY";
     private final String consumer_secret = "NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ%26";
@@ -59,11 +65,19 @@ public class DiscogsClient {
         void onError(String result);
     }
 
-    public interface VolleyCallback_JSON {
-        void onSuccess(JSONObject object);
+    public interface VolleyCallBackPOJO<T> {
+        void onSuccess(T object);
 
-        void onError(String result);
+        void onError(String error);
     }
+
+//    public void removeLogin() {
+//        SharedPreferences.Editor editor = user_preferences.edit();
+//        editor.remove("logged_in");
+//        editor.remove("access_token");
+//        editor.remove("access_token_secret");
+//        editor.apply();
+//    }
 
     private Timestamp currentTimeStamp() {
         // 1) create a java calendar instance
@@ -163,7 +177,7 @@ public class DiscogsClient {
         AppController.getInstance().addToRequestQueue(access_token);
     }
 
-    public void identityRequest(final VolleyCallback_JSON volleyCallback) {
+    public void identityRequest(final VolleyCallBackPOJO<User> volleyCallBackPOJO) {
         Timestamp currentTimestamp = currentTimeStamp();
 
         final String auth = "OAuth oauth_consumer_key=\"" + getConsumer_key() + "\", " +
@@ -174,17 +188,17 @@ public class DiscogsClient {
                 "oauth_timestamp=\"" + currentTimestamp.getTime() + "\", " +
                 "oauth_version=\"1.0\"";
         Log.i("time_stamp", "Current timestamp " + currentTimestamp.getTime());
-        JsonObjectRequest identity_request = new JsonObjectRequest(Request.Method.GET, identity_url, null, new Response.Listener<JSONObject>() {
+        CustomRequest identity_request = new CustomRequest(Request.Method.GET, identity_url, User.class, new Response.Listener<User>() {
             @Override
-            public void onResponse(JSONObject response) {
-                volleyCallback.onSuccess(response);
+            public void onResponse(User response) {
+                volleyCallBackPOJO.onSuccess(response);
                 Log.i("response", "Response is " + response);
                 Log.i("status_code", "Status " + status_code);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                volleyCallback.onError(error.toString());
+                volleyCallBackPOJO.onError(error.toString());
                 Log.i("response", "Response is " + error);
                 Log.i("status_code", "Status " + status_code);
             }
@@ -200,7 +214,7 @@ public class DiscogsClient {
             }
 
             @Override
-            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+            protected Response parseNetworkResponse(NetworkResponse response) {
                 status_code = response.statusCode;
                 return super.parseNetworkResponse(response);
             }
