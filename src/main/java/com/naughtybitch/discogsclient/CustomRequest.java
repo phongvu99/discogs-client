@@ -1,5 +1,6 @@
 package com.naughtybitch.discogsclient;
 
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -10,6 +11,7 @@ import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
+
 
 /**
  * Create a class which extend the Volley Request<T> class
@@ -68,7 +70,8 @@ public class CustomRequest extends Request {
     }
 
     @Override
-    public Map<String, String> getHeaders() throws AuthFailureError {
+    public 
+    <String, String> getHeaders() throws AuthFailureError {
         return super.getHeaders();
     }
 

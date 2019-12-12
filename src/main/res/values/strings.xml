@@ -89,7 +89,7 @@
     <string name="seller_settings">Seller settings</string>
 
     <!-- Account Settings Preferences -->
-    <string name="change_email">Change email</string>
+    <string name="email">Email</string>
     <string name="name">Name</string>
     <string name="location">Location</string>
     <string name="currency">Currency</string>
@@ -109,5 +109,21 @@
     <!-- Legal Information Preferences -->
     <string name="privacy_policy">Privacy Policy</string>
     <string name="term_of_service">Term of Service</string>
+  
+    <!-- Misc. -->
+    <string name="offer_i_made">Offer I made</string>
+    <string name="detailed_wishlist">Detailed wishlist</string>
+    <string name="dark_mode_off">Dark mode is disable</string>
+    <string name="dark_mode_on">Dark mode is enable</string>
+    <string name="profile_settings_summary">Change general profile settings</string>
+    <string name="pp_tos_summary">Privacy Policy and Term Of Service</string>
+    <string name="account_settings_summary">Change settings related to your account</string>
+    <string name="search_history_summary">View your search history</string>
+    <string name="recently_viewed_summary">View your most recently viewed items</string>
+    <string name="buyer_settings_summary">You must fill in these fields before you can purchase items for sale.</string>
+    <string name="seller_settings_summary">You must fill in these fields before you can post items for sale.</string>
+    <string name="change_email">Edit email</string>
+    <string name="save">save</string>
+    <string name="cancel">cancel</string>
 
 </resources>

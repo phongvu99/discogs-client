@@ -118,7 +118,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Log.i("access_token_secret", "access_token_secret " + access_token_secret);
     }
 
-
     public HomeFragment() {
         // Required empty public constructor
     }

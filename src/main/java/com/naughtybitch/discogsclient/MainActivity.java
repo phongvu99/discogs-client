@@ -167,8 +167,9 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.market:
-                        navigateToFragment(MarketFragment.newInstance());
-                        Toast.makeText(MainActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, BuyMusicActivity.class));
+//                        navigateToFragment(MarketFragment.newInstance());
+                        Toast.makeText(MainActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));

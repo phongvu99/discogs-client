@@ -16,36 +16,45 @@
 
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory
+        app:title="@string/profile_settings_header"
+        app:iconSpaceReserved="false" />
+
     <Preference
         app:fragment="com.naughtybitch.discogsclient.SettingsActivity$AccountSettingsFragment"
         app:iconSpaceReserved="false"
         app:key="account_settings"
+        app:summary="@string/account_settings_summary"
         app:title="@string/account_settings" />
 
     <Preference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="search_history"
+        app:summary="@string/search_history_summary"
         app:title="@string/search_history" />
 
     <Preference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="recently_viewed"
+        app:summary="@string/recently_viewed_summary"
         app:title="@string/recently_viewed" />
 
     <Preference
-        app:iconSpaceReserved="false"
-        app:key="privacy"
-        app:title="@string/privacy" />
-
-    <Preference
+        app:allowDividerAbove="true"
         app:fragment="com.naughtybitch.discogsclient.SettingsActivity$BuyerSettingsFragment"
         app:iconSpaceReserved="false"
         app:key="buying_ship_address"
+        app:summary="@string/buyer_settings_summary"
         app:title="@string/buyer_settings" />
 
     <Preference
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
         app:iconSpaceReserved="false"
         app:key="notification"
+        app:summary="@string/seller_settings_summary"
         app:title="@string/seller_settings" />
 
 </PreferenceScreen>

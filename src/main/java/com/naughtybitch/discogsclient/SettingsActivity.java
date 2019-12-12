@@ -1,5 +1,7 @@
 package com.naughtybitch.discogsclient;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,15 +17,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.navigation.NavigationView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -95,16 +102,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onStop() {
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        if (navigationView != null) {
-            navigationView.getCheckedItem().setCheckable(false);
-        }
-        super.onStop();
-    }
-
+          
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
@@ -166,7 +164,53 @@ public class SettingsActivity extends AppCompatActivity implements
             this.drawerLayout.closeDrawer(GravityCompat.START);
         else {
             super.onBackPressed();
+          
+    @Override
+    protected void onStop() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        if (navigationView != null) {
+            navigationView.getCheckedItem().setCheckable(false);
         }
+        super.onStop();
+    }
+
+    public void navigationViewHandler() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setItemIconTintList(null);
+        navigationView.setCheckedItem(R.id.settings);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.home:
+                        Intent intent_main = new Intent(SettingsActivity.this, MainActivity.class);
+                        Toast.makeText(SettingsActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(intent_main);
+                        break;
+                    case R.id.profile:
+                        navigateToFragment(ProfileFragment.newInstance());
+                        Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.market:
+                        navigateToFragment(MarketFragment.newInstance());
+                        Toast.makeText(SettingsActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
+                        Toast.makeText(SettingsActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.explore:
+                        startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
+                        Toast.makeText(SettingsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -207,6 +251,28 @@ public class SettingsActivity extends AppCompatActivity implements
         return true;
     }
 
+    public class EditEmailDialogFragment extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.change_email)
+                    .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // FIRE ZE MISSILES!
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
+    }
+
     public static class HeaderFragment extends PreferenceFragmentCompat {
 
         @Override
@@ -223,11 +289,14 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
-    public static class AccountSettingsFragment extends PreferenceFragmentCompat {
+    public static class AccountSettingsFragment extends Fragment {
 
+        @Nullable
         @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.account_settings_preferences, rootKey);
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            super.onCreateView(inflater, container, savedInstanceState);
+            View view = inflater.inflate(R.layout.activity_album_info, container, false);
+            return view;
         }
     }
 
