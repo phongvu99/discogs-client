@@ -19,15 +19,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.google.android.material.navigation.NavigationView;
 
-public class BuyMusicActivity extends AppCompatActivity implements
-        BuyMusicFragment.OnFragmentInteractionListener,
-        CartFragment.OnFragmentInteractionListener,
-        DWFragment.OnFragmentInteractionListener,
-        PurchasesFragment.OnFragmentInteractionListener,
-        OIMFragment.OnFragmentInteractionListener {
+public class SellMusicActivity extends AppCompatActivity implements
+        SellMusicFragment.OnFragmentInteractionListener,
+        OrderFragment.OnFragmentInteractionListener,
+        OfferFragment.OnFragmentInteractionListener,
+        InventoryFragment.OnFragmentInteractionListener{
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -36,7 +34,7 @@ public class BuyMusicActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buy_music);
+        setContentView(R.layout.activity_sell_music);
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -55,7 +53,7 @@ public class BuyMusicActivity extends AppCompatActivity implements
         }
 
         // Create a new Fragment to be placed in the activity layout
-        BuyMusicFragment firstFragment = BuyMusicFragment.newInstance();
+        SellMusicFragment firstFragment = SellMusicFragment.newInstance();
 
         // In case this activity was started with special instructions from an
         // Intent, pass the Intent's extras to the fragment as arguments
@@ -70,33 +68,33 @@ public class BuyMusicActivity extends AppCompatActivity implements
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
-        navigationView.setCheckedItem(R.id.buy_music);
+        navigationView.setCheckedItem(R.id.sell_music);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.home:
-                        startActivity(new Intent(BuyMusicActivity.this, MainActivity.class));
+                        startActivity(new Intent(SellMusicActivity.this, MainActivity.class));
                         break;
                     case R.id.profile:
-                        startActivity(new Intent(BuyMusicActivity.this, ProfileActivity.class));
-                        Toast.makeText(BuyMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SellMusicActivity.this, ProfileActivity.class));
+                        Toast.makeText(SellMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.buy_music:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        Toast.makeText(BuyMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SellMusicActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(SellMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
-                        startActivity(new Intent(BuyMusicActivity.this, SellMusicActivity.class));
-                        Toast.makeText(BuyMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        Toast.makeText(SellMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(BuyMusicActivity.this, SettingsActivity.class));
-                        Toast.makeText(BuyMusicActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SellMusicActivity.this, SettingsActivity.class));
+                        Toast.makeText(SellMusicActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(BuyMusicActivity.this, SearchActivity.class));
-                        Toast.makeText(BuyMusicActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SellMusicActivity.this, SearchActivity.class));
+                        Toast.makeText(SellMusicActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;
@@ -131,7 +129,7 @@ public class BuyMusicActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
             case R.id.search:
-                Intent intent = new Intent(BuyMusicActivity.this, SearchActivity.class);
+                Intent intent = new Intent(SellMusicActivity.this, SearchActivity.class);
                 startActivity(intent);
                 break;
         }

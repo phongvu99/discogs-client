@@ -28,9 +28,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.material.navigation.NavigationView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -117,9 +114,13 @@ public class SettingsActivity extends AppCompatActivity implements
                         startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
                         Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.market:
+                    case R.id.buy_music:
                         startActivity(new Intent(SettingsActivity.this, BuyMusicActivity.class));
                         Toast.makeText(SettingsActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(SettingsActivity.this, SellMusicActivity.class));
+                        Toast.makeText(SettingsActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         startActivity(new Intent(SettingsActivity.this, SearchActivity.class));

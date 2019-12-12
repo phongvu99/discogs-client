@@ -33,8 +33,7 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity
-        implements HomeFragment.OnFragmentInteractionListener,
-        ProfileFragment.OnFragmentInteractionListener {
+        implements HomeFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -163,9 +162,13 @@ public class MainActivity extends AppCompatActivity
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.market:
+                    case R.id.buy_music:
                         startActivity(new Intent(MainActivity.this, BuyMusicActivity.class));
                         Toast.makeText(MainActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(MainActivity.this, SellMusicActivity.class));
+                        Toast.makeText(MainActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));

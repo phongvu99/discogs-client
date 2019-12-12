@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 public class SearchActivity extends AppCompatActivity implements
-        ProfileFragment.OnFragmentInteractionListener,
         ExploreFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
@@ -121,9 +120,13 @@ public class SearchActivity extends AppCompatActivity implements
                     case R.id.explore:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    case R.id.market:
+                    case R.id.buy_music:
                         startActivity(new Intent(SearchActivity.this, BuyMusicActivity.class));
                         Toast.makeText(SearchActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(SearchActivity.this, SellMusicActivity.class));
+                        Toast.makeText(SearchActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(SearchActivity.this, SettingsActivity.class));

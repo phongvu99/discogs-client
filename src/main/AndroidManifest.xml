@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".SellMusicActivity"></activity>
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".BuyMusicActivity" />
         <activity
             android:name=".SettingsActivity"
@@ -48,7 +49,7 @@
 
                 <data
                     android:host="localhost:8000"
-                    android:scheme="http"></data>
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity android:name=".SearchQuery" />

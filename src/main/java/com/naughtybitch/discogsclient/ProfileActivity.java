@@ -77,9 +77,13 @@ public class ProfileActivity extends AppCompatActivity implements
                     case R.id.profile:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    case R.id.market:
+                    case R.id.buy_music:
                         startActivity(new Intent(ProfileActivity.this, BuyMusicActivity.class));
                         Toast.makeText(ProfileActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(ProfileActivity.this, SellMusicActivity.class));
+                        Toast.makeText(ProfileActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
