@@ -70,8 +70,7 @@ public class CustomRequest extends Request {
     }
 
     @Override
-    public 
-    <String, String> getHeaders() throws AuthFailureError {
+    public Map<String, String> getHeaders() throws AuthFailureError {
         return super.getHeaders();
     }
 

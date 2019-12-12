@@ -21,9 +21,9 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class SearchActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
-        MarketFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener, ExploreFragment.OnFragmentInteractionListener {
+public class SearchActivity extends AppCompatActivity implements
+        ProfileFragment.OnFragmentInteractionListener,
+        ExploreFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -118,17 +118,16 @@ public class SearchActivity extends AppCompatActivity implements HomeFragment.On
                         navigateToFragment(ProfileFragment.newInstance());
                         Toast.makeText(SearchActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.explore:
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
                     case R.id.market:
-                        navigateToFragment(MarketFragment.newInstance());
-                        Toast.makeText(SearchActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SearchActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(SearchActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(SearchActivity.this, SettingsActivity.class));
                         Toast.makeText(SearchActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.explore:
-                        navigateToFragment(ExploreFragment.newInstance());
-                        Toast.makeText(SearchActivity.this, "ExploreFragment", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;

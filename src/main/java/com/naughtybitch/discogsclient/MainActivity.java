@@ -34,8 +34,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements HomeFragment.OnFragmentInteractionListener,
-        MarketFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
@@ -158,10 +156,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.home:
-                        navigateToFragment(HomeFragment.newInstance());
-                        Toast.makeText(MainActivity.this, "HomeFragment", Toast.LENGTH_SHORT).show();
+                    case R.id.home: {
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
+                    }
                     case R.id.profile:
                         navigateToFragment(ProfileFragment.newInstance());
                         Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
