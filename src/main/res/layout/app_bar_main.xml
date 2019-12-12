@@ -20,7 +20,8 @@
             android:background="@android:color/transparent"
             app:contentScrim="@color/light_black"
             app:expandedTitleGravity="top"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleEnabled="false">
 
             <ImageView
                 android:id="@+id/toolbar_background_image"

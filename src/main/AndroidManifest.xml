@@ -3,6 +3,8 @@
     package="com.naughtybitch.discogsclient">
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 
     <application
         android:name=".AppController"
@@ -22,6 +24,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity android:name=".DiscogsClient"></activity>
         <activity android:name=".SearchActivity"></activity>
         <activity android:name=".GetStartedActivity"></activity>
         <activity
@@ -35,7 +38,20 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".SignInActivity" />
+        <activity android:name=".SignInActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="localhost:8000"
+                    android:scheme="http">
+
+                </data>
+            </intent-filter>
+        </activity>
         <activity android:name=".SearchQuery" />
         <activity android:name=".SearchableActivity">
             <intent-filter>

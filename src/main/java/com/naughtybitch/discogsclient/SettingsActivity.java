@@ -32,6 +32,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
 
+import com.google.android.material.navigation.NavigationView;
+
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
         HomeFragment.OnFragmentInteractionListener,
@@ -100,7 +102,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
-
+          
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
@@ -162,7 +164,53 @@ public class SettingsActivity extends AppCompatActivity implements
             this.drawerLayout.closeDrawer(GravityCompat.START);
         else {
             super.onBackPressed();
+          
+    @Override
+    protected void onStop() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        if (navigationView != null) {
+            navigationView.getCheckedItem().setCheckable(false);
         }
+        super.onStop();
+    }
+
+    public void navigationViewHandler() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setItemIconTintList(null);
+        navigationView.setCheckedItem(R.id.settings);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.home:
+                        Intent intent_main = new Intent(SettingsActivity.this, MainActivity.class);
+                        Toast.makeText(SettingsActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(intent_main);
+                        break;
+                    case R.id.profile:
+                        navigateToFragment(ProfileFragment.newInstance());
+                        Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.market:
+                        navigateToFragment(MarketFragment.newInstance());
+                        Toast.makeText(SettingsActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
+                        Toast.makeText(SettingsActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.explore:
+                        startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
+                        Toast.makeText(SettingsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
     }
 
     @Override

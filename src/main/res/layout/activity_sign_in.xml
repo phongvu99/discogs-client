@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,132 +17,66 @@
 
     </include>
 
-    <WebView
-        android:id="@+id/web_view"
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-    </WebView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-<!--    <ImageView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:layout_marginTop="24dp"-->
-<!--        android:src="@drawable/discogs_logo_simplified">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="24dp"
+                android:orientation="vertical">
 
-<!--    </ImageView>-->
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/verification_code"
+                    android:textAlignment="center"
+                    android:textColor="@color/light_black"
+                    android:textSize="24sp" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView7"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="24dp"-->
-<!--        android:text="@string/text11"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/light_black"-->
-<!--        android:textSize="24sp" />-->
+                <EditText
+                    android:id="@+id/verfier_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:autofillHints="@string/code_hint"
+                    android:gravity="center"
+                    android:hint="@string/code_hint"
+                    android:inputType="text">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:orientation="horizontal">-->
+                </EditText>
 
-<!--        <TextView-->
-<!--            android:id="@+id/textView3"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:layout_weight="1"-->
-<!--            android:gravity="center"-->
-<!--            android:text="@string/text5"-->
-<!--            android:textColor="@color/light_black" />-->
+                <Button
+                    android:id="@+id/oauth_verify"
+                    style="?attr/materialButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/check">
 
-<!--        <EditText-->
-<!--            android:id="@+id/username1"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="20dp"-->
-<!--            android:layout_weight="2"-->
-<!--            android:autofillHints="@string/text5"-->
-<!--            android:hint="@string/text5"-->
-<!--            android:inputType="text" />-->
+                </Button>
 
-<!--    </LinearLayout>-->
+            </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:orientation="horizontal">-->
+            <WebView
+                android:id="@+id/web_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-<!--        <TextView-->
-<!--            android:id="@+id/textView8"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:layout_weight="1"-->
-<!--            android:gravity="center"-->
-<!--            android:text="@string/text7"-->
-<!--            android:textColor="@color/light_black" />-->
+            </WebView>
 
-<!--        <EditText-->
-<!--            android:id="@+id/password1"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="20dp"-->
-<!--            android:layout_weight="2"-->
-<!--            android:autofillHints="@string/text7"-->
-<!--            android:hint="@string/text7"-->
-<!--            android:inputType="textPassword" />-->
+        </LinearLayout>
 
-<!--    </LinearLayout>-->
-
-<!--    <Button-->
-<!--        android:id="@+id/create_account1"-->
-<!--        style="?attr/buttonBarButtonStyle"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:background="@color/green"-->
-<!--        android:text="@string/text12"-->
-<!--        android:textColor="@color/white" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/textView2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:text="@string/text4"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/dark_black" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/facebook"-->
-<!--        style="?attr/buttonBarButtonStyle"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:background="@color/blue"-->
-<!--        android:text="@string/text13"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="12sp" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/google"-->
-<!--        style="?attr/buttonBarButtonStyle"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:background="@color/blue_sky"-->
-<!--        android:text="@string/text14"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="12sp" />-->
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

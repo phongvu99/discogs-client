@@ -1,7 +1,7 @@
 package com.naughtybitch.discogsclient;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,13 +21,8 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -71,7 +66,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             case (R.id.token_request):
                 Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
-                tokenRequest();
+                checkLoginStatus();
                 break;
         }
     }
@@ -90,7 +85,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 List<Result> list = response.getResults();
                 String coverImage_url = list.get(0).getCoverImage();
                 editText.setText("CoverImage url: " + coverImage_url + "\nHave a look at this amazing album cover by Coldplay!", TextView.BufferType.EDITABLE);
-                Glide.with(getActivity()).load(coverImage_url).fitCenter().placeholder(R.drawable.bigpump).crossFade().into(coverImage);
+                Glide.with(getActivity()).load(coverImage_url).override(600, 600).fitCenter().placeholder(R.drawable.bigpump).crossFade().into(coverImage);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -112,56 +107,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         AppController.getInstance().addToRequestQueue(customRequest, tag_json_object);
     }
 
-    public void tokenRequest() {
-        final EditText editText = (EditText) getActivity().findViewById(R.id.response);
-
-        String api_base_url = "https://api.discogs.com";
-        String search_url = api_base_url + "/database/search?q=everyday+life+coldplay&release_title=everyday+life&artist=coldplay&per_page=3&page=1";
-        String request_token_url = api_base_url + "/oauth/request_token";
-
-        // 1) create a java calendar instance
-        Calendar calendar = Calendar.getInstance();
-
-        // 2) get a java.util.Date from the calendar instance.
-        //    this date will represent the current instant, or "now".
-        java.util.Date now = calendar.getTime();
-
-        // 3) a java current time (now) instance
-        final java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
-        Log.i("time_stamp", currentTimestamp.toString());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, search_url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i("response", "Response is " + response);
-                editText.setText("Response is " + response, TextView.BufferType.EDITABLE);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("response", "Response is " + error);
-                editText.setText("Response is " + error);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/x-www-form-urlencoded");
-                headers.put("Authorization",
-                        "OAuth oauth_consumer_key=zrNFOdbKoUvMXDxixdPY, " +
-                                "oauth_nonce=" + currentTimestamp.toString() + ", " +
-                                "oauth_signature=NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ&, " +
-                                "oauth_signature_method=PLAINTEXT, " +
-                                "oauth_timestamp=" + currentTimestamp.toString() + ", " +
-                                "oauth_callback=https://www.discogs.com");
-                headers.put("User-Agent", "Discogsnect/0.1 +http://discogsnect.com");
-//                headers.put("Authorization", "Discogs token=mbAGeTxLGrWvJLiEEYOUZSwxkiVJyFYDiqEoNyxt");
-                Log.i("headers", "Header is " + headers);
-                return headers;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(stringRequest);
+    private void checkLoginStatus() {
+        SharedPreferences user_preferences;
+        user_preferences = getActivity().getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        boolean logged_in = user_preferences.getBoolean("logged_in", false);
+        String access_token = user_preferences.getString("access_token", null);
+        String access_token_secret = user_preferences.getString("access_token_secret", null);
+        Log.i("logged_in", "logged_in " + logged_in);
+        Log.i("access_token", "access_token " + access_token);
+        Log.i("access_token_secret", "access_token_secret " + access_token_secret);
     }
-
 
     public HomeFragment() {
         // Required empty public constructor
