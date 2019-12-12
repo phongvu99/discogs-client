@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.naughtybitch.discogsclient">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".AppController"
@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".BuyMusicActivity"></activity>
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".BuyMusicActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"
@@ -24,9 +25,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".DiscogsClient"></activity>
-        <activity android:name=".SearchActivity"></activity>
-        <activity android:name=".GetStartedActivity"></activity>
+        <activity android:name=".DiscogsClient" />
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".GetStartedActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/CustomTheme">
@@ -47,9 +48,7 @@
 
                 <data
                     android:host="localhost:8000"
-                    android:scheme="http">
-
-                </data>
+                    android:scheme="http"></data>
             </intent-filter>
         </activity>
         <activity android:name=".SearchQuery" />
@@ -62,8 +61,8 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".AlbumInfoActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".AlbumInfoActivity" />
     </application>
 
 </manifest>

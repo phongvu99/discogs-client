@@ -115,7 +115,7 @@ public class SearchActivity extends AppCompatActivity implements
                         startActivity(intent_main);
                         break;
                     case R.id.profile:
-                        navigateToFragment(ProfileFragment.newInstance());
+                        startActivity(new Intent(SearchActivity.this, ProfileActivity.class));
                         Toast.makeText(SearchActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
