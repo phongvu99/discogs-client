@@ -7,10 +7,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Debug;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +25,12 @@ import android.view.ViewGroup;
  * Use the {@link BuyMusicFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BuyMusicFragment extends Fragment {
+public class BuyMusicFragment extends Fragment implements
+        View.OnClickListener,
+        CartFragment.OnFragmentInteractionListener,
+        DWFragment.OnFragmentInteractionListener,
+        PurchasesFragment.OnFragmentInteractionListener,
+        OIMFragment.OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,6 +45,52 @@ public class BuyMusicFragment extends Fragment {
     public BuyMusicFragment() {
         // Required empty public constructor
     }
+
+    private void buttonOnClickListener(View v) {
+        Button btn_cart = v.findViewById(R.id.cart);
+        Button btn_purch = v.findViewById(R.id.purchases);
+        Button btn_dw = v.findViewById(R.id.detailed_wishlist);
+        Button btn_oim = v.findViewById(R.id.offer_i_made);
+        btn_cart.setOnClickListener(this);
+        btn_purch.setOnClickListener(this);
+        btn_dw.setOnClickListener(this);
+        btn_oim.setOnClickListener(this);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // Do smt
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.cart:
+                Toast.makeText(getActivity(), "????????", Toast.LENGTH_SHORT).show();
+                navigateToFragment(CartFragment.newInstance());
+                break;
+            case R.id.purchases:
+                navigateToFragment(PurchasesFragment.newInstance());
+                break;
+            case R.id.offer_i_made:
+                navigateToFragment(OIMFragment.newInstance());
+                break;
+            case R.id.detailed_wishlist:
+                navigateToFragment(DWFragment.newInstance());
+                break;
+        }
+    }
+
+
+
+    private void navigateToFragment(Fragment fragment) {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -54,6 +110,13 @@ public class BuyMusicFragment extends Fragment {
         return fragment;
     }
 
+    public static BuyMusicFragment newInstance() {
+        Bundle args = new Bundle();
+        BuyMusicFragment fragment = new BuyMusicFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +131,7 @@ public class BuyMusicFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_buy_music, container, false);
+        buttonOnClickListener(v);
         return v;
     }
 
