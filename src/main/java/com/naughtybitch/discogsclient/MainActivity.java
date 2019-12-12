@@ -156,17 +156,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.home: {
+                    case R.id.home:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    }
                     case R.id.profile:
-                        navigateToFragment(ProfileFragment.newInstance());
+                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.market:
                         startActivity(new Intent(MainActivity.this, BuyMusicActivity.class));
-//                        navigateToFragment(MarketFragment.newInstance());
                         Toast.makeText(MainActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
@@ -231,7 +229,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu);
-
+        return true;
 //        // TODO: Implement into SearchableActivity
 //        searchItem = menu.findItem(R.id.search_bar);
 //        final SearchView searchView = (SearchView) searchItem.getActionView();
@@ -249,8 +247,6 @@ public class MainActivity extends AppCompatActivity
 //                return false;
 //            }
 //        });
-
-        return true;
     }
 }
 

@@ -114,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity implements
                         startActivity(intent_main);
                         break;
                     case R.id.profile:
-                        navigateToFragment(ProfileFragment.newInstance());
+                        startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
                         Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.market:
