@@ -1,18 +1,5 @@
 package com.naughtybitch.discogsclient;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +11,18 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     SearchAdapter adapter;
     SearchView editSearch;
     String[] searchQueries;
-    ArrayList<SearchQuery> arrayList = new ArrayList<SearchQuery>();
+    ArrayList<SearchQuery> arrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +135,8 @@ public class MainActivity extends AppCompatActivity
     private void welcomeBack() {
         SharedPreferences user_preferences;
         user_preferences = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        Toast.makeText(this, "Welcome back, " + user_preferences.getString("user_name", null) + "!", Toast.LENGTH_SHORT).show();
+        String user_name = user_preferences.getString("user_name", null);
+        Toast.makeText(this, "Welcome back, " + user_name + "!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
