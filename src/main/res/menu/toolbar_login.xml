@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:visible="false"
+        android:id="@+id/authorize"
+        android:icon="@drawable/arrow"
+        android:iconTint="@color/light_black"
+        android:orderInCategory="150"
+        android:title="@string/authorize"
+        app:showAsAction="ifRoom">
+
+    </item>
+</menu>

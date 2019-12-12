@@ -32,12 +32,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
 
+import com.google.android.material.navigation.NavigationView;
+
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
-        HomeFragment.OnFragmentInteractionListener,
-        ProfileFragment.OnFragmentInteractionListener,
-        MarketFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener, ExploreFragment.OnFragmentInteractionListener {
+        ProfileFragment.OnFragmentInteractionListener {
 
     private static final String TITLE_TAG = "settingsActivityTitle";
     private DrawerLayout drawerLayout;
@@ -119,16 +118,15 @@ public class SettingsActivity extends AppCompatActivity implements
                         Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.market:
-                        navigateToFragment(MarketFragment.newInstance());
-                        Toast.makeText(SettingsActivity.this, "MarketFragment", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.settings:
-                        startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
-                        Toast.makeText(SettingsActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SettingsActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(SettingsActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
                         Toast.makeText(SettingsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     default:
                         return true;
@@ -163,6 +161,15 @@ public class SettingsActivity extends AppCompatActivity implements
         else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        if (navigationView != null) {
+            navigationView.getCheckedItem().setCheckable(false);
+        }
+        super.onStop();
     }
 
     @Override

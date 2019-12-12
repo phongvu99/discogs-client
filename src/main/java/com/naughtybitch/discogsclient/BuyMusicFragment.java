@@ -80,8 +80,6 @@ public class BuyMusicFragment extends Fragment implements
         }
     }
 
-
-
     private void navigateToFragment(Fragment fragment) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();

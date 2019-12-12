@@ -13,7 +13,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -32,8 +34,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements HomeFragment.OnFragmentInteractionListener,
-        MarketFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
@@ -129,7 +129,23 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
 
         navigationViewHandler();
+        welcomeBack();
 
+    }
+
+    private void welcomeBack() {
+        SharedPreferences user_preferences;
+        user_preferences = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        Toast.makeText(this, "Welcome back, " + user_preferences.getString("user_name", null) + "!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStop() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        if (navigationView != null) {
+            navigationView.getCheckedItem().setCheckable(false);
+        }
+        super.onStop();
     }
 
     public void navigationViewHandler() {
@@ -140,10 +156,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.home:
-                        navigateToFragment(HomeFragment.newInstance());
-                        Toast.makeText(MainActivity.this, "HomeFragment", Toast.LENGTH_SHORT).show();
+                    case R.id.home: {
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
+                    }
                     case R.id.profile:
                         navigateToFragment(ProfileFragment.newInstance());
                         Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
