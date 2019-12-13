@@ -15,15 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity">
+
+        </activity>
         <activity android:name=".BuyMusicActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".SettingsActivity" />
         </activity>
         <activity android:name=".DiscogsClient" />
         <activity android:name=".SearchActivity" />
@@ -48,7 +50,9 @@
 
                 <data
                     android:host="localhost:8000"
-                    android:scheme="http"></data>
+                    android:scheme="http">
+
+                </data>
             </intent-filter>
         </activity>
         <activity android:name=".SearchQuery" />

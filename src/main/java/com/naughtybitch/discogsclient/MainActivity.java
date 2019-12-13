@@ -77,7 +77,22 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
         setSupportActionBar(myToolbar);
+
+        // DrawerLayout
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
 
         // TODO: Implement into SearchableActivity
         searchQueries = new String[]{"TextView", "ListView", "SearchView",
@@ -93,17 +108,6 @@ public class MainActivity extends AppCompatActivity
 
         adapter = new SearchAdapter(this, arrayList);
 
-        // DrawerLayout
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
