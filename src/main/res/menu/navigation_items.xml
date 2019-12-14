@@ -13,9 +13,17 @@
             android:icon="@drawable/lemons"
             android:title="@string/home" />
         <item
-            android:id="@+id/market"
+            android:id="@+id/wish_list"
             android:icon="@drawable/lemons"
-            android:title="@string/market" />
+            android:title="@string/wishlist" />
+        <item
+            android:id="@+id/buy_music"
+            android:icon="@drawable/lemons"
+            android:title="@string/music_buy" />
+        <item
+            android:id="@+id/sell_music"
+            android:icon="@drawable/lemons"
+            android:title="@string/music_sell" />
         <item
             android:id="@+id/explore"
             android:icon="@drawable/icon_search"

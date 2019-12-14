@@ -1,5 +1,13 @@
 package com.naughtybitch.discogsclient;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,21 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.google.android.material.navigation.NavigationView;
 
-public class ProfileActivity extends AppCompatActivity implements
-        ProfileFragment.OnFragmentInteractionListener {
+public class WishlistActivity extends AppCompatActivity implements
+        WishlistFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -31,14 +28,12 @@ public class ProfileActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_wishlist);
 
-        // Custom ActionBar
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        // DrawerLayout
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -49,52 +44,45 @@ public class ProfileActivity extends AppCompatActivity implements
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        // Create a new Fragment to be placed in the activity layout
-        ProfileFragment firstFragment = ProfileFragment.newInstance();
-
-        // In case this activity was started with special instructions from an
-        // Intent, pass the Intent's extras to the fragment as arguments
-        firstFragment.setArguments(getIntent().getExtras());
-
-        // Add the fragment to the 'fragment_container' FrameLayout
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
-
+        WishlistFragment firstfragment = WishlistFragment.newInstance();
+        firstfragment.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstfragment).commit();
         navigationViewHandler();
     }
 
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
-        navigationView.setCheckedItem(R.id.profile);
+        navigationView.setCheckedItem(R.id.wish_list);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.home:
-                        startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                        startActivity(new Intent(WishlistActivity.this, MainActivity.class));
                         break;
                     case R.id.profile:
-                        drawerLayout.closeDrawer(GravityCompat.START);
+                        startActivity(new Intent(WishlistActivity.this, ProfileActivity.class));
+                        Toast.makeText(WishlistActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(ProfileActivity.this, WishlistActivity.class));
-                        Toast.makeText(ProfileActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.buy_music:
-                        startActivity(new Intent(ProfileActivity.this, BuyMusicActivity.class));
-                        Toast.makeText(ProfileActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WishlistActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(WishlistActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
-                        startActivity(new Intent(ProfileActivity.this, SellMusicActivity.class));
-                        Toast.makeText(ProfileActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WishlistActivity.this, SellMusicActivity.class));
+                        Toast.makeText(WishlistActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
-                        Toast.makeText(ProfileActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WishlistActivity.this, SettingsActivity.class));
+                        Toast.makeText(WishlistActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(ProfileActivity.this, ExploreActivity.class));
-                        Toast.makeText(ProfileActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WishlistActivity.this, ExploreActivity.class));
+                        Toast.makeText(WishlistActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;
@@ -104,15 +92,6 @@ public class ProfileActivity extends AppCompatActivity implements
                 return true;
             }
         });
-    }
-
-    private void navigateToFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -129,7 +108,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
             case R.id.search:
-                Intent intent = new Intent(ProfileActivity.this, ExploreActivity.class);
+                Intent intent = new Intent(WishlistActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }

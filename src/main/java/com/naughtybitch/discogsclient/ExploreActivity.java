@@ -1,5 +1,6 @@
 package com.naughtybitch.discogsclient;
 
+
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,7 +25,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.navigation.NavigationView;
 
 public class ExploreActivity extends AppCompatActivity implements
-        ProfileFragment.OnFragmentInteractionListener,
         ExploreFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
@@ -120,12 +120,20 @@ public class ExploreActivity extends AppCompatActivity implements
                         startActivity(new Intent(ExploreActivity.this, ProfileActivity.class));
                         Toast.makeText(ExploreActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(ExploreActivity.this, WishlistActivity.class));
+                        Toast.makeText(ExploreActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.explore:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    case R.id.market:
+                    case R.id.buy_music:
                         startActivity(new Intent(ExploreActivity.this, BuyMusicActivity.class));
                         Toast.makeText(ExploreActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(ExploreActivity.this, SellMusicActivity.class));
+                        Toast.makeText(ExploreActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(ExploreActivity.this, SettingsActivity.class));

@@ -7,27 +7,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CartFragment.OnFragmentInteractionListener} interface
+ * {@link InventoryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CartFragment#newInstance} factory method to
+ * Use the {@link InventoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CartFragment extends Fragment
-        //implements
-        //View.OnClickListener
-        {
+public class InventoryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,32 +32,16 @@ public class CartFragment extends Fragment
 
     private OnFragmentInteractionListener mListener;
 
-    public CartFragment() {
+    public InventoryFragment() {
         // Required empty public constructor
     }
 
-//    private void buttonOnClickListener(View v) {
-//        Button btn_dw = v.findViewById(R.id.cart_dw_button);
-//        btn_dw.setOnClickListener(this);
-//    }
-//
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.cart_dw_button:
-//                navigateToFragment(DWFragment.newInstance());
-//                break;
-//        }
-//    }
-//
-//    private void navigateToFragment(Fragment fragment) {
-//        FragmentManager fm = getActivity().getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.add(R.id.fragment_container, fragment);
-//        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
-//    }
+    public static InventoryFragment newInstance() {
+        Bundle args = new Bundle();
+        InventoryFragment fragment = new InventoryFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -72,21 +49,14 @@ public class CartFragment extends Fragment
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment CartFragment.
+     * @return A new instance of fragment InventoryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CartFragment newInstance(String param1, String param2) {
-        CartFragment fragment = new CartFragment();
+    public static InventoryFragment newInstance(String param1, String param2) {
+        InventoryFragment fragment = new InventoryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static CartFragment newInstance() {
-        Bundle args = new Bundle();
-        CartFragment fragment = new CartFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -104,8 +74,7 @@ public class CartFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_cart, container, false);
-//        buttonOnClickListener(v);
+        View v = inflater.inflate(R.layout.fragment_inventory, container, false);
         return v;
     }
 

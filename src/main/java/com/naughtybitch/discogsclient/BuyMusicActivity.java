@@ -19,10 +19,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 public class BuyMusicActivity extends AppCompatActivity implements
-        ProfileFragment.OnFragmentInteractionListener,
         BuyMusicFragment.OnFragmentInteractionListener,
         CartFragment.OnFragmentInteractionListener,
         DWFragment.OnFragmentInteractionListener,
@@ -70,7 +76,7 @@ public class BuyMusicActivity extends AppCompatActivity implements
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
-        navigationView.setCheckedItem(R.id.market);
+        navigationView.setCheckedItem(R.id.buy_music);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -82,8 +88,16 @@ public class BuyMusicActivity extends AppCompatActivity implements
                         startActivity(new Intent(BuyMusicActivity.this, ProfileActivity.class));
                         Toast.makeText(BuyMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.market:
+                    case R.id.wish_list:
+                        startActivity(new Intent(BuyMusicActivity.this, WishlistActivity.class));
+                        Toast.makeText(BuyMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.buy_music:
                         drawerLayout.closeDrawer(GravityCompat.START);
+                        Toast.makeText(BuyMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(BuyMusicActivity.this, SellMusicActivity.class));
                         Toast.makeText(BuyMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:

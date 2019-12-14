@@ -125,6 +125,27 @@
     <string name="change_email">Edit email</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
+  
+    <!-- Buy Music -->
+    <string name="cart_text_view_1">Shop for Vinyl, CDs, and more in the Discogs Marketplace.</string>
+    <string name="cart_text_view_2">Your cart is empty</string>
+    <string name="cart_text_view_3">1. Tap the Search icon to search for a Release title, Artist name, Label name, or other identifying release details.</string>
+    <string name="cart_text_view_4">2. Narrow down to the Release version you want to buy.</string>
+    <string name="cart_text_view_5">3. Narrow down to the a specific sales listing.</string>
+    <string name="cart_text_view_6">You have items in your wishlist for sale.</string>
+    <string name="dw_text_view_1">Could not find any marketplace listings from your wishlist.</string>
+    <string name="purch_text_view_1">There are no purchase items.</string>
+    <string name="oim_text_view_1">You have no offer with the status Pending.</string>
+    <string name="music_sell">Sell music</string>
+    <string name="music_buy">Buy music</string>
+
+    <!-- Sell Music -->
+    <string name="offers">Offers</string>
+    <string name="inventory">Inventory</string>
+    <string name="order_text_view_1">There are no order items.</string>
+    <string name="offer_text_view_1">You have no offers with the status Pending.</string>
+    <string name="inven_text_view_1">You have no items in your inventory with status For Sale,</string>
+    <string name="wishlist">Wishlist</string>
 
     <!-- CardView row item -->
     <string name="title">Everyday Life</string>

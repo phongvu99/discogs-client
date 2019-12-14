@@ -129,9 +129,17 @@ public class SettingsActivity extends AppCompatActivity implements
                         startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
                         Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.market:
+                    case R.id.wish_list:
+                        startActivity(new Intent(SettingsActivity.this, WishlistActivity.class));
+                        Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.buy_music:
                         startActivity(new Intent(SettingsActivity.this, BuyMusicActivity.class));
                         Toast.makeText(SettingsActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(SettingsActivity.this, SellMusicActivity.class));
+                        Toast.makeText(SettingsActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
