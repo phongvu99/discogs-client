@@ -162,6 +162,10 @@ public class MainActivity extends AppCompatActivity
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(MainActivity.this, WishlistActivity.class));
+                        Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.buy_music:
                         startActivity(new Intent(MainActivity.this, BuyMusicActivity.class));
                         Toast.makeText(MainActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
@@ -175,7 +179,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                        startActivity(new Intent(MainActivity.this, ExploreActivity.class));
                         Toast.makeText(MainActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -193,7 +197,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.search:
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                Intent intent = new Intent(MainActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }

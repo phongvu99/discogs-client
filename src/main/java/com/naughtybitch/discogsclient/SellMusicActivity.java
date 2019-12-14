@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -80,6 +79,10 @@ public class SellMusicActivity extends AppCompatActivity implements
                         startActivity(new Intent(SellMusicActivity.this, ProfileActivity.class));
                         Toast.makeText(SellMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(SellMusicActivity.this, WishlistActivity.class));
+                        Toast.makeText(SellMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.buy_music:
                         startActivity(new Intent(SellMusicActivity.this, BuyMusicActivity.class));
                         Toast.makeText(SellMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
@@ -93,7 +96,7 @@ public class SellMusicActivity extends AppCompatActivity implements
                         Toast.makeText(SellMusicActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(SellMusicActivity.this, SearchActivity.class));
+                        startActivity(new Intent(SellMusicActivity.this, ExploreActivity.class));
                         Toast.makeText(SellMusicActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -129,7 +132,7 @@ public class SellMusicActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
             case R.id.search:
-                Intent intent = new Intent(SellMusicActivity.this, SearchActivity.class);
+                Intent intent = new Intent(SellMusicActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }

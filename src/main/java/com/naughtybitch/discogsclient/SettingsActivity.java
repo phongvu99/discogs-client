@@ -86,7 +86,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
             case R.id.search:
-                startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
+                startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
                 break;
         }
 
@@ -114,6 +114,10 @@ public class SettingsActivity extends AppCompatActivity implements
                         startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
                         Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(SettingsActivity.this, WishlistActivity.class));
+                        Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.buy_music:
                         startActivity(new Intent(SettingsActivity.this, BuyMusicActivity.class));
                         Toast.makeText(SettingsActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
@@ -123,7 +127,7 @@ public class SettingsActivity extends AppCompatActivity implements
                         Toast.makeText(SettingsActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
+                        startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
                         Toast.makeText(SettingsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:

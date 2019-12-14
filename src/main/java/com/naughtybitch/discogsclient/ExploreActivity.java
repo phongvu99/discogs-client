@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class SearchActivity extends AppCompatActivity implements
+public class ExploreActivity extends AppCompatActivity implements
         ExploreFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
@@ -109,28 +109,32 @@ public class SearchActivity extends AppCompatActivity implements
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.home:
-                        Intent intent_main = new Intent(SearchActivity.this, MainActivity.class);
-                        Toast.makeText(SearchActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
+                        Intent intent_main = new Intent(ExploreActivity.this, MainActivity.class);
+                        Toast.makeText(ExploreActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
                         startActivity(intent_main);
                         break;
                     case R.id.profile:
-                        startActivity(new Intent(SearchActivity.this, ProfileActivity.class));
-                        Toast.makeText(SearchActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ExploreActivity.this, ProfileActivity.class));
+                        Toast.makeText(ExploreActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(ExploreActivity.this, WishlistActivity.class));
+                        Toast.makeText(ExploreActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.buy_music:
-                        startActivity(new Intent(SearchActivity.this, BuyMusicActivity.class));
-                        Toast.makeText(SearchActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ExploreActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(ExploreActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
-                        startActivity(new Intent(SearchActivity.this, SellMusicActivity.class));
-                        Toast.makeText(SearchActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ExploreActivity.this, SellMusicActivity.class));
+                        Toast.makeText(ExploreActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(SearchActivity.this, SettingsActivity.class));
-                        Toast.makeText(SearchActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ExploreActivity.this, SettingsActivity.class));
+                        Toast.makeText(ExploreActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;

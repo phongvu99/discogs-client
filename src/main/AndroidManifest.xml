@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".SellMusicActivity"></activity>
+        <activity android:name=".WishlistActivity"></activity>
+        <activity android:name=".SellMusicActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".BuyMusicActivity" />
         <activity
@@ -27,7 +28,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".DiscogsClient" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".ExploreActivity" />
         <activity android:name=".GetStartedActivity" />
         <activity
             android:name=".SplashActivity"

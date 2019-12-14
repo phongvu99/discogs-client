@@ -13,6 +13,10 @@
             android:icon="@drawable/lemons"
             android:title="@string/home" />
         <item
+            android:id="@+id/wish_list"
+            android:icon="@drawable/lemons"
+            android:title="@string/wishlist" />
+        <item
             android:id="@+id/buy_music"
             android:icon="@drawable/lemons"
             android:title="@string/music_buy" />

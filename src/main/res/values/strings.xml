@@ -145,5 +145,6 @@
     <string name="order_text_view_1">There are no order items.</string>
     <string name="offer_text_view_1">You have no offers with the status Pending.</string>
     <string name="inven_text_view_1">You have no items in your inventory with status For Sale,</string>
+    <string name="wishlist">Wishlist</string>
 
 </resources>

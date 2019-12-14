@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -77,6 +76,10 @@ public class ProfileActivity extends AppCompatActivity implements
                     case R.id.profile:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(ProfileActivity.this, WishlistActivity.class));
+                        Toast.makeText(ProfileActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.buy_music:
                         startActivity(new Intent(ProfileActivity.this, BuyMusicActivity.class));
                         Toast.makeText(ProfileActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
@@ -90,7 +93,7 @@ public class ProfileActivity extends AppCompatActivity implements
                         Toast.makeText(ProfileActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(ProfileActivity.this, SearchActivity.class));
+                        startActivity(new Intent(ProfileActivity.this, ExploreActivity.class));
                         Toast.makeText(ProfileActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -126,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
             case R.id.search:
-                Intent intent = new Intent(ProfileActivity.this, SearchActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }
