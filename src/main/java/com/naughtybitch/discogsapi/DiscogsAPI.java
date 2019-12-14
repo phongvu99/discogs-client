@@ -14,4 +14,5 @@ public interface DiscogsAPI {
      */
     @GET("database/search")
     Call<SearchResponse> getSearchResult(@Query("q") String query, @Query("per_page") int per_page, @Query("page") int page);
+
 }

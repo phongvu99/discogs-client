@@ -4,17 +4,19 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.bumptech.glide.Glide;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.Result;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
@@ -22,10 +24,17 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
     // Store a member variable for the results
     private List<Result> mResults;
+    CircularProgressDrawable progressDrawable;
+    private Context context;
 
     // Pass in the result list into the constructor
-    public ResultsAdapter(List<Result> results) {
-        mResults = results;
+    public ResultsAdapter(Context context, List<Result> results) {
+        this.context = context;
+        this.mResults = results;
+    }
+
+    public ResultsAdapter() {
+        mResults = new ArrayList<>();
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -48,15 +57,19 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get the data model based on position
         Result result = mResults.get(position);
+        progressDrawable = new CircularProgressDrawable(context);
+        progressDrawable.setStrokeWidth(5f);
+        progressDrawable.setCenterRadius(30f);
+        progressDrawable.start();
 
         // Set item views based on your views and data model
         TextView textView = holder.card_title;
         textView.setText(result.getTitle());
         TextView textView1 = holder.card_genre;
         textView1.setText(result.getCountry());
-        CircleImageView imageView = holder.card_image;
-//        Glide.with(SearchableActivity.getInstance()).load(result.getCoverImage())
-//                .into(imageView);
+        ImageView imageView = holder.card_image;
+        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+                .into(imageView);
 
     }
 
@@ -72,7 +85,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         // for any view that will be set as you render a row
         private TextView card_title;
         private TextView card_genre;
-        private CircleImageView card_image;
+        private ImageView card_image;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -83,7 +96,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
             card_title = (TextView) itemView.findViewById(R.id.card_title);
             card_genre = (TextView) itemView.findViewById(R.id.card_genre);
-            card_image = (CircleImageView) itemView.findViewById(R.id.card_image);
+            card_image = (ImageView) itemView.findViewById(R.id.card_image);
 
         }
     }

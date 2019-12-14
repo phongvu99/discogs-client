@@ -3,7 +3,6 @@ package com.naughtybitch.discogsclient;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Result {
@@ -59,21 +58,6 @@ public class Result {
     @SerializedName("format_quantity")
     @Expose
     private Integer formatQuantity;
-
-    // Testing the recyclerView
-    public Result(String title, String genre) {
-        this.title = title;
-        this.country = genre;
-    }
-
-    // Testing the recyclerView
-    public static ArrayList<Result> createResultsList(int numResults) {
-        ArrayList<Result> results = new ArrayList<>();
-        for (int i = 1; i <= numResults; i++) {
-            results.add(new Result("Everyday Life", "Rock"));
-        }
-        return results;
-    }
 
     public String getYear() {
         return year;
