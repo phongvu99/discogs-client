@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 
 public class SettingsActivity extends AppCompatActivity implements
@@ -47,6 +48,8 @@ public class SettingsActivity extends AppCompatActivity implements
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+        collapsingToolbarLayout.setTitleEnabled(false);
         setSupportActionBar(myToolbar);
 
         // DrawerLayout
@@ -55,11 +58,10 @@ public class SettingsActivity extends AppCompatActivity implements
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setHomeButtonEnabled(true);
         }
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -74,7 +76,13 @@ public class SettingsActivity extends AppCompatActivity implements
                     @Override
                     public void onBackStackChanged() {
                         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                            toggle.setDrawerIndicatorEnabled(true);
                             setTitle(R.string.settings);
+                        }
+                        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                            toggle.setDrawerIndicatorEnabled(false);
+                            getSupportActionBar().setHomeButtonEnabled(true);
+                            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                         }
                     }
                 });
@@ -85,6 +93,13 @@ public class SettingsActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    fm.popBackStack();
+                    return true;
+                }
+                break;
             case R.id.search:
                 startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
                 break;

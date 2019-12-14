@@ -1,10 +1,5 @@
 package com.naughtybitch.discogsclient;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,8 +19,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
-import org.json.JSONObject;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -50,7 +47,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         myToolbar.setTitle("Authorization");
         setSupportActionBar(myToolbar);
 
-        WebView webView = (WebView) findViewById(R.id.web_view);
+        webView = (WebView) findViewById(R.id.web_view);
+        webView.clearCache(true);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);

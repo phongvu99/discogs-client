@@ -1,18 +1,5 @@
 package com.naughtybitch.discogsclient;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,14 +9,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity
@@ -38,15 +33,6 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
-    private MenuItem searchItem;
-    private ImageView imageView;
-
-    // Declare Variables
-    ListView list;
-    SearchAdapter adapter;
-    SearchView editSearch;
-    String[] searchQueries;
-    ArrayList<SearchQuery> arrayList = new ArrayList<SearchQuery>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,28 +63,17 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
         setSupportActionBar(myToolbar);
-
-        // TODO: Implement into SearchableActivity
-        searchQueries = new String[]{"TextView", "ListView", "SearchView",
-                "RatingBar", "ToolBar", "Button", "EditText", "ToggleButton",
-                "ImageView", "SlidingDrawer", "Android"};
-
-        list = (ListView) findViewById(R.id.list_view);
-        for (String searchQuery : searchQueries) {
-            SearchQuery searchQuery1 = new SearchQuery(searchQuery);
-            // Binds all strings into an array
-            arrayList.add(searchQuery1);
-        }
-
-        adapter = new SearchAdapter(this, arrayList);
 
         // DrawerLayout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
         ActionBar actionBar = getSupportActionBar();
+
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -135,7 +110,8 @@ public class MainActivity extends AppCompatActivity
     private void welcomeBack() {
         SharedPreferences user_preferences;
         user_preferences = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        Toast.makeText(this, "Welcome back, " + user_preferences.getString("user_name", null) + "!", Toast.LENGTH_SHORT).show();
+        String user_name = user_preferences.getString("user_name", null);
+        Toast.makeText(this, "Welcome back, " + user_name + "!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -237,23 +213,6 @@ public class MainActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu);
         return true;
-//        // TODO: Implement into SearchableActivity
-//        searchItem = menu.findItem(R.id.search_bar);
-//        final SearchView searchView = (SearchView) searchItem.getActionView();
-//        searchView.setQueryHint(getResources().getText(R.string.search_hint));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                searchView.clearFocus();
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                adapter.filter(newText);
-//                return false;
-//            }
-//        });
     }
 }
 
