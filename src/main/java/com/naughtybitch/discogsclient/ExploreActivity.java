@@ -1,16 +1,6 @@
 package com.naughtybitch.discogsclient;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
+import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,9 +9,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.navigation.NavigationView;
 
-public class SearchActivity extends AppCompatActivity implements
+public class ExploreActivity extends AppCompatActivity implements
         ProfileFragment.OnFragmentInteractionListener,
         ExploreFragment.OnFragmentInteractionListener {
 
@@ -110,24 +112,24 @@ public class SearchActivity extends AppCompatActivity implements
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.home:
-                        Intent intent_main = new Intent(SearchActivity.this, MainActivity.class);
-                        Toast.makeText(SearchActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
+                        Intent intent_main = new Intent(ExploreActivity.this, MainActivity.class);
+                        Toast.makeText(ExploreActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
                         startActivity(intent_main);
                         break;
                     case R.id.profile:
-                        startActivity(new Intent(SearchActivity.this, ProfileActivity.class));
-                        Toast.makeText(SearchActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ExploreActivity.this, ProfileActivity.class));
+                        Toast.makeText(ExploreActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.market:
-                        startActivity(new Intent(SearchActivity.this, BuyMusicActivity.class));
-                        Toast.makeText(SearchActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ExploreActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(ExploreActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(SearchActivity.this, SettingsActivity.class));
-                        Toast.makeText(SearchActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ExploreActivity.this, SettingsActivity.class));
+                        Toast.makeText(ExploreActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;
@@ -152,6 +154,28 @@ public class SearchActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_search, menu);
+        searchItem = menu.findItem(R.id.search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getResources().getText(R.string.search_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                Intent intent = new Intent(ExploreActivity.this, SearchableActivity.class);
+                intent.setAction(Intent.ACTION_SEARCH);
+                Bundle bundle = new Bundle();
+                bundle.putString(SearchManager.QUERY, query);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+
+        });
         return true;
     }
 

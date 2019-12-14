@@ -28,7 +28,7 @@
                 android:value=".SettingsActivity" />
         </activity>
         <activity android:name=".DiscogsClient" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".ExploreActivity" />
         <activity android:name=".GetStartedActivity" />
         <activity
             android:name=".SplashActivity"

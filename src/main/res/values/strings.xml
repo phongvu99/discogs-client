@@ -126,4 +126,7 @@
     <string name="save">save</string>
     <string name="cancel">cancel</string>
 
+    <!-- CardView row item -->
+    <string name="title">Everyday Life</string>
+
 </resources>

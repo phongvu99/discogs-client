@@ -9,14 +9,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -28,8 +26,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity
         implements HomeFragment.OnFragmentInteractionListener,
@@ -38,15 +34,6 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
-    private MenuItem searchItem;
-    private ImageView imageView;
-
-    // Declare Variables
-    ListView list;
-    SearchAdapter adapter;
-    SearchView editSearch;
-    String[] searchQueries;
-    ArrayList<SearchQuery> arrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,21 +80,6 @@ public class MainActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
         }
-
-        // TODO: Implement into SearchableActivity
-        searchQueries = new String[]{"TextView", "ListView", "SearchView",
-                "RatingBar", "ToolBar", "Button", "EditText", "ToggleButton",
-                "ImageView", "SlidingDrawer", "Android"};
-
-        list = (ListView) findViewById(R.id.list_view);
-        for (String searchQuery : searchQueries) {
-            SearchQuery searchQuery1 = new SearchQuery(searchQuery);
-            // Binds all strings into an array
-            arrayList.add(searchQuery1);
-        }
-
-        adapter = new SearchAdapter(this, arrayList);
-
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
@@ -176,7 +148,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                        startActivity(new Intent(MainActivity.this, ExploreActivity.class));
                         Toast.makeText(MainActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -194,7 +166,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.search:
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                Intent intent = new Intent(MainActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -234,23 +206,6 @@ public class MainActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu);
         return true;
-//        // TODO: Implement into SearchableActivity
-//        searchItem = menu.findItem(R.id.search_bar);
-//        final SearchView searchView = (SearchView) searchItem.getActionView();
-//        searchView.setQueryHint(getResources().getText(R.string.search_hint));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                searchView.clearFocus();
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                adapter.filter(newText);
-//                return false;
-//            }
-//        });
     }
 }
 

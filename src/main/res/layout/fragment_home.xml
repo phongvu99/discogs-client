@@ -80,12 +80,14 @@
 
             </ImageView>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/lemons">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/lemons"
+                app:civ_border_color="@color/light_black"
+                app:civ_border_width="2dp">
 
-            </ImageView>
+            </de.hdodenhof.circleimageview.CircleImageView>
 
         </LinearLayout>
 

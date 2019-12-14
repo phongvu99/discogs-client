@@ -101,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity implements
                 }
                 break;
             case R.id.search:
-                startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
+                startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
                 break;
         }
 
@@ -134,7 +134,7 @@ public class SettingsActivity extends AppCompatActivity implements
                         Toast.makeText(SettingsActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(SettingsActivity.this, SearchActivity.class));
+                        startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
                         Toast.makeText(SettingsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:

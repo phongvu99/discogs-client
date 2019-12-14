@@ -1,5 +1,13 @@
 package com.naughtybitch.discogsclient;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -8,17 +16,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 public class BuyMusicActivity extends AppCompatActivity implements
@@ -91,7 +91,7 @@ public class BuyMusicActivity extends AppCompatActivity implements
                         Toast.makeText(BuyMusicActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(BuyMusicActivity.this, SearchActivity.class));
+                        startActivity(new Intent(BuyMusicActivity.this, ExploreActivity.class));
                         Toast.makeText(BuyMusicActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -127,7 +127,7 @@ public class BuyMusicActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
             case R.id.search:
-                Intent intent = new Intent(BuyMusicActivity.this, SearchActivity.class);
+                Intent intent = new Intent(BuyMusicActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }

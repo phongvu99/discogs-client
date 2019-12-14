@@ -2,16 +2,16 @@ package com.naughtybitch.discogsclient;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class SuggestionsFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -41,6 +41,8 @@ public class SuggestionsFragment extends Fragment implements View.OnClickListene
     }
 
     private void buttonOnClickListener(View v) {
+        HorizontalScrollView scrollView = v.findViewById(R.id.horizontal_scroll);
+        scrollView.setHorizontalScrollBarEnabled(false);
         ImageButton img_btn_1 = v.findViewById(R.id.img1);
         ImageButton img_btn_2 = v.findViewById(R.id.img2);
         ImageButton img_btn_3 = v.findViewById(R.id.img3);

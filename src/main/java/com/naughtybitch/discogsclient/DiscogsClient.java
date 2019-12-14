@@ -1,7 +1,6 @@
 package com.naughtybitch.discogsclient;
 
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -12,12 +11,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.JsonObject;
-
-
-import org.json.JSONObject;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -79,7 +73,7 @@ public class DiscogsClient extends AppCompatActivity {
 //        editor.apply();
 //    }
 
-    private Timestamp currentTimeStamp() {
+    public Timestamp currentTimeStamp() {
         // 1) create a java calendar instance
         Calendar calendar = Calendar.getInstance();
         // 2) get a java.util.Date from the calendar instance.
