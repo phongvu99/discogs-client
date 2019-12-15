@@ -22,13 +22,16 @@
                 android:id="@+id/card_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:contentDescription="@string/lemon">
+                android:contentDescription="@string/lemon"
+                android:padding="10dp"
+                android:paddingTop="0dp">
 
             </ImageView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_toEndOf="@id/card_image"
                 android:orientation="vertical">
 
@@ -37,16 +40,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/title"
-                    android:textColor="@color/white">
+                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header"
+                    android:textColor="@color/white"
+                    android:textSize="18sp">
 
                 </TextView>
 
                 <TextView
-                    android:id="@+id/card_genre"
+                    android:id="@+id/card_formats"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/genre"
-                    android:textColor="@color/white">
+                    android:text="@string/formats"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="12sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/card_labels"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="12sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/card_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/card_country"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="12sp">
 
                 </TextView>
             </LinearLayout>

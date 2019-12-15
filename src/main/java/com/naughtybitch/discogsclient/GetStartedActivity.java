@@ -1,7 +1,5 @@
 package com.naughtybitch.discogsclient;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.naughtybitch.discogsapi.DiscogsClient;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;

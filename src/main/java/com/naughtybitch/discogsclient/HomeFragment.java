@@ -21,6 +21,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.naughtybitch.POJO.Result;
+import com.naughtybitch.POJO.SearchResponse;
+import com.naughtybitch.discogsapi.AppController;
+import com.naughtybitch.discogsapi.CustomRequest;
 
 import java.util.HashMap;
 import java.util.List;

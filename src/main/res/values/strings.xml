@@ -73,7 +73,7 @@
     <string name="purchases">Purchases</string>
     <string name="orders">Orders</string>
     <string name="contributions">Contributions</string>
-    <string name="description">Description</string>
+
 
     <!-- Preference Header -->
     <string name="profile_settings_header">Profile settings</string>
@@ -125,7 +125,8 @@
     <string name="change_email">Edit email</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
-  
+    <string name="description">Description</string>
+
     <!-- Buy Music -->
     <string name="cart_text_view_1">Shop for Vinyl, CDs, and more in the Discogs Marketplace.</string>
     <string name="cart_text_view_2">Your cart is empty</string>
@@ -148,6 +149,15 @@
     <string name="wishlist">Wishlist</string>
 
     <!-- CardView row item -->
+    <string name="user">User</string>
     <string name="title">Everyday Life</string>
+    <string name="master">Master release</string>
+    <string name="show_all">Click to show all versions</string>
+    <string name="formats">Formats: 2xVinyl, LP, Album</string>
+    <string name="card_country">Europe (2019)</string>
+    <string name="label">Labels: Parlophone + 3 more</string>
+    <string name="artist_profile">Coldplay is an English rock band from London, England. They\'\ve been a band since January 16, 1998 when they lost a demotap...</string>
+    <string name="label_profile">Label Code: LC 0299 Please note, many Parlophone issues also carry an EMI logo. This is not a label and EMI should not be add...</string>
+    <string name="no_item">Could not find any items</string>
 
 </resources>
