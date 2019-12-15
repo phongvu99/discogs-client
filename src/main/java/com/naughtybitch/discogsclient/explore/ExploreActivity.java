@@ -1,7 +1,8 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsclient.explore;
 
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
+import com.naughtybitch.discogsclient.MainActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
+import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.SearchableActivity;
+import com.naughtybitch.discogsclient.settings.SettingsActivity;
+import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
+import com.naughtybitch.discogsclient.sell.SellMusicActivity;
+import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 
 public class ExploreActivity extends AppCompatActivity implements
         ExploreFragment.OnFragmentInteractionListener {
@@ -163,7 +172,9 @@ public class ExploreActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_search, menu);
         searchItem = menu.findItem(R.id.search);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint(getResources().getText(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

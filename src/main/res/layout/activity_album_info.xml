@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".AlbumInfoActivity">
+    tools:context=".album.AlbumInfoActivity">
 
     <LinearLayout
         android:id="@+id/linear_container"
@@ -64,7 +64,7 @@
 
         <fragment
             android:id="@+id/more_by"
-            android:name="com.naughtybitch.discogsclient.SuggestionsFragment"
+            android:name="com.naughtybitch.discogsclient.album.SuggestionsFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

@@ -1,25 +1,28 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsclient.buy;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.naughtybitch.discogsclient.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link WishlistFragment.OnFragmentInteractionListener} interface
+ * {@link PurchasesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link WishlistFragment#newInstance} factory method to
+ * Use the {@link PurchasesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WishlistFragment extends Fragment {
+public class PurchasesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,15 +34,8 @@ public class WishlistFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public WishlistFragment() {
+    public PurchasesFragment() {
         // Required empty public constructor
-    }
-
-    public static WishlistFragment newInstance() {
-        Bundle args = new Bundle();
-        WishlistFragment fragment = new WishlistFragment();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     /**
@@ -48,14 +44,21 @@ public class WishlistFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment WishlistFragment.
+     * @return A new instance of fragment PurchasesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WishlistFragment newInstance(String param1, String param2) {
-        WishlistFragment fragment = new WishlistFragment();
+    public static PurchasesFragment newInstance(String param1, String param2) {
+        PurchasesFragment fragment = new PurchasesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static PurchasesFragment newInstance() {
+        Bundle args = new Bundle();
+        PurchasesFragment fragment = new PurchasesFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,11 +72,12 @@ public class WishlistFragment extends Fragment {
         }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wishlist, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View v = inflater.inflate(R.layout.fragment_purchases, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

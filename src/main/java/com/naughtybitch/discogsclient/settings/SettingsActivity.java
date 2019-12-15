@@ -1,4 +1,4 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsclient.settings;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -31,6 +31,14 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.naughtybitch.discogsclient.MainActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
+import com.naughtybitch.discogsclient.profile.ProfileFragment;
+import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
+import com.naughtybitch.discogsclient.explore.ExploreActivity;
+import com.naughtybitch.discogsclient.sell.SellMusicActivity;
+import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
@@ -228,28 +236,6 @@ public class SettingsActivity extends AppCompatActivity implements
                 .commit();
         setTitle(pref.getTitle());
         return true;
-    }
-
-    public class EditEmailDialogFragment extends DialogFragment {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the Builder class for convenient dialog construction
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.change_email)
-                    .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // FIRE ZE MISSILES!
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
-            // Create the AlertDialog object and return it
-            return builder.create();
-        }
     }
 
     public static class HeaderFragment extends PreferenceFragmentCompat {

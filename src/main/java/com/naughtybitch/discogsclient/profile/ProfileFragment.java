@@ -1,26 +1,27 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsclient.profile;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.naughtybitch.discogsclient.R;
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link InventoryFragment.OnFragmentInteractionListener} interface
+ * {@link ProfileFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link InventoryFragment#newInstance} factory method to
+ * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InventoryFragment extends Fragment {
+public class ProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,15 +33,8 @@ public class InventoryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public InventoryFragment() {
+    public ProfileFragment() {
         // Required empty public constructor
-    }
-
-    public static InventoryFragment newInstance() {
-        Bundle args = new Bundle();
-        InventoryFragment fragment = new InventoryFragment();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     /**
@@ -49,18 +43,25 @@ public class InventoryFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment InventoryFragment.
+     * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static InventoryFragment newInstance(String param1, String param2) {
-        InventoryFragment fragment = new InventoryFragment();
+    public static ProfileFragment newInstance(String param1, String param2) {
+        ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
+  
+    public static ProfileFragment newInstance() {
+        Bundle args = new Bundle();
+        ProfileFragment fragment = new ProfileFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+  
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,12 +71,11 @@ public class InventoryFragment extends Fragment {
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_inventory, container, false);
-        return v;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

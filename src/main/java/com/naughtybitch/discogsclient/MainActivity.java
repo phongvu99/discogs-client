@@ -25,6 +25,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
+import com.naughtybitch.discogsclient.explore.ExploreActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
+import com.naughtybitch.discogsclient.sell.SellMusicActivity;
+import com.naughtybitch.discogsclient.settings.SettingsActivity;
+import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 
 
 public class MainActivity extends AppCompatActivity

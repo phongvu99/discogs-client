@@ -60,7 +60,7 @@
 
             <fragment
                 android:id="@+id/suggestion_fragment"
-                android:name="com.naughtybitch.discogsclient.SuggestionsFragment"
+                android:name="com.naughtybitch.discogsclient.album.SuggestionsFragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 

@@ -1,10 +1,9 @@
 package com.naughtybitch.discogsclient;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -14,15 +13,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DiscogsClient extends AppCompatActivity {
+public class DiscogsClient {
 
     private int status_code;
-
-    private SharedPreferences user_preferences;
 
     private final String consumer_key = "zrNFOdbKoUvMXDxixdPY";
     private final String consumer_secret = "NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ%26";
@@ -63,6 +61,16 @@ public class DiscogsClient extends AppCompatActivity {
         void onSuccess(T object);
 
         void onError(String error);
+    }
+
+    public ArrayList<String> getCredentials(Context context) {
+        ArrayList<String> token = new ArrayList<>();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        String access_token = sharedPreferences.getString("access_token", null);
+        String access_token_secret = sharedPreferences.getString("access_token_secret", null);
+        token.add(access_token);
+        token.add(access_token_secret);
+        return token;
     }
 
 //    public void removeLogin() {

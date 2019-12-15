@@ -1,4 +1,4 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsclient.wishlist;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -16,7 +17,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
+import com.naughtybitch.discogsclient.explore.ExploreActivity;
+import com.naughtybitch.discogsclient.MainActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
+import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.sell.SellMusicActivity;
+import com.naughtybitch.discogsclient.settings.SettingsActivity;
 
 public class WishlistActivity extends AppCompatActivity implements
         WishlistFragment.OnFragmentInteractionListener {
@@ -30,10 +39,14 @@ public class WishlistActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
 
-        final Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        // Custom ActionBar
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+        collapsingToolbarLayout.setTitleEnabled(false);
         setSupportActionBar(myToolbar);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+        // DrawerLayout
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -41,8 +54,22 @@ public class WishlistActivity extends AppCompatActivity implements
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
         }
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    @Override
+                    public void onBackStackChanged() {
+                        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                            toggle.setDrawerIndicatorEnabled(true);
+                            setTitle(R.string.wishlist);
+                        }
+                        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                            toggle.setDrawerIndicatorEnabled(false);
+                            getSupportActionBar().setHomeButtonEnabled(true);
+                            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                        }
+                    }
+                });
 
         WishlistFragment firstfragment = WishlistFragment.newInstance();
         firstfragment.setArguments(getIntent().getExtras());
@@ -107,6 +134,13 @@ public class WishlistActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    fm.popBackStack();
+                    return true;
+                }
+                break;
             case R.id.search:
                 Intent intent = new Intent(WishlistActivity.this, ExploreActivity.class);
                 startActivity(intent);

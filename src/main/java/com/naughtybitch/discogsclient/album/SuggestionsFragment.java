@@ -1,4 +1,4 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsclient.album;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.naughtybitch.discogsclient.R;
+
 public class SuggestionsFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +22,13 @@ public class SuggestionsFragment extends Fragment implements View.OnClickListene
     private static final String ARG_PARAM2 = "param2";
 
     public SuggestionsFragment() {
+    }
+
+    public static SuggestionsFragment newInstance() {
+        Bundle args = new Bundle();
+        SuggestionsFragment fragment = new SuggestionsFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     static SuggestionsFragment newInstance(String param1, String param2) {

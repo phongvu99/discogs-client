@@ -5,7 +5,7 @@
     android:background="@drawable/gradient_color_market_buy"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".SellMusicFragment">
+    tools:context=".sell.SellMusicFragment">
 
         <LinearLayout
             style="?android:attr/buttonBarStyle"

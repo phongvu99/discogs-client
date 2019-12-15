@@ -15,20 +15,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".WishlistActivity"></activity>
-        <activity android:name=".SellMusicActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".BuyMusicActivity" />
+        <activity android:name=".wishlist.WishlistActivity">
+
+        </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".sell.SellMusicActivity"
+            android:label="@string/music_sell"
+            android:parentActivityName=".sell.SellMusicActivity">
+        </activity>
+        <activity android:name=".profile.ProfileActivity" />
+        <activity
+            android:name=".buy.BuyMusicActivity"
+            android:label="@string/music_buy"
+            android:parentActivityName=".buy.BuyMusicActivity"></activity>
+        <activity
+            android:name=".settings.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".SettingsActivity">
+            android:parentActivityName=".settings.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SettingsActivity" />
+                android:value=".settings.SettingsActivity" />
         </activity>
-        <activity android:name=".DiscogsClient" />
-        <activity android:name=".ExploreActivity" />
+        <activity android:name=".explore.ExploreActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
         <activity android:name=".GetStartedActivity" />
         <activity
             android:name=".SplashActivity"
@@ -50,8 +66,7 @@
 
                 <data
                     android:host="localhost:8000"
-                    android:scheme="http">
-                </data>
+                    android:scheme="http"></data>
             </intent-filter>
         </activity>
         <activity android:name=".SearchQuery" />
@@ -65,7 +80,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".AlbumInfoActivity" />
+        <activity android:name=".album.AlbumInfoActivity" />
     </application>
 
 </manifest>

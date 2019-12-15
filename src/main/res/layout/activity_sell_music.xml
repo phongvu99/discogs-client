@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:context=".SellMusicActivity">
+    tools:context=".sell.SellMusicActivity">
 
     <include
         layout="@layout/app_bar_main"

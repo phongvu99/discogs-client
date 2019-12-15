@@ -30,7 +30,7 @@
 
     <Preference
         app:allowDividerAbove="true"
-        app:fragment="com.naughtybitch.discogsclient.SettingsActivity$ProfileSettingsFragment"
+        app:fragment="com.naughtybitch.discogsclient.settings.SettingsActivity$ProfileSettingsFragment"
         app:iconSpaceReserved="false"
         app:key="profile_settings_header"
         app:summary="@string/profile_settings_summary"
@@ -38,7 +38,7 @@
 
     <Preference
         app:allowDividerAbove="true"
-        app:fragment="com.naughtybitch.discogsclient.SettingsActivity$LegalInformationFragment"
+        app:fragment="com.naughtybitch.discogsclient.settings.SettingsActivity$LegalInformationFragment"
         app:iconSpaceReserved="false"
         app:key="legal_information_header"
         app:summary="@string/pp_tos_summary"

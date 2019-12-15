@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".WishlistFragment">
+    tools:context=".wishlist.WishlistFragment">
 
     <ImageView
         android:layout_width="132dp"

@@ -1,10 +1,11 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsclient.album;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+
+import com.naughtybitch.discogsclient.R;
 
 
 public class AlbumInfoActivity extends AppCompatActivity {

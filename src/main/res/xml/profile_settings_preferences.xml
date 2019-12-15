@@ -21,7 +21,7 @@
         app:iconSpaceReserved="false" />
 
     <Preference
-        app:fragment="com.naughtybitch.discogsclient.SettingsActivity$AccountSettingsFragment"
+        app:fragment="com.naughtybitch.discogsclient.settings.SettingsActivity$AccountSettingsFragment"
         app:iconSpaceReserved="false"
         app:key="account_settings"
         app:summary="@string/account_settings_summary"
@@ -43,7 +43,7 @@
 
     <Preference
         app:allowDividerAbove="true"
-        app:fragment="com.naughtybitch.discogsclient.SettingsActivity$BuyerSettingsFragment"
+        app:fragment="com.naughtybitch.discogsclient.settings.SettingsActivity$BuyerSettingsFragment"
         app:iconSpaceReserved="false"
         app:key="buying_ship_address"
         app:summary="@string/buyer_settings_summary"

@@ -1,4 +1,4 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsclient.buy;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,29 +7,22 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
+
+import com.naughtybitch.discogsclient.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BuyMusicFragment.OnFragmentInteractionListener} interface
+ * {@link DWFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BuyMusicFragment#newInstance} factory method to
+ * Use the {@link DWFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BuyMusicFragment extends Fragment implements
-        View.OnClickListener,
-        CartFragment.OnFragmentInteractionListener,
-        DWFragment.OnFragmentInteractionListener,
-        PurchasesFragment.OnFragmentInteractionListener,
-        OIMFragment.OnFragmentInteractionListener {
+public class DWFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -41,53 +34,9 @@ public class BuyMusicFragment extends Fragment implements
 
     private OnFragmentInteractionListener mListener;
 
-    public BuyMusicFragment() {
+    public DWFragment() {
         // Required empty public constructor
     }
-
-    private void buttonOnClickListener(View v) {
-        Button btn_cart = v.findViewById(R.id.cart);
-        Button btn_purch = v.findViewById(R.id.purchases);
-        Button btn_dw = v.findViewById(R.id.detailed_wishlist);
-        Button btn_oim = v.findViewById(R.id.offer_i_made);
-        btn_cart.setOnClickListener(this);
-        btn_purch.setOnClickListener(this);
-        btn_dw.setOnClickListener(this);
-        btn_oim.setOnClickListener(this);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        // Do smt
-    }
-
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.cart:
-                Toast.makeText(getActivity(), "????????", Toast.LENGTH_SHORT).show();
-                navigateToFragment(CartFragment.newInstance());
-                break;
-            case R.id.purchases:
-                navigateToFragment(PurchasesFragment.newInstance());
-                break;
-            case R.id.offer_i_made:
-                navigateToFragment(OIMFragment.newInstance());
-                break;
-            case R.id.detailed_wishlist:
-                navigateToFragment(DWFragment.newInstance());
-                break;
-        }
-    }
-
-    private void navigateToFragment(Fragment fragment) {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
 
     /**
      * Use this factory method to create a new instance of
@@ -95,11 +44,11 @@ public class BuyMusicFragment extends Fragment implements
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BuyMusicFragment.
+     * @return A new instance of fragment DWFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BuyMusicFragment newInstance(String param1, String param2) {
-        BuyMusicFragment fragment = new BuyMusicFragment();
+    public static DWFragment newInstance(String param1, String param2) {
+        DWFragment fragment = new DWFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -107,9 +56,9 @@ public class BuyMusicFragment extends Fragment implements
         return fragment;
     }
 
-    public static BuyMusicFragment newInstance() {
+    public static DWFragment newInstance() {
         Bundle args = new Bundle();
-        BuyMusicFragment fragment = new BuyMusicFragment();
+        DWFragment fragment = new DWFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -127,8 +76,7 @@ public class BuyMusicFragment extends Fragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_buy_music, container, false);
-        buttonOnClickListener(v);
+        View v = inflater.inflate(R.layout.fragment_dw, container, false);
         return v;
     }
 
