@@ -22,6 +22,7 @@ import com.naughtybitch.POJO.SearchResponse;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
+import com.naughtybitch.discogsclient.album.AlbumInfoActivity;
 import com.naughtybitch.recyclerview.ResultsAdapter;
 
 import java.io.IOException;
