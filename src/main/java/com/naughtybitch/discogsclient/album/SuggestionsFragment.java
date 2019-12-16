@@ -76,7 +76,7 @@ public class SuggestionsFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), AlbumInfoActivity.class);
+        Intent intent = new Intent(getActivity(), MasterInfoActivity.class);
         switch (v.getId()) {
             case (R.id.img1):
                 Log.i("test", "test");

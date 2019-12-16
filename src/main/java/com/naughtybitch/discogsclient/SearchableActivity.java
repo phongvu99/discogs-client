@@ -22,7 +22,7 @@ import com.naughtybitch.POJO.SearchResponse;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
-import com.naughtybitch.discogsclient.album.AlbumInfoActivity;
+import com.naughtybitch.discogsclient.album.MasterInfoActivity;
 import com.naughtybitch.recyclerview.ResultsAdapter;
 
 import java.io.IOException;
@@ -190,7 +190,7 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
         Intent intent;
         switch (result.getType()) {
             case "master":
-                intent = new Intent(SearchableActivity.this, AlbumInfoActivity.class);
+                intent = new Intent(SearchableActivity.this, MasterInfoActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("master_id", result.getMasterId());
                 intent.putExtras(bundle);
@@ -198,7 +198,7 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
                 break;
             default:
         }
-        Log.i("onResultClick", "onResultClick: clicked" + position);
+        Log.i("onReleaseClick", "onReleaseClick: clicked" + position);
     }
 
 }

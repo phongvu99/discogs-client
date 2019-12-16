@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    tools:context=".album.AlbumInfoActivity">
+    tools:context=".album.MasterInfoActivity">
 
     <LinearLayout
         android:id="@+id/linear_container"
@@ -15,11 +15,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!--        <androidx.viewpager.widget.ViewPager-->
-        <!--            android:id="@+id/pager"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="420dp"-->
-        <!--            android:background="@color/light_black" />-->
 
         <com.smarteist.autoimageslider.SliderView
             android:id="@+id/slider_view"
@@ -27,7 +22,7 @@
             android:layout_height="300dp"
             app:sliderAnimationDuration="600"
             app:sliderAutoCycleDirection="right"
-            app:sliderAutoCycleEnabled="true"
+            app:sliderAutoCycleEnabled="false"
             app:sliderCircularHandlerEnabled="true"
             app:sliderIndicatorAnimationDuration="600"
             app:sliderIndicatorGravity="center_horizontal|bottom"
@@ -50,29 +45,34 @@
             android:paddingBottom="24dp">
 
             <TextView
+                android:id="@+id/master_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/bio" />
+                android:text="@string/title" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cd" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/year" />
-
-            <TextView
+                android:id="@+id/master_artist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/artist" />
 
             <TextView
+                android:id="@+id/master_genre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/genre" />
+
+            <TextView
+                android:id="@+id/master_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/genre" />
+
+            <TextView
+                android:id="@+id/master_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/year" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -82,19 +82,12 @@
                 android:textSize="24sp" />
         </LinearLayout>
 
-        <fragment
-            android:id="@+id/more_by"
-            android:name="com.naughtybitch.discogsclient.album.SuggestionsFragment"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="@color/light_black">
 
-        </fragment>
-
-        <ImageView
-            android:id="@+id/test_img"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/lemon"
-            android:src="@drawable/weather_icon_005_heavy_rain" />
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 </ScrollView>

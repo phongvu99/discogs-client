@@ -56,7 +56,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 lastPosition = linearLayoutManager.findLastVisibleItemPosition();
                 Log.i("last_position", "Last position" + lastPosition);
                 Log.i("total_item", "Total item" + totalItem);
-                if (totalItem != pagination.getItems() && !isLoading) {
+                if (totalItem != mPagination.getItems() && !isLoading) {
                     if (totalItem <= (lastPosition + visibleThreshold)) {
                         if (mOnLoadMoreListener != null) {
                             mOnLoadMoreListener.onLoadMore();
@@ -143,6 +143,72 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    private void updateMaster(MasterViewHolder masterViewHolder, Result result) {
+        TextView title_master = masterViewHolder.card_title;
+        title_master.setText(result.getTitle());
+        ImageView image_master = masterViewHolder.card_image;
+        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+                .into(image_master);
+    }
+
+    private void updateLabel(LabelViewHolder labelViewHolder, Result result) {
+        TextView title_label = labelViewHolder.card_title;
+        title_label.setText(result.getTitle());
+        TextView profile_label = labelViewHolder.card_profile;
+        profile_label.setText(result.getTitle());
+        ImageView image_label = labelViewHolder.card_image;
+        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+                .into(image_label);
+    }
+
+    private void updateRelease(ReleaseViewHolder releaseViewHolder, Result result) {
+        StringBuilder stringBuilder;
+        List<Format> temp = result.getFormats();
+        String quantity = temp.get(0).getQty();
+        int qty = Integer.parseInt(quantity);
+        stringBuilder = new StringBuilder();
+        for (String desc : result.getFormat()) {
+            stringBuilder.append(desc);
+            if (result.getFormat().indexOf(desc) == result.getFormat().size() - 1) {
+                break;
+            }
+            stringBuilder.append(", ");
+        }
+        TextView title_release = releaseViewHolder.card_title;
+        title_release.setText(result.getTitle());
+        TextView formats = releaseViewHolder.card_formats;
+        if (qty > 1) {
+            formats.setText("Formats: " + quantity + "x" + stringBuilder);
+        } else {
+            formats.setText("Formats: " + stringBuilder);
+        }
+        TextView labels = releaseViewHolder.card_labels;
+        if (result.getLabel().size() > 1) {
+            labels.setText("Labels: " + result.getLabel().get(0) + " +" + (result.getLabel().size() - 1) + " more");
+        } else {
+            labels.setText("Labels: " + result.getLabel().get(0));
+        }
+        TextView country = releaseViewHolder.card_country;
+        if (result.getYear() == null) {
+            country.setText(result.getCountry());
+        } else {
+            country.setText(result.getCountry() + " (" + result.getYear() + ")");
+        }
+        ImageView image_release = releaseViewHolder.card_image;
+        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+                .into(image_release);
+    }
+
+    private void updateArtist(ArtistViewHolder artistViewHolder, Result result) {
+        TextView title_artist = artistViewHolder.card_title;
+        title_artist.setText(result.getTitle());
+        TextView profile_artist = artistViewHolder.card_profile;
+        profile_artist.setText(result.getTitle());
+        CircleImageView image_artist = artistViewHolder.card_image;
+        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+                .dontAnimate().into(image_artist);
+    }
+
     // Involves populating data into the item through holder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
@@ -156,82 +222,25 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case 1: // Master
                 // Set item views based on your views and data model
                 MasterViewHolder masterViewHolder = (MasterViewHolder) holder;
-                TextView title_master = masterViewHolder.card_title;
-                title_master.setText(result.getTitle());
-                ImageView image_master = masterViewHolder.card_image;
-                Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
-                        .into(image_master);
+                updateMaster(masterViewHolder, result);
                 break;
             case 2: // Label
                 LabelViewHolder labelViewHolder = (LabelViewHolder) holder;
-                TextView title_label = labelViewHolder.card_title;
-                title_label.setText(result.getTitle());
-                TextView profile_label = labelViewHolder.card_profile;
-                profile_label.setText(result.getTitle());
-                ImageView image_label = labelViewHolder.card_image;
-                Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
-                        .into(image_label);
+                updateLabel(labelViewHolder, result);
                 break;
             case 3: // Release
-                StringBuilder stringBuilder;
-                List<Format> temp = result.getFormats();
-                String quantity = temp.get(0).getQty();
-                int qty = Integer.parseInt(quantity);
-                stringBuilder = new StringBuilder();
-                for (String desc : result.getFormat()) {
-                    stringBuilder.append(desc);
-                    if (result.getFormat().indexOf(desc) == result.getFormat().size() - 1) {
-                        break;
-                    }
-                    stringBuilder.append(", ");
-                }
-
                 ReleaseViewHolder releaseViewHolder = (ReleaseViewHolder) holder;
-                TextView title_release = releaseViewHolder.card_title;
-                title_release.setText(result.getTitle());
-                TextView formats = releaseViewHolder.card_formats;
-                if (qty > 1) {
-                    formats.setText("Formats: " + quantity + "x" + stringBuilder);
-                } else {
-                    formats.setText("Formats: " + stringBuilder);
-                }
-                TextView labels = releaseViewHolder.card_labels;
-                if (result.getLabel().size() > 1) {
-                    labels.setText("Labels: " + result.getLabel().get(0) + " +" + (result.getLabel().size() - 1) + " more");
-                } else {
-                    labels.setText("Labels: " + result.getLabel().get(0));
-                }
-                TextView country = releaseViewHolder.card_country;
-                if (result.getYear() == null) {
-                    country.setText(result.getCountry());
-                } else {
-                    country.setText(result.getCountry() + " (" + result.getYear() + ")");
-                }
-                ImageView image_release = releaseViewHolder.card_image;
-                Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
-                        .into(image_release);
+                updateRelease(releaseViewHolder, result);
                 break;
             case 4: // Artist
                 ArtistViewHolder artistViewHolder = (ArtistViewHolder) holder;
-                TextView title_artist = artistViewHolder.card_title;
-                title_artist.setText(result.getTitle());
-                TextView profile_artist = artistViewHolder.card_profile;
-                profile_artist.setText(result.getTitle());
-                CircleImageView image_artist = artistViewHolder.card_image;
-                Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
-                        .dontAnimate().into(image_artist);
+                updateArtist(artistViewHolder, result);
                 break;
             case 5: // Loading
                 LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
                 ProgressBar progressBar = loadingViewHolder.progressBar;
                 progressBar.setIndeterminate(true);
                 break;
-            default: // Default, this is not working, just put here to avoid the warning.
-                EmptyViewHolder emptyViewHolder = (EmptyViewHolder) holder;
-                TextView empty = emptyViewHolder.card_empty;
-                empty.setText(R.string.no_item);
-                break;
-
         }
     }
 

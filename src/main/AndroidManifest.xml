@@ -82,7 +82,8 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".album.AlbumInfoActivity" />
+        <activity android:name=".album.MasterInfoActivity" />
+        <activity android:name=".album.ArtistInfoActivity" />
     </application>
 
 </manifest>
