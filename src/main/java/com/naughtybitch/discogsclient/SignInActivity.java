@@ -24,6 +24,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.naughtybitch.POJO.User;
+import com.naughtybitch.discogsapi.DiscogsClient;
+
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 

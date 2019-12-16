@@ -30,8 +30,8 @@ public class SuggestionsFragment extends Fragment implements View.OnClickListene
         fragment.setArguments(args);
         return fragment;
     }
-
-    static SuggestionsFragment newInstance(String param1, String param2) {
+	
+    public static SuggestionsFragment newInstance(String param1, String param2) {
         SuggestionsFragment fragment = new SuggestionsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);

@@ -1,4 +1,4 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsapi;
 
 
 import android.content.Context;
@@ -11,6 +11,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.naughtybitch.POJO.User;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class DiscogsClient {
         if (instance == null) {
             synchronized (DiscogsClient.class) {
                 if (instance == null) {
-                    Log.i("instance", "Creating new instance");
+                    Log.i("instance", "Creating new DiscogsClient instance");
                     instance = new DiscogsClient();
                 }
             }

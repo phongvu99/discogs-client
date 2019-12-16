@@ -7,12 +7,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.naughtybitch.POJO.Pagination;
+import com.naughtybitch.POJO.Result;
+import com.naughtybitch.POJO.SearchResponse;
 import com.naughtybitch.discogsapi.DiscogsAPI;
+import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.recyclerview.ResultsAdapter;
 
@@ -29,34 +37,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class SearchableActivity extends AppCompatActivity {
+public class SearchableActivity extends AppCompatActivity implements ResultsAdapter.OnResultListener {
 
     Context context = this;
     List<Result> results;
+    Pagination pagination;
     RecyclerView recyclerView;
     ResultsAdapter adapter;
     ProgressBar progressBar;
-
-    private static void glide() {
-
-    }
+    TextView empty;
+    int next_page = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
-
-        // Lookup the recyclerView in activity layout
-
-        // Initialize results
-
-        // Create adapter passing in the sample result data
-
-        // Attach the adapter to the recyclerView populate items
-
-        // Set layout manager to position the items
-
-        // That's all!
         initViews();
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -66,7 +61,17 @@ public class SearchableActivity extends AppCompatActivity {
         }
     }
 
+    private void navigateToFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
     private void initViews() {
+        empty = (TextView) findViewById(R.id.card_empty);
         progressBar = (ProgressBar) findViewById(R.id.progress_circular);
         recyclerView = (RecyclerView) findViewById(R.id.rc_view);
         adapter = new ResultsAdapter();
@@ -74,7 +79,8 @@ public class SearchableActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(SearchableActivity.this));
     }
 
-    public void searchQuery(String query) {
+    public void searchQuery(final String query) {
+		
         DiscogsClient instance = DiscogsClient.getInstance();
         Timestamp currentTimestamp = instance.currentTimeStamp();
         ArrayList<String> token = instance.getCredentials(context);
@@ -112,7 +118,7 @@ public class SearchableActivity extends AppCompatActivity {
         on the annotation associated with each method. This is achieved by just passing the
         interface class as parameter to the create method
          */
-        DiscogsAPI discogsAPI = retrofit.create(DiscogsAPI.class);
+        final DiscogsAPI discogsAPI = retrofit.create(DiscogsAPI.class);
         /*
         Invoke the method corresponding to HTTP request which will return a Call object.
         This Call object will be used to send the actual network request with the specified parameters
@@ -124,7 +130,7 @@ public class SearchableActivity extends AppCompatActivity {
          */
         call.enqueue(new Callback<SearchResponse>() {
             @Override
-            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+            public void onResponse(final Call<SearchResponse> call, Response<SearchResponse> response) {
                 /* This is the success callback. Though the response type is JSON, with Retrofit
                 we get the response in the form of SearchResponse POJO class
                  */
@@ -133,7 +139,38 @@ public class SearchableActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     SearchResponse sResponse = response.body();
                     results = sResponse.getResults();
-                    adapter = new ResultsAdapter(context, results);
+                    pagination = sResponse.getPagination();
+                    if (results.isEmpty()) {
+                        empty.setVisibility(View.VISIBLE);
+                    } else {
+                        empty.setVisibility(View.GONE);
+                    }
+                    adapter = new ResultsAdapter(context, results, pagination, SearchableActivity.this, recyclerView);
+                    adapter.setOnLoadMoreListener(new ResultsAdapter.OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            results.add(null);
+                            adapter.notifyItemInserted(results.size() - 1);
+                            int per_page = pagination.getPerPage();
+                            Log.i("next_page", "next page " + next_page);
+                            Call<SearchResponse> newCall = discogsAPI.getSearchResult(query, per_page, next_page);
+                            newCall.enqueue(new Callback<SearchResponse>() {
+                                @Override
+                                public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                                    results.remove(results.size() - 1);
+                                    results.addAll(response.body().getResults());
+                                    adapter.notifyItemRangeInserted(results.size(), 50);
+                                    adapter.setLoaded();
+                                    ++next_page;
+                                }
+
+                                @Override
+                                public void onFailure(Call<SearchResponse> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -145,6 +182,22 @@ public class SearchableActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onResultClick(int position, Result result) {
+        Intent intent;
+        switch (result.getType()) {
+            case "master":
+                intent = new Intent(SearchableActivity.this, AlbumInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("master_id", result.getMasterId());
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            default:
+        }
+        Log.i("onResultClick", "onResultClick: clicked" + position);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.POJO;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,6 +7,12 @@ import java.util.List;
 
 public class Result {
 
+    @SerializedName("catno")
+    @Expose
+    private String catno;
+    @SerializedName("formats")
+    @Expose
+    private List<Format> formats = null;
     @SerializedName("year")
     @Expose
     private String year;
@@ -58,6 +64,18 @@ public class Result {
     @SerializedName("format_quantity")
     @Expose
     private Integer formatQuantity;
+
+    public Result(String resourceUrl) {
+        this.resourceUrl = resourceUrl;
+    }
+
+    public String getCatno() {
+        return catno;
+    }
+
+    public void setCatno(String catno) {
+        this.catno = catno;
+    }
 
     public String getYear() {
         return year;
@@ -194,4 +212,13 @@ public class Result {
     public void setFormatQuantity(Integer formatQuantity) {
         this.formatQuantity = formatQuantity;
     }
+
+    public List<Format> getFormats() {
+        return formats;
+    }
+
+    public void setFormats(List<Format> formats) {
+        this.formats = formats;
+    }
+
 }

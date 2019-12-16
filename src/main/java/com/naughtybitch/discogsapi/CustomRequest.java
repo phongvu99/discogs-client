@@ -1,4 +1,4 @@
-package com.naughtybitch.discogsclient;
+package com.naughtybitch.discogsapi;
 
 
 import com.android.volley.AuthFailureError;
