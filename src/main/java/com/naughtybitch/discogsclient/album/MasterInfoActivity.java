@@ -1,18 +1,26 @@
 package com.naughtybitch.discogsclient.album;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +34,14 @@ import com.naughtybitch.adapter.SliderAdapter;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
+import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
+import com.naughtybitch.discogsclient.explore.ExploreActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
+import com.naughtybitch.discogsclient.sell.SellMusicActivity;
+import com.naughtybitch.discogsclient.settings.SettingsActivity;
+import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -46,8 +61,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapter.OnMoreByListener,
-        MasterInfoFragment.OnFragmentInteractionListener {
+public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapter.OnMoreByListener {
 
     private int master_id;
     private List<String> genres, styles;
@@ -56,17 +70,17 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     private SliderView sliderView;
     private MoreByAdapter adapter;
     private RecyclerView recyclerView;
-    private Context context = this;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_info);
-
-        // Custom ActionBar
+        master_id = getIntent().getExtras().getInt("master_id");
+        Log.i("master_id", "master_id " + master_id);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
@@ -91,6 +105,8 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
 
         setSupportActionBar(myToolbar);
 
+        navigationViewHandler();
+
         // DrawerLayout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -104,23 +120,96 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
         }
-
-        // Check that the activity is using the layout version with
-        // the fragment_container FrameLayout
-        if (findViewById(R.id.fragment_container) != null) {
-
-            // However, if we're being restored from a previous state,
-            // then we don't need to do anything and should return or else
-            // we could end up with overlapping fragments.
-            if (savedInstanceState != null) {
-                return;
-            }
-        }
-
-        master_id = getIntent().getExtras().getInt("master_id");
-        Log.i("master_id", "master_id " + master_id);
         initView();
         fetchData();
+    }
+
+    public void navigationViewHandler() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setItemIconTintList(null);
+        navigationView.setCheckedItem(R.id.home);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.home:
+                        startActivity(new Intent(MasterInfoActivity.this, MainActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.profile:
+                        startActivity(new Intent(MasterInfoActivity.this, ProfileActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(MasterInfoActivity.this, WishlistActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.buy_music:
+                        startActivity(new Intent(MasterInfoActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(MasterInfoActivity.this, SellMusicActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        startActivity(new Intent(MasterInfoActivity.this, SettingsActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.explore:
+                        startActivity(new Intent(MasterInfoActivity.this, ExploreActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.search:
+                Intent intent = new Intent(MasterInfoActivity.this, ExploreActivity.class);
+                startActivity(intent);
+                break;
+        }
+
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerVisible(GravityCompat.START))
+            this.drawerLayout.closeDrawer(GravityCompat.START);
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    private void navigateToFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_main, menu);
+        return true;
     }
 
     public void initView() {
@@ -203,20 +292,24 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     }
 
     public void updateView(MasterReleasesResponse masterResponse) {
-        if (masterResponse.getStyles() == null) {
-            Log.i("damn", "damn");
-        } else {
+        StringBuilder stringBuilder = null;
+        try {
             styles = masterResponse.getStyles();
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String style : styles) {
-            stringBuilder.append(style);
-            if (styles.indexOf(style) == styles.size() - 1) {
-                break;
+
+            stringBuilder = new StringBuilder();
+            for (String style : styles) {
+                stringBuilder.append(style);
+                if (styles.indexOf(style) == styles.size() - 1) {
+                    break;
+                }
+                stringBuilder.append(", ");
             }
-            stringBuilder.append(", ");
+            style.setText("Style: " + stringBuilder);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            style.setText("Style: " + "Freestyle");
+            Log.i("damn", "damn");
         }
-        style.setText("Style: " + stringBuilder);
         stringBuilder.delete(0, stringBuilder.capacity());
         genres = masterResponse.getGenres();
         for (String genre : genres) {
@@ -263,10 +356,5 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     @Override
     public void onReleaseClick(int position, Release release) {
         Log.i("release", "Release position " + position + "release title " + release.getTitle());
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 }

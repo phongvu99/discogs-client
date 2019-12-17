@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".WeatherActivity">
+    <group
+        android:id="@+id/group_divider"
+        android:checkableBehavior="single"
+        android:menuCategory="container"
+        android:orderInCategory="150">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/lemons"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/wish_list"
+            android:icon="@drawable/lemons"
+            android:title="@string/wishlist" />
+        <item
+            android:id="@+id/buy_music"
+            android:icon="@drawable/lemons"
+            android:title="@string/music_buy" />
+        <item
+            android:id="@+id/sell_music"
+            android:icon="@drawable/lemons"
+            android:title="@string/music_sell" />
+        <item
+            android:id="@+id/explore"
+            android:icon="@drawable/icon_search"
+            android:title="@string/explore" />
+    </group>
+
+    <group
+        android:id="@+id/group_divider1"
+        android:checkableBehavior="single"
+        android:menuCategory="system"
+        android:orderInCategory="100">
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/lemons"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/lemons"
+            android:title="@string/profile" />
+    </group>
+
+
+</menu>
