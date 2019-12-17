@@ -137,20 +137,24 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     }
 
     public void updateView(MasterReleasesResponse masterResponse) {
-        if (masterResponse.getStyles() == null) {
-            Log.i("damn", "damn");
-        } else {
+        StringBuilder stringBuilder = null;
+        try {
             styles = masterResponse.getStyles();
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String style : styles) {
-            stringBuilder.append(style);
-            if (styles.indexOf(style) == styles.size() - 1) {
-                break;
+
+            stringBuilder = new StringBuilder();
+            for (String style : styles) {
+                stringBuilder.append(style);
+                if (styles.indexOf(style) == styles.size() - 1) {
+                    break;
+                }
+                stringBuilder.append(", ");
             }
-            stringBuilder.append(", ");
+            style.setText("Style: " + stringBuilder);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            style.setText("Style: " + "Freestyle");
+            Log.i("damn", "damn");
         }
-        style.setText("Style: " + stringBuilder);
         stringBuilder.delete(0, stringBuilder.capacity());
         genres = masterResponse.getGenres();
         for (String genre : genres) {
