@@ -1,7 +1,5 @@
 package com.naughtybitch.discogsclient.settings;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,12 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,11 +28,11 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.naughtybitch.discogsclient.MainActivity;
-import com.naughtybitch.discogsclient.profile.ProfileActivity;
-import com.naughtybitch.discogsclient.profile.ProfileFragment;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
+import com.naughtybitch.discogsclient.profile.ProfileFragment;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 
@@ -260,7 +256,7 @@ public class SettingsActivity extends AppCompatActivity implements
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
-            View view = inflater.inflate(R.layout.activity_album_info, container, false);
+            View view = inflater.inflate(R.layout.activity_master_info, container, false);
             return view;
         }
     }

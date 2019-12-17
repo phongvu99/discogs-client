@@ -7,16 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.naughtybitch.POJO.MasterResponse;
+import com.naughtybitch.POJO.MasterReleasesResponse;
 import com.naughtybitch.discogsclient.R;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
 
     private Context context;
-    private MasterResponse masterResponse;
+    private MasterReleasesResponse masterResponse;
 
-    public SliderAdapter(Context context, MasterResponse masterResponse) {
+    public SliderAdapter(Context context, MasterReleasesResponse masterResponse) {
         this.context = context;
         this.masterResponse = masterResponse;
     }

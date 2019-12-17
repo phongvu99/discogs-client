@@ -56,12 +56,13 @@
     <string name="text16">Sign Up</string>
     <string name="guest_login">Guest Login</string>
 
-    <!-- Album info fragment -->
+    <!-- Master Info Activity  -->
     <string name="bio">Bio:</string>
     <string name="cd">CD:</string>
     <string name="year">Year:</string>
     <string name="artist">Artist:</string>
     <string name="genre">Genre:</string>
+    <string name="style">Style:</string>
     <string name="more_by">More by this artist:</string>
 
     <!-- Profile -->

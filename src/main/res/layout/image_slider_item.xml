@@ -8,6 +8,8 @@
         android:id="@+id/iv_auto_image_slider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/light_black"
         android:contentDescription="@string/lemon"
         android:scaleType="centerCrop">
 

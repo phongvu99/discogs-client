@@ -5,53 +5,61 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MasterResponse {
+public class MasterReleasesResponse {
 
+    @SerializedName("styles")
+    @Expose
+    private List<String> styles = null;
     @SerializedName("genres")
     @Expose
     private List<String> genres = null;
-    @SerializedName("num_for_sale")
-    @Expose
-    private Integer numForSale;
     @SerializedName("title")
     @Expose
     private String title;
-    @SerializedName("most_recent_release")
-    @Expose
-    private Integer mostRecentRelease;
     @SerializedName("main_release")
     @Expose
     private Integer mainRelease;
     @SerializedName("main_release_url")
     @Expose
     private String mainReleaseUrl;
-    @SerializedName("year")
-    @Expose
-    private Integer year;
     @SerializedName("uri")
     @Expose
     private String uri;
+    @SerializedName("artists")
+    @Expose
+    private List<Artist> artists = null;
     @SerializedName("versions_url")
     @Expose
     private String versionsUrl;
-    @SerializedName("tracklist")
+    @SerializedName("year")
     @Expose
-    private List<Tracklist> tracklist = null;
-    @SerializedName("most_recent_release_url")
-    @Expose
-    private String mostRecentReleaseUrl;
+    private Integer year;
     @SerializedName("images")
     @Expose
     private List<Image> images = null;
     @SerializedName("resource_url")
     @Expose
     private String resourceUrl;
+    @SerializedName("tracklist")
+    @Expose
+    private List<Tracklist> tracklist = null;
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("num_for_sale")
+    @Expose
+    private Integer numForSale;
     @SerializedName("data_quality")
     @Expose
     private String dataQuality;
+
+    public List<String> getStyles() {
+        return styles;
+    }
+
+    public void setStyles(List<String> styles) {
+        this.styles = styles;
+    }
 
     public List<String> getGenres() {
         return genres;
@@ -61,28 +69,12 @@ public class MasterResponse {
         this.genres = genres;
     }
 
-    public Integer getNumForSale() {
-        return numForSale;
-    }
-
-    public void setNumForSale(Integer numForSale) {
-        this.numForSale = numForSale;
-    }
-
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Integer getMostRecentRelease() {
-        return mostRecentRelease;
-    }
-
-    public void setMostRecentRelease(Integer mostRecentRelease) {
-        this.mostRecentRelease = mostRecentRelease;
     }
 
     public Integer getMainRelease() {
@@ -101,20 +93,20 @@ public class MasterResponse {
         this.mainReleaseUrl = mainReleaseUrl;
     }
 
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
     public String getUri() {
         return uri;
     }
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public List<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(List<Artist> artists) {
+        this.artists = artists;
     }
 
     public String getVersionsUrl() {
@@ -125,20 +117,12 @@ public class MasterResponse {
         this.versionsUrl = versionsUrl;
     }
 
-    public List<Tracklist> getTracklist() {
-        return tracklist;
+    public Integer getYear() {
+        return year;
     }
 
-    public void setTracklist(List<Tracklist> tracklist) {
-        this.tracklist = tracklist;
-    }
-
-    public String getMostRecentReleaseUrl() {
-        return mostRecentReleaseUrl;
-    }
-
-    public void setMostRecentReleaseUrl(String mostRecentReleaseUrl) {
-        this.mostRecentReleaseUrl = mostRecentReleaseUrl;
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
     public List<Image> getImages() {
@@ -157,12 +141,28 @@ public class MasterResponse {
         this.resourceUrl = resourceUrl;
     }
 
+    public List<Tracklist> getTracklist() {
+        return tracklist;
+    }
+
+    public void setTracklist(List<Tracklist> tracklist) {
+        this.tracklist = tracklist;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getNumForSale() {
+        return numForSale;
+    }
+
+    public void setNumForSale(Integer numForSale) {
+        this.numForSale = numForSale;
     }
 
     public String getDataQuality() {
