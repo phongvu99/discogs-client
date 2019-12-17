@@ -15,9 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".welcome.WelcomeActivity">
-
-        </activity>
+        <activity
+            android:name=".welcome.WelcomeActivity"
+            android:label="@string/welcome" />
         <activity
             android:name=".wishlist.WishlistActivity"
             android:label="@string/wishlist"
