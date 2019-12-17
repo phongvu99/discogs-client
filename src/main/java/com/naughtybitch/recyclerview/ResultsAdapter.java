@@ -23,6 +23,8 @@ import com.naughtybitch.discogsclient.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom MasterViewHolder which gives us access to our views
 public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
