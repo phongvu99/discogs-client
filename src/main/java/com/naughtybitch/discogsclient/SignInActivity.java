@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.naughtybitch.POJO.User;
 import com.naughtybitch.discogsapi.DiscogsClient;
 
@@ -45,8 +46,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-//        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
-//        collapsingToolbarLayout.setTitle("Discogs Authorization");
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+//        collapsingToolbarLayout.setTitle("Authorization");
         myToolbar.setTitle("Authorization");
         setSupportActionBar(myToolbar);
 

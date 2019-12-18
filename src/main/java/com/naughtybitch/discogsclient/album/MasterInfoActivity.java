@@ -2,12 +2,12 @@ package com.naughtybitch.discogsclient.album;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +28,17 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
-import com.naughtybitch.POJO.MasterReleasesResponse;
+import com.naughtybitch.POJO.MasterReleaseResponse;
+import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.Release;
+import com.naughtybitch.POJO.ShowAllResponse;
+import com.naughtybitch.POJO.Tracklist;
 import com.naughtybitch.adapter.SliderAdapter;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.SearchableActivity;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
@@ -43,6 +47,7 @@ import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
 import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
+import com.naughtybitch.recyclerview.TracklistAdapter;
 
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -52,6 +57,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -62,13 +68,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapter.OnMoreByListener {
+public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapter.OnMoreByListener, View.OnClickListener {
 
+    private TextView show_all;
     private int master_id;
     private List<String> genres, styles;
-    private TextView title, artist, year, genre, style;
+    private TextView title, artist, year, genre, style, total_length;
     private SliderAdapter sliderAdapter;
+    private TracklistAdapter tracklistAdapter;
     private SliderView sliderView;
+    private MoreByAdapter morebyAdapter;
+    private RecyclerView rc_moreby, rc_tracklist;
     private MoreByAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -83,7 +93,7 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
         setContentView(R.layout.activity_master_info);
         master_id = getIntent().getExtras().getInt("master_id");
         Log.i("master_id", "master_id " + master_id);
-      
+
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
@@ -125,8 +135,9 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
         }
         initView();
         fetchData();
+        fetchMasterReleaseVersions(master_id);
     }
-  
+
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
@@ -216,19 +227,57 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     }
 
     public void initView() {
+        show_all = findViewById(R.id.show_all);
+        show_all.setOnClickListener(this);
+        total_length = findViewById(R.id.tracklist_total_length);
+        rc_tracklist = findViewById(R.id.rc_tracklist);
+        tracklistAdapter = new TracklistAdapter();
+        rc_tracklist.setAdapter(tracklistAdapter);
+        rc_tracklist.setLayoutManager(new LinearLayoutManager(context));
         genre = findViewById(R.id.master_genre);
         style = findViewById(R.id.master_style);
         title = findViewById(R.id.master_title);
         artist = findViewById(R.id.master_artist);
         year = findViewById(R.id.master_year);
-        recyclerView = findViewById(R.id.rc_view);
-        adapter = new MoreByAdapter();
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        rc_moreby = findViewById(R.id.rc_moreby);
+        morebyAdapter = new MoreByAdapter();
+        rc_moreby.setAdapter(morebyAdapter);
+        rc_moreby.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         sliderView = findViewById(R.id.slider_view);
         sliderView.startAutoCycle();
-        sliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
+        sliderView.setIndicatorAnimation(IndicatorAnimations.FILL);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.show_all:
+                Intent intent = new Intent(MasterInfoActivity.this, SearchableActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("master_id", master_id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+        }
+    }
+
+    public void fetchMasterReleaseVersions(int master_id) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<ShowAllResponse> call = discogsAPI.fetchMasterReleaseVersions(master_id, 50, 1);
+        call.enqueue(new Callback<ShowAllResponse>() {
+            @Override
+            public void onResponse(Call<ShowAllResponse> call, Response<ShowAllResponse> response) {
+                ShowAllResponse showAllResponse = response.body();
+                Pagination pagination = showAllResponse.getPagination();
+                Log.i("response_show_all", "response " + response.code());
+                show_all.setText("Show all " + pagination.getItems() + " versions");
+            }
+
+            @Override
+            public void onFailure(Call<ShowAllResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     public DiscogsAPI getDiscogsAPI() {
@@ -272,33 +321,76 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     public void fetchMoreBy(int artist_id) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
         Call<ArtistReleasesResponse> call = discogsAPI.fetchArtistReleases(artist_id, "year", "asc"
-                , 9, 1);
+                , 10, 1);
 
         call.enqueue(new Callback<ArtistReleasesResponse>() {
             @Override
             public void onResponse(Call<ArtistReleasesResponse> call, Response<ArtistReleasesResponse> response) {
-                Log.i("status", "response code " + response.code());
+                Log.i("more_by", "response code " + response.code());
                 if (response.body() != null) {
                     ArtistReleasesResponse artistResponse = response.body();
                     List<Release> releases = artistResponse.getReleases();
-                    adapter = new MoreByAdapter(context, releases, MasterInfoActivity.this);
-                    recyclerView.setAdapter(adapter);
+                    morebyAdapter = new MoreByAdapter(context, releases, MasterInfoActivity.this);
+                    rc_moreby.setAdapter(morebyAdapter);
+                } else {
+                    TextView empty = findViewById(R.id.card_empty);
+                    empty.setVisibility(View.VISIBLE);
+                    rc_moreby.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<ArtistReleasesResponse> call, Throwable t) {
-                Log.i("status", "response code " + t.getMessage());
+                Log.i("more_by_response", "response code " + t.getMessage());
             }
         });
 
     }
 
-    public void updateView(MasterReleasesResponse masterResponse) {
+    public void updateTotalLength(List<Tracklist> tracklists) {
+        String[] data;
+        int length_seconds = 0;
+        int secs, mins;
+        ArrayList<Integer> seconds = new ArrayList<>();
+        Pattern pattern = Pattern.compile(Pattern.quote(":"));
+        String duration;
+        try {
+            duration = tracklists.get(1).getDuration();
+            if (duration.equals("")) {
+                total_length.setVisibility(View.GONE);
+                return;
+            }
+        } catch (NullPointerException e) {
+            total_length.setVisibility(View.GONE);
+            return;
+        } catch (IndexOutOfBoundsException e) {
+            // Do nothing
+        }
+        for (Tracklist tracklist : tracklists) {
+            if (tracklist.getType().equals("track")) {
+                data = pattern.split(tracklist.getDuration());
+                seconds.add(Integer.parseInt(data[0]) * 60);
+                seconds.add(Integer.parseInt(data[1]));
+            }
+        }
+        for (int second : seconds) {
+            length_seconds += second;
+        }
+        mins = length_seconds / 60;
+        secs = length_seconds % 60;
+        if (Integer.toString(secs).length() == 1) {
+            total_length.setText("Total length " + "~ " + mins + ":" + "0" + secs);
+        } else {
+            total_length.setText("Total length " + "~ " + mins + ":" + secs);
+        }
+    }
+
+    public void updateView(MasterReleaseResponse masterResponse) {
+
+        updateTotalLength(masterResponse.getTracklist());
         StringBuilder stringBuilder = null;
         try {
             styles = masterResponse.getStyles();
-
             stringBuilder = new StringBuilder();
             for (String style : styles) {
                 stringBuilder.append(style);
@@ -309,9 +401,7 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
             }
             style.setText("Style: " + stringBuilder);
         } catch (NullPointerException e) {
-            e.printStackTrace();
             style.setText("Style: " + "Freestyle");
-            Log.i("damn", "damn");
         }
         stringBuilder.delete(0, stringBuilder.capacity());
         genres = masterResponse.getGenres();
@@ -325,31 +415,39 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
         genre.setText("Genre: " + stringBuilder);
         title.setText("Title: " + masterResponse.getTitle());
         artist.setText("Artist: " + masterResponse.getArtists().get(0).getName());
-        year.setText("Year: " + masterResponse.getYear());
+        if (masterResponse.getYear() != 0) {
+            year.setText("Year: " + masterResponse.getYear());
+        } else {
+            year.setText("Year: Unknown");
+        }
+
     }
 
     public void fetchData() {
         DiscogsAPI discogsAPI = getDiscogsAPI();
 
-        Call<MasterReleasesResponse> call = discogsAPI.fetchMasterData(master_id);
+        Call<MasterReleaseResponse> call = discogsAPI.fetchMasterData(master_id);
 
-        call.enqueue(new Callback<MasterReleasesResponse>() {
+        call.enqueue(new Callback<MasterReleaseResponse>() {
             @Override
-            public void onResponse(Call<MasterReleasesResponse> call, Response<MasterReleasesResponse> response) {
-                Log.i("status", "response code " + response.code());
+            public void onResponse(Call<MasterReleaseResponse> call, Response<MasterReleaseResponse> response) {
+                Log.i("fetch_data", "response code " + response.code());
                 if (response.body() != null) {
-                    MasterReleasesResponse masterResponse = response.body();
+                    MasterReleaseResponse masterResponse = response.body();
+                    List<Tracklist> tracklists = masterResponse.getTracklist();
                     int artist_id = masterResponse.getArtists().get(0).getId();
                     updateView(masterResponse);
                     fetchMoreBy(artist_id);
+                    tracklistAdapter = new TracklistAdapter(context, tracklists);
+                    rc_tracklist.setAdapter(tracklistAdapter);
                     sliderAdapter = new SliderAdapter(context, masterResponse);
                     sliderView.setSliderAdapter(sliderAdapter);
                 }
             }
 
             @Override
-            public void onFailure(Call<MasterReleasesResponse> call, Throwable t) {
-                Log.i("status", "response code " + t.getMessage());
+            public void onFailure(Call<MasterReleaseResponse> call, Throwable t) {
+                Log.i("fetch_data", "response code " + t.getMessage());
             }
         });
 
@@ -357,7 +455,8 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     }
 
     @Override
-    public void onReleaseClick(int position, Release release) {
+    public void onReleaseClick(int position, Release release, int size) {
         Log.i("release", "Release position " + position + "release title " + release.getTitle());
     }
+
 }

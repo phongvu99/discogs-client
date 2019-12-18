@@ -63,7 +63,11 @@
     <string name="artist">Artist:</string>
     <string name="genre">Genre:</string>
     <string name="style">Style:</string>
-    <string name="more_by">More by this artist:</string>
+    <string name="more_by">More by this artist</string>
+    <string name="total_length">Total length</string>
+    <string name="track_list">Tracklist</string>
+    <string name="show_all1">Show all 12 versions</string>
+    <string name="show_all0">View all versions</string>
 
     <!-- Profile -->
     <string name="val">Collection Value</string>
@@ -153,7 +157,7 @@
     <string name="user">User</string>
     <string name="title">Everyday Life</string>
     <string name="master">Master release</string>
-    <string name="show_all">Click to show all versions</string>
+    <string name="click_show_all">Click to show all versions</string>
     <string name="formats">Formats: 2xVinyl, LP, Album</string>
     <string name="card_country">Europe (2019)</string>
     <string name="label">Labels: Parlophone + 3 more</string>
