@@ -15,21 +15,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <activity
+            android:name=".welcome.WelcomeActivity"
+            android:label="@string/welcome">
+
+        </activity>
+
         <activity
             android:name=".wishlist.WishlistActivity"
             android:label="@string/wishlist"
             android:parentActivityName=".wishlist.WishlistActivity">
+
         </activity>
         <activity
             android:name=".sell.SellMusicActivity"
             android:label="@string/music_sell"
             android:parentActivityName=".sell.SellMusicActivity">
+
         </activity>
         <activity android:name=".profile.ProfileActivity" />
         <activity
             android:name=".buy.BuyMusicActivity"
             android:label="@string/music_buy"
-            android:parentActivityName=".buy.BuyMusicActivity"></activity>
+            android:parentActivityName=".buy.BuyMusicActivity">
+
+        </activity>
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/settings"
