@@ -59,7 +59,7 @@
                     android:id="@+id/show_all"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/show_all"
+                    android:text="@string/click_show_all"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/white"
                     android:textSize="12sp">

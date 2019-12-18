@@ -54,7 +54,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 super.onScrolled(recyclerView, dx, dy);
                 totalItem = linearLayoutManager.getItemCount();
                 lastPosition = linearLayoutManager.findLastVisibleItemPosition();
-                Log.i("last_position", "Last position" + lastPosition);
                 Log.i("total_item", "Total item" + totalItem);
                 if (totalItem != mPagination.getItems() && !isLoading) {
                     if (totalItem <= (lastPosition + visibleThreshold)) {
@@ -83,7 +82,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return 5;
         }
         String viewType = mResults.get(position).getType();
-        Log.i("view_type", viewType + position);
         switch (viewType) {
             case "master":
                 type = 1;
@@ -148,6 +146,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         title_master.setText(result.getTitle());
         ImageView image_master = masterViewHolder.card_image;
         Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+                .error(progressDrawable)
                 .into(image_master);
     }
 
@@ -157,7 +156,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView profile_label = labelViewHolder.card_profile;
         profile_label.setText(result.getTitle());
         ImageView image_label = labelViewHolder.card_image;
-        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+        Glide.with(context).load(result.getCoverImage()).placeholder(R.drawable.record)
+                .error(R.drawable.record)
                 .into(image_label);
     }
 
@@ -195,7 +195,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             country.setText(result.getCountry() + " (" + result.getYear() + ")");
         }
         ImageView image_release = releaseViewHolder.card_image;
-        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+        Glide.with(context).load(result.getCoverImage()).placeholder(R.drawable.discogs_vinyl_record_mark)
+                .error(R.drawable.discogs_vinyl_record_mark)
                 .into(image_release);
     }
 
@@ -205,7 +206,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView profile_artist = artistViewHolder.card_profile;
         profile_artist.setText(result.getTitle());
         CircleImageView image_artist = artistViewHolder.card_image;
-        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
+        Glide.with(context).load(result.getCoverImage()).placeholder(R.drawable.microphone)
+                .error(R.drawable.microphone)
                 .dontAnimate().into(image_artist);
     }
 
@@ -312,7 +314,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ReleaseViewHolder(View itemView, OnResultListener onResultListener) {
 
             super(itemView);
-
             this.onResultListener = onResultListener;
             card_title = itemView.findViewById(R.id.card_title);
             card_formats = itemView.findViewById(R.id.card_formats);

@@ -3,6 +3,8 @@ package com.naughtybitch.POJO;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Tracklist {
 
     @SerializedName("duration")
@@ -14,6 +16,9 @@ public class Tracklist {
     @SerializedName("type_")
     @Expose
     private String type;
+    @SerializedName("artists")
+    @Expose
+    private List<Artist> artists = null;
     @SerializedName("title")
     @Expose
     private String title;
@@ -42,6 +47,14 @@ public class Tracklist {
         this.type = type;
     }
 
+    public List<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(List<Artist> artists) {
+        this.artists = artists;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -51,3 +64,4 @@ public class Tracklist {
     }
 
 }
+

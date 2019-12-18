@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MasterReleasesResponse {
+public class MasterReleaseResponse {
 
     @SerializedName("styles")
     @Expose

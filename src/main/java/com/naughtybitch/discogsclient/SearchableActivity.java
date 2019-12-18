@@ -10,20 +10,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.Result;
 import com.naughtybitch.POJO.SearchResponse;
+import com.naughtybitch.POJO.ShowAllResponse;
+import com.naughtybitch.POJO.Version;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.album.MasterInfoActivity;
 import com.naughtybitch.recyclerview.ResultsAdapter;
+import com.naughtybitch.recyclerview.VersionAdapter;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -38,13 +38,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class SearchableActivity extends AppCompatActivity implements ResultsAdapter.OnResultListener {
+public class SearchableActivity extends AppCompatActivity implements ResultsAdapter.OnResultListener, VersionAdapter.OnVersionListener {
 
+    int master_id;
     Context context = this;
     List<Result> results;
+    List<Version> versions;
     Pagination pagination;
     RecyclerView recyclerView;
-    ResultsAdapter adapter;
+    ResultsAdapter resultsAdapter;
+    VersionAdapter versionAdapter;
     ProgressBar progressBar;
     TextView empty;
     int next_page = 2;
@@ -55,6 +58,15 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
         setContentView(R.layout.activity_searchable);
         initViews();
         Intent intent = getIntent();
+        try {
+            master_id = intent.getExtras().getInt("master_id");
+            if (master_id != 0) {
+                fetchMasterReleaseVersions(master_id);
+            }
+            Log.i("master_id", "master id " + master_id);
+        } catch (Exception e) {
+            // Do smt
+        }
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.i("query", query);
@@ -62,39 +74,57 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
         }
     }
 
-    private void navigateToFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+    public void fetchMasterReleaseVersions(final int master_id) {
+        final DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<ShowAllResponse> call = discogsAPI.fetchMasterReleaseVersions(master_id, 50, 1);
+        call.enqueue(new Callback<ShowAllResponse>() {
+            @Override
+            public void onResponse(Call<ShowAllResponse> call, Response<ShowAllResponse> response) {
+                if (response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+                    ShowAllResponse showAllResponse = response.body();
+                    pagination = showAllResponse.getPagination();
+                    versions = showAllResponse.getVersions();
+                    versionAdapter = new VersionAdapter(context, versions, pagination, SearchableActivity.this, recyclerView);
+                    versionAdapter.setOnLoadMoreListener(new VersionAdapter.OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            versions.add(null);
+                            versionAdapter.notifyItemInserted(versions.size() - 1);
+                            int per_page = pagination.getPerPage();
+                            Log.i("next_page", "next page " + next_page);
+                            Call<ShowAllResponse> newCall = discogsAPI.fetchMasterReleaseVersions(master_id, per_page, next_page);
+                            newCall.enqueue(new Callback<ShowAllResponse>() {
+                                @Override
+                                public void onResponse(Call<ShowAllResponse> call, Response<ShowAllResponse> response) {
+                                    versions.remove(versions.size() - 1);
+                                    versions.addAll(response.body().getVersions());
+                                    versionAdapter.notifyItemRangeInserted(versions.size(), 50);
+                                    versionAdapter.setLoaded();
+                                    ++next_page;
+                                }
+
+                                @Override
+                                public void onFailure(Call<ShowAllResponse> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+                    recyclerView.setAdapter(versionAdapter);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ShowAllResponse> call, Throwable t) {
+
+            }
+        });
     }
 
-    private void initViews() {
-        empty = (TextView) findViewById(R.id.card_empty);
-        progressBar = (ProgressBar) findViewById(R.id.progress_circular);
-        recyclerView = (RecyclerView) findViewById(R.id.rc_view);
-        adapter = new ResultsAdapter();
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(SearchableActivity.this));
-    }
-
-    public void searchQuery(final String query) {
-		
-        DiscogsClient instance = DiscogsClient.getInstance();
-        Timestamp currentTimestamp = instance.currentTimeStamp();
-        ArrayList<String> token = instance.getCredentials(context);
-        final String auth = "OAuth oauth_consumer_key=\"" + instance.getConsumer_key() + "\", " +
-                "oauth_nonce=\"" + currentTimestamp.getTime() + "\", " +
-                "oauth_token=\"" + token.get(0) + "\", " +
-                "oauth_signature_method=\"PLAINTEXT\", " +
-                "oauth_timestamp=\"" + currentTimestamp.getTime() + "\", " +
-                "oauth_version=\"1.0\", " +
-                "oauth_signature=\"" + instance.getConsumer_secret() + token.get(1) + "\"";
-
-        Log.i("header", auth);
-
+    public DiscogsAPI getDiscogsAPI() {
+        final String auth = getCredentials();
         // Define the interceptor, add authentication headers
         Interceptor interceptor = new Interceptor() {
             @Override
@@ -106,20 +136,42 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
             }
         };
 
-        // Add the interceptor to OkHTTPClient
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.interceptors().add(interceptor);
         OkHttpClient client = builder.build();
 
-        // Obtain an instance of Retrofit by calling the static method.
         Retrofit retrofit = RetrofitClient.getRetrofitClient(client);
 
-        /*
-        The main purpose of Retrofit is to create HTTP calls from the Java interface based
-        on the annotation associated with each method. This is achieved by just passing the
-        interface class as parameter to the create method
-         */
-        final DiscogsAPI discogsAPI = retrofit.create(DiscogsAPI.class);
+        return retrofit.create(DiscogsAPI.class);
+    }
+
+    public String getCredentials() {
+        DiscogsClient instance = DiscogsClient.getInstance();
+        Timestamp currentTimestamp = instance.currentTimeStamp();
+        ArrayList<String> token = instance.getCredentials(this);
+        String auth = "OAuth oauth_consumer_key=\"" + instance.getConsumer_key() + "\", " +
+                "oauth_nonce=\"" + currentTimestamp.getTime() + "\", " +
+                "oauth_token=\"" + token.get(0) + "\", " +
+                "oauth_signature_method=\"PLAINTEXT\", " +
+                "oauth_timestamp=\"" + currentTimestamp.getTime() + "\", " +
+                "oauth_version=\"1.0\", " +
+                "oauth_signature=\"" + instance.getConsumer_secret() + token.get(1) + "\"";
+
+        Log.i("header", auth);
+        return auth;
+    }
+
+    private void initViews() {
+        empty = (TextView) findViewById(R.id.card_empty);
+        progressBar = (ProgressBar) findViewById(R.id.progress_circular);
+        recyclerView = (RecyclerView) findViewById(R.id.rc_result);
+        resultsAdapter = new ResultsAdapter();
+        recyclerView.setAdapter(resultsAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(SearchableActivity.this));
+    }
+
+    public void searchQuery(final String query) {
+        final DiscogsAPI discogsAPI = getDiscogsAPI();
         /*
         Invoke the method corresponding to HTTP request which will return a Call object.
         This Call object will be used to send the actual network request with the specified parameters
@@ -146,12 +198,12 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
                     } else {
                         empty.setVisibility(View.GONE);
                     }
-                    adapter = new ResultsAdapter(context, results, pagination, SearchableActivity.this, recyclerView);
-                    adapter.setOnLoadMoreListener(new ResultsAdapter.OnLoadMoreListener() {
+                    resultsAdapter = new ResultsAdapter(context, results, pagination, SearchableActivity.this, recyclerView);
+                    resultsAdapter.setOnLoadMoreListener(new ResultsAdapter.OnLoadMoreListener() {
                         @Override
                         public void onLoadMore() {
                             results.add(null);
-                            adapter.notifyItemInserted(results.size() - 1);
+                            resultsAdapter.notifyItemInserted(results.size() - 1);
                             int per_page = pagination.getPerPage();
                             Log.i("next_page", "next page " + next_page);
                             Call<SearchResponse> newCall = discogsAPI.getSearchResult(query, per_page, next_page);
@@ -160,8 +212,8 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
                                 public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                                     results.remove(results.size() - 1);
                                     results.addAll(response.body().getResults());
-                                    adapter.notifyItemRangeInserted(results.size(), 50);
-                                    adapter.setLoaded();
+                                    resultsAdapter.notifyItemRangeInserted(results.size(), 50);
+                                    resultsAdapter.setLoaded();
                                     ++next_page;
                                 }
 
@@ -172,7 +224,7 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
                             });
                         }
                     });
-                    recyclerView.setAdapter(adapter);
+                    recyclerView.setAdapter(resultsAdapter);
                 }
             }
 
@@ -201,4 +253,8 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
         Log.i("onReleaseClick", "onReleaseClick: clicked" + position);
     }
 
+    @Override
+    public void onVersionClick(int position, Version version) {
+        Log.i("onVersionClick", "onVersionClick: clicked" + position);
+    }
 }

@@ -5,16 +5,19 @@
     android:id="@+id/album_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/delicate"
     android:fillViewport="true"
     android:orientation="vertical"
     tools:context=".album.MasterInfoActivity">
 
     <LinearLayout
-        android:id="@+id/linear_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:focusedByDefault="true"
         android:orientation="vertical">
-
 
         <com.smarteist.autoimageslider.SliderView
             android:id="@+id/slider_view"
@@ -39,9 +42,8 @@
             android:id="@+id/bio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/delicate"
             android:orientation="vertical"
-            android:paddingTop="48dp"
+            android:paddingTop="24dp"
             android:paddingBottom="24dp">
 
             <TextView
@@ -73,21 +75,76 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/year" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/more_by"
-                android:textAlignment="center"
-                android:textSize="24sp" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_view"
+        <TextView
+            android:id="@+id/show_all"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/light_black">
+            android:layout_height="wrap_content"
+            android:text="@string/show_all0">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tracklist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/track_list"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_tracklist"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@color/light_black"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/tracklist_total_length"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/total_length"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/more_by"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/card_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/no_item"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header"
+            android:textSize="24sp"
+            android:visibility="gone">
+
+        </TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_moreby"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_black"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
+
 </ScrollView>
