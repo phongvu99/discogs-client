@@ -164,5 +164,7 @@
     <string name="artist_profile">Coldplay is an English rock band from London, England. They\'\ve been a band since January 16, 1998 when they lost a demotap...</string>
     <string name="label_profile">Label Code: LC 0299 Please note, many Parlophone issues also carry an EMI logo. This is not a label and EMI should not be add...</string>
     <string name="no_item">Could not find any items</string>
+    <string name="start">GOT IT</string>
+    <string name="next">NEXT</string>
 
 </resources>
