@@ -34,8 +34,8 @@ import com.naughtybitch.adapter.SliderAdapter;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
-import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
@@ -43,6 +43,7 @@ import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
 import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
+
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -70,6 +71,7 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     private SliderView sliderView;
     private MoreByAdapter adapter;
     private RecyclerView recyclerView;
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
@@ -81,6 +83,7 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
         setContentView(R.layout.activity_master_info);
         master_id = getIntent().getExtras().getInt("master_id");
         Log.i("master_id", "master_id " + master_id);
+      
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
@@ -123,7 +126,7 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
         initView();
         fetchData();
     }
-
+  
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
