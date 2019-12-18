@@ -1,14 +1,32 @@
 package com.naughtybitch.discogsclient.album;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.navigation.NavigationView;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.MasterReleasesResponse;
 import com.naughtybitch.POJO.Release;
@@ -17,7 +35,15 @@ import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.MainActivity;
+import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
+import com.naughtybitch.discogsclient.explore.ExploreActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
+import com.naughtybitch.discogsclient.sell.SellMusicActivity;
+import com.naughtybitch.discogsclient.settings.SettingsActivity;
+import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
+
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -45,6 +71,10 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
     private SliderView sliderView;
     private MoreByAdapter adapter;
     private RecyclerView recyclerView;
+
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
+    private NavigationView navigationView;
     private Context context = this;
 
     @Override
@@ -53,8 +83,136 @@ public class MasterInfoActivity extends AppCompatActivity implements MoreByAdapt
         setContentView(R.layout.activity_master_info);
         master_id = getIntent().getExtras().getInt("master_id");
         Log.i("master_id", "master_id " + master_id);
+      
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    collapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+
+        setSupportActionBar(myToolbar);
+
+        navigationViewHandler();
+
+        // DrawerLayout
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
         initView();
         fetchData();
+    }
+  
+    public void navigationViewHandler() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setItemIconTintList(null);
+        navigationView.setCheckedItem(R.id.home);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.home:
+                        startActivity(new Intent(MasterInfoActivity.this, MainActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.profile:
+                        startActivity(new Intent(MasterInfoActivity.this, ProfileActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(MasterInfoActivity.this, WishlistActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.buy_music:
+                        startActivity(new Intent(MasterInfoActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(MasterInfoActivity.this, SellMusicActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        startActivity(new Intent(MasterInfoActivity.this, SettingsActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.explore:
+                        startActivity(new Intent(MasterInfoActivity.this, ExploreActivity.class));
+                        Toast.makeText(MasterInfoActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.search:
+                Intent intent = new Intent(MasterInfoActivity.this, ExploreActivity.class);
+                startActivity(intent);
+                break;
+        }
+
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerVisible(GravityCompat.START))
+            this.drawerLayout.closeDrawer(GravityCompat.START);
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    private void navigateToFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_main, menu);
+        return true;
     }
 
     public void initView() {

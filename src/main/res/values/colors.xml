@@ -11,4 +11,18 @@
     <color name="dark_black">#000000</color>
     <color name="green">#00AF00</color>
     <color name="some_green_idk_name_but_it_looks_cool_so">#4bab48</color>
+    <color name="dot_inactive">#5c5757</color>
+    <color name="dot_active">#cccccc</color>
+    <array name="array_dot_inactive">
+        <item>@color/dot_inactive</item>
+        <item>@color/dot_inactive</item>
+        <item>@color/dot_inactive</item>
+        <item>@color/dot_inactive</item>
+    </array>
+    <array name="array_dot_active">
+        <item>@color/dot_active</item>
+        <item>@color/dot_active</item>
+        <item>@color/dot_active</item>
+        <item>@color/dot_active</item>
+    </array>
 </resources>
