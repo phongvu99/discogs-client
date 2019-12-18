@@ -12,12 +12,12 @@
         android:layout_marginBottom="20dp"
         android:text="From the creators of"
         android:textColor="@color/white"
-        android:textSize="24sp" />
+        android:textSize="34sp" />
 
     <ImageView
         android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:src="@drawable/oop" />
+        android:layout_height="102dp"
+        android:src="@drawable/ugandan" />
 
     <ImageView
         android:layout_width="180dp"
@@ -26,7 +26,8 @@
 
     <ImageView
         android:layout_width="180dp"
-        android:layout_height="140dp"
-        android:src="@drawable/ugandan" />
+        android:layout_height="180dp"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/oop" />
 
 </LinearLayout>

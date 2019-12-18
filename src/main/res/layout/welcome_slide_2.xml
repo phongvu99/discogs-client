@@ -9,7 +9,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Discogsnect"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:text="Introducing"
+        android:textSize="48sp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:src="@drawable/discogs_logo_white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="Client"
         android:textColor="@color/white"
         android:textSize="48sp" />
 
