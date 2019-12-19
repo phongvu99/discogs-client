@@ -21,8 +21,7 @@ public class WelcomeActivity extends AppIntro {
         super.onCreate(savedInstanceState);
         addSlide(SampleSlide.newInstance(R.layout.welcome_slide_1));
         addSlide(SampleSlide.newInstance(R.layout.welcome_slide_2));
-        addSlide(SampleSlide.newInstance(R.layout.welcome_slide_3));
-        addSlide(SampleSlide.newInstance(R.layout.welcome_slide_4));
+
         setFadeAnimation();
 
         /* In your onCreate method */
