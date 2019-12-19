@@ -44,6 +44,9 @@ public class TracklistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case "track":
                 type = 2;
                 break;
+            case "index":
+                type = 3;
+                break;
             default:
                 type = 0;
                 break;
@@ -62,6 +65,7 @@ public class TracklistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 itemView = inflater.inflate(R.layout.tracklist_track_header, parent, false);
                 return new HeaderViewHolder(itemView);
             case 2: // Body
+            case 3:
                 itemView = inflater.inflate(R.layout.tracklist_track_title, parent, false);
                 return new BodyViewHolder(itemView);
             default:
@@ -79,6 +83,10 @@ public class TracklistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView track_number = bodyViewHolder.track_number;
         track_number.setText(tracklist.getPosition());
         TextView track_title = bodyViewHolder.track_title;
+        if (tracklist.getType().equals("index")) {
+            track_number.setText(String.valueOf(getItemCount()));
+            track_title.setText(tracklist.getTitle());
+        }
         try {
             String track_artist = tracklist.getArtists().get(0).getName();
             track_title.setText(track_artist + " - " + tracklist.getTitle());
@@ -102,6 +110,7 @@ public class TracklistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 updateHeader(headerViewHolder, tracklist);
                 break;
             case 2: // Body
+            case 3:
                 BodyViewHolder bodyViewHolder = (BodyViewHolder) holder;
                 updateBody(bodyViewHolder, tracklist);
                 break;

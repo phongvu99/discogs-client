@@ -34,7 +34,7 @@ public class VersionAdapter extends ResultsAdapter {
     private int lastPosition, totalItem;
     private int visibleThreshold = 5;
 
-    public VersionAdapter(Context context, List<Version> versions, final Pagination pagination, OnVersionListener onVersionListener, RecyclerView recyclerView) {
+    public VersionAdapter(Context context, List<Version> versions, Pagination pagination, OnVersionListener onVersionListener, RecyclerView recyclerView) {
         this.context = context;
         this.mVersions = versions;
         this.mPagination = pagination;

@@ -2,8 +2,9 @@ package com.naughtybitch.discogsapi;
 
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
+import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
+import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.POJO.SearchResponse;
-import com.naughtybitch.POJO.ShowAllResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -39,6 +40,12 @@ public interface DiscogsAPI {
     Retrieves a list of all Releases that are versions of this master. Accepts Pagination parameters.
      */
     @GET("masters/{master_id}/versions")
-    Call<ShowAllResponse> fetchMasterReleaseVersions(@Path("master_id") int master_id, @Query("per_page") int per_page, @Query("page") int page);
+    Call<MasterReleaseVersionsResponse> fetchMasterReleaseVersions(@Path("master_id") int master_id, @Query("per_page") int per_page, @Query("page") int page);
+
+    /*
+    The Release resource represents a particular physical or digital object released by one or more Artists.
+     */
+    @GET("releases/{release_id}")
+    Call<ReleaseResponse> fetchRelease(@Path("release_id") int release_id);
 
 }

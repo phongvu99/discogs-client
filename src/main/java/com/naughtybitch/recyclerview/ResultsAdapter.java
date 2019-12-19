@@ -141,7 +141,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void updateMaster(MasterViewHolder masterViewHolder, Result result) {
+    public void updateMaster(MasterViewHolder masterViewHolder, Result result) {
         TextView title_master = masterViewHolder.card_title;
         title_master.setText(result.getTitle());
         ImageView image_master = masterViewHolder.card_image;
@@ -150,7 +150,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .into(image_master);
     }
 
-    private void updateLabel(LabelViewHolder labelViewHolder, Result result) {
+    public void updateLabel(LabelViewHolder labelViewHolder, Result result) {
         TextView title_label = labelViewHolder.card_title;
         title_label.setText(result.getTitle());
         TextView profile_label = labelViewHolder.card_profile;
@@ -161,7 +161,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .into(image_label);
     }
 
-    private void updateRelease(ReleaseViewHolder releaseViewHolder, Result result) {
+    public void updateRelease(ReleaseViewHolder releaseViewHolder, Result result) {
         StringBuilder stringBuilder;
         List<Format> temp = result.getFormats();
         String quantity = temp.get(0).getQty();
@@ -200,7 +200,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .into(image_release);
     }
 
-    private void updateArtist(ArtistViewHolder artistViewHolder, Result result) {
+    public void updateArtist(ArtistViewHolder artistViewHolder, Result result) {
         TextView title_artist = artistViewHolder.card_title;
         title_artist.setText(result.getTitle());
         TextView profile_artist = artistViewHolder.card_profile;
@@ -370,7 +370,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             progressBar = itemView.findViewById(R.id.progressBar);
         }
     }
-
 
 }
 

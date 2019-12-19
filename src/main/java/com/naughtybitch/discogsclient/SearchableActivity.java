@@ -13,15 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.naughtybitch.POJO.ArtistReleasesResponse;
+import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
 import com.naughtybitch.POJO.Pagination;
+import com.naughtybitch.POJO.Release;
 import com.naughtybitch.POJO.Result;
 import com.naughtybitch.POJO.SearchResponse;
-import com.naughtybitch.POJO.ShowAllResponse;
 import com.naughtybitch.POJO.Version;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.album.MasterInfoActivity;
+import com.naughtybitch.recyclerview.ArtistReleaseAdapter;
 import com.naughtybitch.recyclerview.ResultsAdapter;
 import com.naughtybitch.recyclerview.VersionAdapter;
 
@@ -38,17 +41,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class SearchableActivity extends AppCompatActivity implements ResultsAdapter.OnResultListener, VersionAdapter.OnVersionListener {
+public class SearchableActivity extends AppCompatActivity implements ResultsAdapter.OnResultListener
+        , VersionAdapter.OnVersionListener,
+        ArtistReleaseAdapter.OnArtistReleaseListener {
 
-    int master_id;
-    Context context = this;
-    List<Result> results;
-    List<Version> versions;
-    Pagination pagination;
-    RecyclerView recyclerView;
-    ResultsAdapter resultsAdapter;
-    VersionAdapter versionAdapter;
-    ProgressBar progressBar;
+    private String view;
+    private int master_id, artist_id;
+    private Context context = this;
+    private List<Result> results;
+    private List<Version> versions;
+    private Pagination pagination;
+    private RecyclerView recyclerView;
+    private ResultsAdapter resultsAdapter;
+    private VersionAdapter versionAdapter;
+    private ArtistReleaseAdapter artistReleaseAdapter;
+    private ProgressBar progressBar;
     TextView empty;
     int next_page = 2;
 
@@ -58,6 +65,16 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
         setContentView(R.layout.activity_searchable);
         initViews();
         Intent intent = getIntent();
+        try {
+            artist_id = intent.getExtras().getInt("artist_id");
+            view = intent.getExtras().getString("view_all");
+            if (artist_id != 0) {
+                fetchMoreBy(artist_id);
+            }
+            Log.i("artist_id", "artist id " + artist_id);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
         try {
             master_id = intent.getExtras().getInt("master_id");
             if (master_id != 0) {
@@ -74,17 +91,89 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
         }
     }
 
-    public void fetchMasterReleaseVersions(final int master_id) {
+    private void initViews() {
+        empty = (TextView) findViewById(R.id.card_empty);
+        progressBar = (ProgressBar) findViewById(R.id.progress_circular);
+        recyclerView = (RecyclerView) findViewById(R.id.rc_result);
+        resultsAdapter = new ResultsAdapter();
+        recyclerView.setAdapter(resultsAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(SearchableActivity.this));
+    }
+
+    private void fetchMoreBy(final int artist_id) {
         final DiscogsAPI discogsAPI = getDiscogsAPI();
-        Call<ShowAllResponse> call = discogsAPI.fetchMasterReleaseVersions(master_id, 50, 1);
-        call.enqueue(new Callback<ShowAllResponse>() {
+        Call<ArtistReleasesResponse> call = discogsAPI.fetchArtistReleases(artist_id, "year", "asc"
+                , 10, 1);
+
+        call.enqueue(new Callback<ArtistReleasesResponse>() {
             @Override
-            public void onResponse(Call<ShowAllResponse> call, Response<ShowAllResponse> response) {
+            public void onResponse(Call<ArtistReleasesResponse> call, Response<ArtistReleasesResponse> response) {
+                Log.i("more_by", "response code " + response.code());
                 if (response.body() != null) {
                     progressBar.setVisibility(View.GONE);
-                    ShowAllResponse showAllResponse = response.body();
-                    pagination = showAllResponse.getPagination();
-                    versions = showAllResponse.getVersions();
+                    ArtistReleasesResponse artistResponse = response.body();
+                    Pagination pagination = artistResponse.getPagination();
+                    final List<Release> releases = artistResponse.getReleases();
+                    artistReleaseAdapter = new ArtistReleaseAdapter(context, releases, pagination, SearchableActivity.this, recyclerView);
+                    try {
+                        if (view.equals("view_all")) {
+                            artistReleaseAdapter.setOnLoadMoreListener(new ArtistReleaseAdapter.OnLoadMoreListener() {
+                                @Override
+                                public void onLoadMore() {
+                                    releases.add(null);
+                                    artistReleaseAdapter.notifyItemInserted(releases.size() - 1);
+                                    Log.i("next_page", "next page " + next_page);
+                                    Call<ArtistReleasesResponse> newCall = discogsAPI.fetchArtistReleases(artist_id, "year", "asc", 50, next_page);
+                                    newCall.enqueue(new Callback<ArtistReleasesResponse>() {
+                                        @Override
+                                        public void onResponse(Call<ArtistReleasesResponse> call, Response<ArtistReleasesResponse> response) {
+                                            releases.remove(releases.size() - 1);
+                                            releases.addAll(response.body().getReleases());
+                                            artistReleaseAdapter.notifyItemRangeInserted(releases.size(), 50);
+                                            artistReleaseAdapter.setLoaded();
+                                            ++next_page;
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ArtistReleasesResponse> call, Throwable t) {
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    } catch (NullPointerException e) {
+                        Log.i("sucks", "sucks");
+                        // Do smt
+                    }
+                    recyclerView.setAdapter(artistReleaseAdapter);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    TextView empty = findViewById(R.id.card_empty);
+                    empty.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArtistReleasesResponse> call, Throwable t) {
+                Log.i("more_by_response", "response code " + t.getMessage());
+            }
+        });
+
+    }
+
+    public void fetchMasterReleaseVersions(final int master_id) {
+        final DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<MasterReleaseVersionsResponse> call = discogsAPI.fetchMasterReleaseVersions(master_id, 50, 1);
+        call.enqueue(new Callback<MasterReleaseVersionsResponse>() {
+            @Override
+            public void onResponse(Call<MasterReleaseVersionsResponse> call, Response<MasterReleaseVersionsResponse> response) {
+                if (response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+                    MasterReleaseVersionsResponse masterReleaseVersionsResponse = response.body();
+                    pagination = masterReleaseVersionsResponse.getPagination();
+                    versions = masterReleaseVersionsResponse.getVersions();
                     versionAdapter = new VersionAdapter(context, versions, pagination, SearchableActivity.this, recyclerView);
                     versionAdapter.setOnLoadMoreListener(new VersionAdapter.OnLoadMoreListener() {
                         @Override
@@ -93,10 +182,10 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
                             versionAdapter.notifyItemInserted(versions.size() - 1);
                             int per_page = pagination.getPerPage();
                             Log.i("next_page", "next page " + next_page);
-                            Call<ShowAllResponse> newCall = discogsAPI.fetchMasterReleaseVersions(master_id, per_page, next_page);
-                            newCall.enqueue(new Callback<ShowAllResponse>() {
+                            Call<MasterReleaseVersionsResponse> newCall = discogsAPI.fetchMasterReleaseVersions(master_id, per_page, next_page);
+                            newCall.enqueue(new Callback<MasterReleaseVersionsResponse>() {
                                 @Override
-                                public void onResponse(Call<ShowAllResponse> call, Response<ShowAllResponse> response) {
+                                public void onResponse(Call<MasterReleaseVersionsResponse> call, Response<MasterReleaseVersionsResponse> response) {
                                     versions.remove(versions.size() - 1);
                                     versions.addAll(response.body().getVersions());
                                     versionAdapter.notifyItemRangeInserted(versions.size(), 50);
@@ -105,7 +194,7 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
                                 }
 
                                 @Override
-                                public void onFailure(Call<ShowAllResponse> call, Throwable t) {
+                                public void onFailure(Call<MasterReleaseVersionsResponse> call, Throwable t) {
 
                                 }
                             });
@@ -117,7 +206,7 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
             }
 
             @Override
-            public void onFailure(Call<ShowAllResponse> call, Throwable t) {
+            public void onFailure(Call<MasterReleaseVersionsResponse> call, Throwable t) {
 
             }
         });
@@ -159,15 +248,6 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
 
         Log.i("header", auth);
         return auth;
-    }
-
-    private void initViews() {
-        empty = (TextView) findViewById(R.id.card_empty);
-        progressBar = (ProgressBar) findViewById(R.id.progress_circular);
-        recyclerView = (RecyclerView) findViewById(R.id.rc_result);
-        resultsAdapter = new ResultsAdapter();
-        recyclerView.setAdapter(resultsAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(SearchableActivity.this));
     }
 
     public void searchQuery(final String query) {
@@ -240,21 +320,54 @@ public class SearchableActivity extends AppCompatActivity implements ResultsAdap
     @Override
     public void onResultClick(int position, Result result) {
         Intent intent;
+        Bundle bundle = new Bundle();
         switch (result.getType()) {
             case "master":
                 intent = new Intent(SearchableActivity.this, MasterInfoActivity.class);
-                Bundle bundle = new Bundle();
                 bundle.putInt("master_id", result.getMasterId());
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            default:
+            case "release":
+                intent = new Intent(SearchableActivity.this, MasterInfoActivity.class);
+                bundle.putInt("release_id", result.getId());
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
         }
         Log.i("onReleaseClick", "onReleaseClick: clicked" + position);
     }
 
     @Override
     public void onVersionClick(int position, Version version) {
+        Intent intent = new Intent(SearchableActivity.this, MasterInfoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("release_id", version.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
         Log.i("onVersionClick", "onVersionClick: clicked" + position);
     }
+
+    @Override
+    public void onArtistReleaseClick(int position, Release release) {
+        Intent intent;
+        Bundle bundle = new Bundle();
+        switch (release.getType()) {
+            case "master":
+                intent = new Intent(SearchableActivity.this, MasterInfoActivity.class);
+                bundle.putInt("master_id", release.getId());
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case "release":
+                intent = new Intent(SearchableActivity.this, MasterInfoActivity.class);
+                bundle.putInt("release_id", release.getId());
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+        }
+        Log.i("release", "Release position " + position + " release title " + release.getTitle());
+    }
 }
+
+

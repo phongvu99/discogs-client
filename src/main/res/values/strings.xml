@@ -17,7 +17,6 @@
     <string name="b" translatable="false">B</string>
     <string name="c" translatable="false">C</string>
     <string name="lemon">Lemon</string>
-    <string name="view_all">View all</string>
     <string name="get_started">Get Started</string>
     <string name="authorize">Check Authorize</string>
     <string name="logo">Logo</string>
@@ -64,6 +63,7 @@
     <string name="genre">Genre:</string>
     <string name="style">Style:</string>
     <string name="more_by">More by this artist</string>
+    <string name="view_all">View all</string>
     <string name="total_length">Total length</string>
     <string name="track_list">Tracklist</string>
     <string name="show_all1">Show all 12 versions</string>
@@ -161,6 +161,7 @@
     <string name="formats">Formats: 2xVinyl, LP, Album</string>
     <string name="card_country">Europe (2019)</string>
     <string name="label">Labels: Parlophone + 3 more</string>
+    <string name="released">Released 22 Nov 2019 Europe</string>
     <string name="artist_profile">Coldplay is an English rock band from London, England. They\'\ve been a band since January 16, 1998 when they lost a demotap...</string>
     <string name="label_profile">Label Code: LC 0299 Please note, many Parlophone issues also carry an EMI logo. This is not a label and EMI should not be add...</string>
     <string name="no_item">Could not find any items</string>
