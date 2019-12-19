@@ -4,13 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.naughtybitch.POJO.ProfileResponse;
@@ -18,6 +22,7 @@ import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.sell.OrderFragment;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -40,10 +45,13 @@ import retrofit2.Retrofit;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements View.OnClickListener {
+
     private SharedPreferences sp;
-    private ImageView profile_image;
-    private TextView profile, profile_name;
+    private ImageView profile_image, profile_banner;
+    private TextView profile, profile_name, seller_rating_star, seller_rating, buyer_rating_star, buyer_rating;
+    private Button btn_order;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -104,14 +112,32 @@ public class ProfileFragment extends Fragment {
         if (username != null) {
             fetchProfile(username);
         }
+        buttonOnClickListener(v);
         return v;
     }
-
 
     private void initView(View v) {
         profile_image = v.findViewById(R.id.profile_image);
         profile_name = v.findViewById(R.id.profile_name);
         profile = v.findViewById(R.id.profile);
+        profile_banner = v.findViewById(R.id.profile_banner);
+        btn_order = v.findViewById(R.id.button_order);
+        seller_rating = v.findViewById(R.id.seller_rating);
+        seller_rating_star = v.findViewById(R.id.seller_rating_stars);
+        buyer_rating = v.findViewById(R.id.buyer_rating);
+        buyer_rating_star = v.findViewById(R.id.buyer_rating_stars);
+    }
+
+    private void buttonOnClickListener(View v) {
+        btn_order.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_order:
+                navigateToFragment(OrderFragment.newInstance());
+        }
     }
 
     private void fetchProfile(String username) {
@@ -129,12 +155,29 @@ public class ProfileFragment extends Fragment {
                             .into(profile_image);
                     profile_name.setText(profileResponse.getName());
                     profile.setText(profileResponse.getProfile());
+                    Glide.with(getActivity())
+                            .load(profileResponse.getBannerUrl())
+                            .error(R.drawable.discogs_logo)
+                            .placeholder(R.drawable.discogs_logo)
+                            .into(profile_banner);
+                    int sell_rating = profileResponse.getSellerNumRatings();
+                    String sell_string = String.valueOf(sell_rating);
+                    seller_rating.setText(sell_string);
+                    int buy_rating = profileResponse.getBuyerNumRatings();
+                    String buy_string = String.valueOf(buy_rating);
+                    buyer_rating.setText(buy_string);
+                    double sell_rating_star = profileResponse.getSellerRatingStars();
+                    String sell_star_string = String.valueOf(sell_rating_star);
+                    seller_rating_star.setText(sell_star_string);
+                    double buy_rating_star = profileResponse.getSellerRatingStars();
+                    String buy_star_string = String.valueOf(buy_rating_star);
+                    buyer_rating_star.setText(buy_star_string);
                 }
             }
 
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
-
+                Log.e("PROFILE_CAT", t.getMessage());
             }
         });
     }
@@ -173,6 +216,15 @@ public class ProfileFragment extends Fragment {
                 "oauth_version=\"1.0\", " +
                 "oauth_signature=\"" + instance.getConsumer_secret() + token.get(1) + "\"";
         return auth;
+    }
+
+    private void navigateToFragment(Fragment fragment) {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
