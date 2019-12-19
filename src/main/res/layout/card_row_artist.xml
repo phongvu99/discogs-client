@@ -9,19 +9,20 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:background="@color/light_black"
         android:backgroundTint="@color/light_black"
         app:cardCornerRadius="0dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/card_image"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
+                android:layout_marginStart="12dp"
                 android:contentDescription="@string/lemon"
                 app:civ_border_color="@color/light_black"
                 app:civ_border_width="2dp">
@@ -32,7 +33,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_toEndOf="@id/card_image"
                 android:orientation="vertical">
 
                 <TextView
@@ -59,7 +59,7 @@
             </LinearLayout>
 
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

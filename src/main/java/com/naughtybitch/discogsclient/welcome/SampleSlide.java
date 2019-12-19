@@ -1,11 +1,12 @@
 package com.naughtybitch.discogsclient.welcome;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class SampleSlide extends Fragment {
 

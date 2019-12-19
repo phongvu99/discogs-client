@@ -86,7 +86,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 List<Result> list = response.getResults();
                 String coverImage_url = list.get(0).getCoverImage();
                 editText.setText("CoverImage url: " + coverImage_url + "\nHave a look at this amazing album cover by Coldplay!", TextView.BufferType.EDITABLE);
-                Glide.with(getActivity()).load(coverImage_url).override(600, 600).fitCenter().placeholder(R.drawable.bigpump).crossFade().into(coverImage);
+                Glide.with(getActivity()).load(coverImage_url).override(600, 600).fitCenter()
+                        .placeholder(R.drawable.bigpump)
+                        .error(R.drawable.bigpump)
+                        .into(coverImage);
             }
         }, new Response.ErrorListener() {
             @Override

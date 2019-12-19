@@ -25,15 +25,22 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<Release> releases;
     private OnMoreByListener mOnMoreByListener;
     private CircularProgressDrawable progressDrawable;
+    private int artist_id;
 
-    public MoreByAdapter(Context context, List<Release> releases, OnMoreByListener onMoreByListener) {
+    public MoreByAdapter(Context context, List<Release> releases, int artist_id, OnMoreByListener onMoreByListener) {
         this.context = context;
         this.releases = releases;
         this.mOnMoreByListener = onMoreByListener;
+        this.artist_id = artist_id;
     }
 
     public MoreByAdapter() {
         releases = new ArrayList<>();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return 0;
     }
 
     @Override
@@ -44,7 +51,6 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View itemView = inflater.inflate(R.layout.moreby_artist, parent, false);
         return new MoreByViewHolder(itemView, mOnMoreByListener);
@@ -63,14 +69,15 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         TextView artist = moreByViewHolder.card_artist;
         artist.setText(releases.get(position).getArtist());
         ImageView image_release = moreByViewHolder.card_image;
-        Glide.with(context).load(releases.get(position).getThumb()).placeholder(progressDrawable).override(150, 150)
+        Glide.with(context).load(releases.get(position).getThumb())
+                .placeholder(R.drawable.discogs_vinyl_record_mark)
+                .error(R.drawable.discogs_vinyl_record_mark)
                 .into(image_release);
-
-
     }
 
+
     public interface OnMoreByListener {
-        void onReleaseClick(int position, Release release);
+        void onReleaseClick(int position, Release release, List<Release> releases, int artist_id);
     }
 
     public class MoreByViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -90,7 +97,7 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View v) {
-            onMoreByListener.onReleaseClick(getAdapterPosition(), releases.get(getAdapterPosition()));
+            onMoreByListener.onReleaseClick(getAdapterPosition(), releases.get(getAdapterPosition()), releases, artist_id);
         }
     }
 }
