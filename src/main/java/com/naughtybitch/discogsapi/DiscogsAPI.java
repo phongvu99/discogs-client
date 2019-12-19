@@ -3,6 +3,7 @@ package com.naughtybitch.discogsapi;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
 import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
+import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.POJO.SearchResponse;
 
@@ -47,5 +48,14 @@ public interface DiscogsAPI {
      */
     @GET("releases/{release_id}")
     Call<ReleaseResponse> fetchRelease(@Path("release_id") int release_id);
+
+    /*
+    Retrieve a user by username.
+    If authenticated as the requested user, the email key will be visible, and the num_list count will include
+    the user’s private lists. If authenticated as the requested user or the user’s collection/wantlist is public,
+    the num_collection / num_wantlist keys will be visible.
+     */
+    @GET("users/{username}")
+    Call<ProfileResponse> fetchProfile(@Path("username") String username);
 
 }

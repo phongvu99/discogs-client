@@ -13,6 +13,7 @@
 <!--        android:contentDescription="@string/description" />-->
 
     <ImageView
+        android:id="@+id/profile_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
@@ -22,6 +23,14 @@
     <TextView
         android:id="@+id/profile_name"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Fake name"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Fake name"
