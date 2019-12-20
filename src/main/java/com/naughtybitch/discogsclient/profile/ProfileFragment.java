@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -51,6 +52,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ImageView profile_image, profile_banner;
     private TextView profile, profile_name, seller_rating_star, seller_rating, buyer_rating_star, buyer_rating;
     private Button btn_order;
+    private NestedScrollView profile_container;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,14 +86,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         fragment.setArguments(args);
         return fragment;
     }
-  
+
     public static ProfileFragment newInstance() {
         Bundle args = new Bundle();
         ProfileFragment fragment = new ProfileFragment();
         fragment.setArguments(args);
         return fragment;
     }
-  
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +128,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         seller_rating_star = v.findViewById(R.id.seller_rating_stars);
         buyer_rating = v.findViewById(R.id.buyer_rating);
         buyer_rating_star = v.findViewById(R.id.buyer_rating_stars);
+        profile_container = v.findViewById(R.id.profile_container);
     }
 
     private void buttonOnClickListener(View v) {
@@ -140,6 +143,26 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void updateProfile(ProfileResponse profileResponse) {
+        Glide.with(getActivity())
+                .load(profileResponse.getAvatarUrl())
+                .error(R.drawable.discogs_vinyl_record_mark)
+                .placeholder(R.drawable.discogs_vinyl_record_mark)
+                .into(profile_image);
+        profile_name.setText(profileResponse.getName());
+        profile.setText(profileResponse.getProfile());
+        Glide.with(getActivity())
+                .load(profileResponse.getBannerUrl())
+                .error(R.drawable.discogs_logo)
+                .placeholder(R.drawable.discogs_logo)
+                .into(profile_banner);
+        seller_rating.setText(String.valueOf(profileResponse.getSellerNumRatings()));
+        buyer_rating.setText(String.valueOf(profileResponse.getBuyerNumRatings()));
+        seller_rating_star.setText(String.valueOf(profileResponse.getSellerRatingStars()));
+        buyer_rating_star.setText(String.valueOf(profileResponse.getBuyerRatingStars()));
+        profile_container.setVisibility(View.VISIBLE);
+    }
+
     private void fetchProfile(String username) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
         Call<ProfileResponse> call = discogsAPI.fetchProfile(username);
@@ -148,30 +171,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                 if (response.body() != null) {
                     ProfileResponse profileResponse = response.body();
-                    Glide.with(getActivity())
-                            .load(profileResponse.getAvatarUrl())
-                            .error(R.drawable.discogs_vinyl_record_mark)
-                            .placeholder(R.drawable.discogs_vinyl_record_mark)
-                            .into(profile_image);
-                    profile_name.setText(profileResponse.getName());
-                    profile.setText(profileResponse.getProfile());
-                    Glide.with(getActivity())
-                            .load(profileResponse.getBannerUrl())
-                            .error(R.drawable.discogs_logo)
-                            .placeholder(R.drawable.discogs_logo)
-                            .into(profile_banner);
-                    int sell_rating = profileResponse.getSellerNumRatings();
-                    String sell_string = String.valueOf(sell_rating);
-                    seller_rating.setText(sell_string);
-                    int buy_rating = profileResponse.getBuyerNumRatings();
-                    String buy_string = String.valueOf(buy_rating);
-                    buyer_rating.setText(buy_string);
-                    double sell_rating_star = profileResponse.getSellerRatingStars();
-                    String sell_star_string = String.valueOf(sell_rating_star);
-                    seller_rating_star.setText(sell_star_string);
-                    double buy_rating_star = profileResponse.getSellerRatingStars();
-                    String buy_star_string = String.valueOf(buy_rating_star);
-                    buyer_rating_star.setText(buy_star_string);
+                    updateProfile(profileResponse);
                 }
             }
 
