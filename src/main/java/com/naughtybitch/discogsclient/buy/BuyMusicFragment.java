@@ -3,18 +3,16 @@ package com.naughtybitch.discogsclient.buy;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.naughtybitch.discogsclient.R;
 
@@ -66,7 +64,6 @@ public class BuyMusicFragment extends Fragment implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cart:
-                Toast.makeText(getActivity(), "????????", Toast.LENGTH_SHORT).show();
                 navigateToFragment(CartFragment.newInstance());
                 break;
             case R.id.purchases:

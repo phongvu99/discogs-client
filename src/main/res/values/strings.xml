@@ -156,6 +156,11 @@
     <!-- CardView row item -->
     <string name="user">User</string>
     <string name="title">Everyday Life</string>
+    <string name="artist_title">Dave Grohl</string>
+    <string name="artist_status">Active member</string>
+    <string name="label_title">Parlophone</string>
+    <string name="label_status1">Sublabel</string>
+    <string name="label_status2">Parent label</string>
     <string name="master">Master release</string>
     <string name="click_show_all">Click to show all versions</string>
     <string name="formats">Formats: 2xVinyl, LP, Album</string>

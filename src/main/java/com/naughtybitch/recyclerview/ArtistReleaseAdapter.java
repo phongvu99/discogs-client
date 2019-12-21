@@ -1,5 +1,6 @@
 package com.naughtybitch.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -116,29 +117,39 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateMaster(MasterViewHolder masterViewHolder, Release release) {
         TextView title_master = masterViewHolder.card_title;
         title_master.setText(release.getTitle());
         TextView artist = masterViewHolder.card_artist;
         artist.setText(release.getArtist());
         TextView released = masterViewHolder.card_released;
-        released.setText("First released in " + release.getYear());
+        try {
+            released.setText("First released in " + release.getYear());
+        } catch (NullPointerException e) {
+            released.setText("First released in " + "unknown");
+        }
         ImageView image_master = masterViewHolder.card_image;
-        Glide.with(context).load(release.getThumb()).placeholder(progressDrawable)
-                .error(progressDrawable)
+        Glide.with(context).load(release.getThumb()).placeholder(R.drawable.discogs_vinyl_record_mark)
+                .error(R.drawable.discogs_vinyl_record_mark)
                 .into(image_master);
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateRelease(MasterViewHolder masterViewHolder, Release release) {
         TextView title_master = masterViewHolder.card_title;
         title_master.setText(release.getTitle() + " (" + release.getFormat() + ")");
         TextView artist = masterViewHolder.card_artist;
         artist.setText(release.getArtist());
         TextView released = masterViewHolder.card_released;
-        released.setText("Released in " + release.getYear());
+        try {
+            released.setText("Released in " + release.getYear());
+        } catch (NullPointerException e) {
+            released.setText("Released in " + "unknown");
+        }
         ImageView image_master = masterViewHolder.card_image;
-        Glide.with(context).load(release.getThumb()).placeholder(progressDrawable)
-                .error(progressDrawable)
+        Glide.with(context).load(release.getThumb()).placeholder(R.drawable.discogs_vinyl_record_mark)
+                .error(R.drawable.discogs_vinyl_record_mark)
                 .into(image_master);
     }
 
@@ -179,7 +190,7 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
     }
 
     // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
+// Used to cache the views within the item layout for fast access
     public class MasterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row

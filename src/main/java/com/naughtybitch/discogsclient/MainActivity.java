@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,8 +45,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // Custom ActionBar
-        ImageView imageView = (ImageView) findViewById(R.id.toolbar_background_image);
-        imageView.setImageDrawable(getResources().getDrawable(R.drawable.background));
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);

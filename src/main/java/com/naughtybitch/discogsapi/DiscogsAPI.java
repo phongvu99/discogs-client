@@ -1,6 +1,9 @@
 package com.naughtybitch.discogsapi;
 
 import com.naughtybitch.POJO.ArtistReleasesResponse;
+import com.naughtybitch.POJO.ArtistResponse;
+import com.naughtybitch.POJO.LabelReleasesResponse;
+import com.naughtybitch.POJO.LabelResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
 import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
 import com.naughtybitch.POJO.ReleaseResponse;
@@ -47,5 +50,27 @@ public interface DiscogsAPI {
      */
     @GET("releases/{release_id}")
     Call<ReleaseResponse> fetchRelease(@Path("release_id") int release_id);
+
+    /*
+    The Artist resource represents a person in the Discogs
+    database who contributed to a Release in some capacity.
+     */
+    @GET("artists/{artist_id}")
+    Call<ArtistResponse> fetchArtist(@Path("artist_id") int artist_id);
+
+    /*
+    The Label resource represents a label, company, recording studio,
+    location, or other entity involved with Artists and Releases.
+    Labels were recently expanded in scope to include things that aren’t
+    labels – the name is an artifact of this history.
+     */
+    @GET("labels/{label_id}")
+    Call<LabelResponse> fetchLabel(@Path("label_id") int label_id);
+
+    /*
+    Returns a list of Releases associated with the label. Accepts Pagination parameters.
+     */
+    @GET("labels/{label_id}/releases")
+    Call<LabelReleasesResponse> fetchLabelReleases(@Path("label_id") int label_id, @Query("per_page") int per_page, @Query("page") int page);
 
 }

@@ -5,9 +5,54 @@ import com.google.gson.annotations.SerializedName;
 
 public class Release {
 
+    // User Collection Response
+    @SerializedName("instance_id")
+    @Expose
+    private Integer instanceId;
+    @SerializedName("date_added")
+    @Expose
+    private String dateAdded;
+    @SerializedName("basic_information")
+    @Expose
+    private BasicInformation basicInformation;
+    @SerializedName("rating")
+    @Expose
+    private Integer rating;
+    // Release Response
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("catno")
+    @Expose
+    private String catno;
+
+    public Integer getInstanceId() {
+        return instanceId;
+    }
+
+    public void setInstanceId(Integer instanceId) {
+        this.instanceId = instanceId;
+    }
+
+    public String getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(String dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
+    public BasicInformation getBasicInformation() {
+        return basicInformation;
+    }
+
+    public void setBasicInformation(BasicInformation basicInformation) {
+        this.basicInformation = basicInformation;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
     @SerializedName("thumb")
     @Expose
     private String thumb;
@@ -32,6 +77,10 @@ public class Release {
     @SerializedName("artist")
     @Expose
     private String artist;
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
     @SerializedName("type")
     @Expose
     private String type;
@@ -112,6 +161,14 @@ public class Release {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public String getCatno() {
+        return catno;
+    }
+
+    public void setCatno(String catno) {
+        this.catno = catno;
     }
 
     public String getType() {

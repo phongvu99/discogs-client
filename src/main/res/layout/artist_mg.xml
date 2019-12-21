@@ -16,16 +16,19 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/card_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/artist_image"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
                 android:layout_marginStart="12dp"
-                android:contentDescription="@string/lemon">
+                android:contentDescription="@string/lemon"
+                app:civ_border_color="@color/light_black"
+                app:civ_border_width="2dp">
 
-            </ImageView>
+            </de.hdodenhof.circleimageview.CircleImageView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,10 +37,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/card_title"
+                    android:id="@+id/artist_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/title"
+                    android:text="@string/artist_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header"
                     android:textColor="@color/white"
                     android:textSize="18sp">
@@ -45,10 +48,10 @@
                 </TextView>
 
                 <TextView
-                    android:id="@+id/card_profile"
+                    android:id="@+id/artist_status"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/label_profile"
+                    android:text="@string/artist_status"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/white"
                     android:textSize="14sp">

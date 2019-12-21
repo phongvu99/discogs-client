@@ -256,7 +256,7 @@ public class SettingsActivity extends AppCompatActivity implements
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
-            View view = inflater.inflate(R.layout.activity_master_info, container, false);
+            View view = inflater.inflate(R.layout.activity_master_details, container, false);
             return view;
         }
     }

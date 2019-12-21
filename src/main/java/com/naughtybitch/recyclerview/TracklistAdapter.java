@@ -66,11 +66,10 @@ public class TracklistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 return new HeaderViewHolder(itemView);
             case 2: // Body
             case 3:
+            default:
                 itemView = inflater.inflate(R.layout.tracklist_track_title, parent, false);
                 return new BodyViewHolder(itemView);
-            default:
-                itemView = inflater.inflate(R.layout.card_row_default, parent, false);
-                return new EmptyViewHolder(itemView);
+
         }
     }
 
@@ -114,16 +113,6 @@ public class TracklistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 BodyViewHolder bodyViewHolder = (BodyViewHolder) holder;
                 updateBody(bodyViewHolder, tracklist);
                 break;
-        }
-    }
-
-    public class EmptyViewHolder extends RecyclerView.ViewHolder {
-        private TextView card_empty;
-
-        public EmptyViewHolder(View itemView) {
-            super(itemView);
-
-            card_empty = itemView.findViewById(R.id.card_empty);
         }
     }
 

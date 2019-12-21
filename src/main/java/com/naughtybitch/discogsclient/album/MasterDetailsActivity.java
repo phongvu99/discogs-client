@@ -19,6 +19,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -72,7 +73,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class MasterInfoActivity extends AppCompatActivity implements
+public class MasterDetailsActivity extends AppCompatActivity implements
         MoreByAdapter.OnMoreByListener,
         View.OnClickListener {
 
@@ -85,20 +86,21 @@ public class MasterInfoActivity extends AppCompatActivity implements
     private TracklistAdapter tracklistAdapter;
     private SliderView sliderView;
     private MoreByAdapter morebyAdapter;
-    private RecyclerView rc_moreby, rc_tracklist;
-    private LinearLayout linearLayout;
+    private RecyclerView rc_moreby, rc_tracklist, rc_members;
+    private LinearLayout details_holder, moreby_holder;
     private NestedScrollView nestedScrollView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private CollapsingToolbarLayout collapsingToolbarLayout;
+    private AppBarLayout appBarLayout;
     private Toolbar myToolbar;
     private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_master_info);
+        setContentView(R.layout.activity_master_details);
         initView();
         try {
             master_id = getIntent().getExtras().getInt("master_id");
@@ -120,7 +122,16 @@ public class MasterInfoActivity extends AppCompatActivity implements
             // Do smt
         }
 
-        navigationViewHandler();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void initView() {
+
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+
+        setSupportActionBar(myToolbar);
 
         // DrawerLayout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -135,36 +146,24 @@ public class MasterInfoActivity extends AppCompatActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
         }
-    }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void initView() {
+        navigationViewHandler();
 
-        myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = true;
-            int scrollRange = -1;
-
+        // Disable AppBar scrolling in coordinator layout
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        params.setBehavior(new AppBarLayout.Behavior());
+        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + i == 0) {
-                    collapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbarLayout.setTitle(" ");
-                    isShow = false;
-                }
+            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+                return false;
             }
         });
 
-        setSupportActionBar(myToolbar);
-
-        linearLayout = findViewById(R.id.info_holder);
+        moreby_holder = findViewById(R.id.more_by_holder);
+        moreby_holder.setVisibility(View.INVISIBLE);
+        rc_members = findViewById(R.id.rc_members);
+        details_holder = findViewById(R.id.details_holder);
         nestedScrollView = findViewById(R.id.master_container);
         nestedScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -174,13 +173,14 @@ public class MasterInfoActivity extends AppCompatActivity implements
         });
         view_all = findViewById(R.id.more_by_all);
         view_all.setOnClickListener(this);
-        tracklist = findViewById(R.id.master_tracklist);
+        tracklist = findViewById(R.id.tracklist);
         released = findViewById(R.id.master_released);
         formats = findViewById(R.id.master_formats);
         labels = findViewById(R.id.master_labels);
         show_all = findViewById(R.id.show_all);
         show_all.setOnClickListener(this);
         total_length = findViewById(R.id.tracklist_total_length);
+        total_length.setVisibility(View.INVISIBLE);
         rc_tracklist = findViewById(R.id.rc_tracklist);
         tracklistAdapter = new TracklistAdapter();
         rc_tracklist.setAdapter(tracklistAdapter);
@@ -206,14 +206,13 @@ public class MasterInfoActivity extends AppCompatActivity implements
         Bundle bundle = new Bundle();
         switch (v.getId()) {
             case R.id.show_all:
-                intent = new Intent(MasterInfoActivity.this, SearchableActivity.class);
-                bundle = new Bundle();
+                intent = new Intent(MasterDetailsActivity.this, SearchableActivity.class);
                 bundle.putInt("master_id", master_id);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case R.id.more_by_all:
-                intent = new Intent(MasterInfoActivity.this, SearchableActivity.class);
+                intent = new Intent(MasterDetailsActivity.this, SearchableActivity.class);
                 bundle.putInt("artist_id", artist_id);
                 bundle.putString("view_all", "view_all");
                 intent.putExtras(bundle);
@@ -222,12 +221,59 @@ public class MasterInfoActivity extends AppCompatActivity implements
         }
     }
 
+
+    public void updateToolbarTitle(final ReleaseResponse response) {
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    collapsingToolbarLayout.setTitle(response.getTitle());
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+    }
+
+    public void updateToolbarTitle(final MasterReleaseResponse response) {
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    collapsingToolbarLayout.setTitle(response.getTitle());
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+    }
+
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void updateReleaseView(ReleaseResponse releaseResponse) {
         // title, artist, year, genre, style, total_lengths
-        linearLayout.setVisibility(View.VISIBLE);
+        updateToolbarTitle(releaseResponse);
+        moreby_holder.setVisibility(View.VISIBLE);
+        rc_members.setVisibility(View.GONE);
+        details_holder.setVisibility(View.VISIBLE);
         nestedScrollView.setOnTouchListener(null);
         sliderView.setVisibility(View.VISIBLE);
+        total_length.setVisibility(View.VISIBLE);
         tracklist.setVisibility(View.VISIBLE);
         rc_tracklist.setVisibility(View.VISIBLE);
         show_all.setVisibility(View.GONE);
@@ -239,7 +285,11 @@ public class MasterInfoActivity extends AppCompatActivity implements
         artist.setVisibility(View.VISIBLE);
         year.setVisibility(View.VISIBLE);
         style.setVisibility(View.VISIBLE);
-        released.setText("Released " + releaseResponse.getReleased());
+        if (releaseResponse.getReleased() == null) {
+            released.setText("Released " + "Unknown");
+        } else {
+            released.setText("Released " + releaseResponse.getReleased());
+        }
         StringBuilder stringBuilder = new StringBuilder();
         try {
             for (String desc : releaseResponse.getFormats().get(0).getDescriptions()) {
@@ -307,10 +357,12 @@ public class MasterInfoActivity extends AppCompatActivity implements
         call.enqueue(new Callback<ReleaseResponse>() {
             @Override
             public void onResponse(Call<ReleaseResponse> call, Response<ReleaseResponse> response) {
-                ReleaseResponse releaseResponse = response.body();
-                artist_id = releaseResponse.getArtists().get(0).getId();
-                fetchMoreBy(artist_id);
-                updateReleaseView(releaseResponse);
+                if (response.body() != null) {
+                    ReleaseResponse releaseResponse = response.body();
+                    artist_id = releaseResponse.getArtists().get(0).getId();
+                    fetchArtistReleases(artist_id);
+                    updateReleaseView(releaseResponse);
+                }
             }
 
             @Override
@@ -327,10 +379,12 @@ public class MasterInfoActivity extends AppCompatActivity implements
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<MasterReleaseVersionsResponse> call, Response<MasterReleaseVersionsResponse> response) {
-                MasterReleaseVersionsResponse masterReleaseVersionsResponse = response.body();
-                Pagination pagination = masterReleaseVersionsResponse.getPagination();
-                Log.i("response_show_all", "response " + response.code());
-                show_all.setText("Show all " + pagination.getItems() + " versions");
+                if (response.body() != null) {
+                    MasterReleaseVersionsResponse masterReleaseVersionsResponse = response.body();
+                    Pagination pagination = masterReleaseVersionsResponse.getPagination();
+                    Log.i("response_show_all", "response " + response.code());
+                    show_all.setText("Show all " + pagination.getItems() + " versions");
+                }
             }
 
             @Override
@@ -376,7 +430,7 @@ public class MasterInfoActivity extends AppCompatActivity implements
         return auth;
     }
 
-    private void fetchMoreBy(final int artist_id) {
+    private void fetchArtistReleases(final int artist_id) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
         Call<ArtistReleasesResponse> call = discogsAPI.fetchArtistReleases(artist_id, "year", "asc"
                 , 10, 1);
@@ -387,7 +441,7 @@ public class MasterInfoActivity extends AppCompatActivity implements
                 if (response.body() != null) {
                     ArtistReleasesResponse artistResponse = response.body();
                     List<Release> releases = artistResponse.getReleases();
-                    morebyAdapter = new MoreByAdapter(context, releases, artist_id, MasterInfoActivity.this);
+                    morebyAdapter = new MoreByAdapter(context, releases, artist_id, MasterDetailsActivity.this);
                     rc_moreby.setAdapter(morebyAdapter);
                 } else {
                     TextView empty = findViewById(R.id.card_empty);
@@ -442,9 +496,13 @@ public class MasterInfoActivity extends AppCompatActivity implements
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void updateMasterView(MasterReleaseResponse masterResponse) {
-        linearLayout.setVisibility(View.VISIBLE);
+        updateToolbarTitle(masterResponse);
+        moreby_holder.setVisibility(View.VISIBLE);
+        rc_members.setVisibility(View.GONE);
+        details_holder.setVisibility(View.VISIBLE);
         nestedScrollView.setOnTouchListener(null);
         sliderView.setVisibility(View.VISIBLE);
+        total_length.setVisibility(View.VISIBLE);
         genre.setVisibility(View.VISIBLE);
         tracklist.setVisibility(View.VISIBLE);
         rc_tracklist.setVisibility(View.VISIBLE);
@@ -503,7 +561,7 @@ public class MasterInfoActivity extends AppCompatActivity implements
                     tracklists = masterResponse.getTracklist();
                     artist_id = masterResponse.getArtists().get(0).getId();
                     updateMasterView(masterResponse);
-                    fetchMoreBy(artist_id);
+                    fetchArtistReleases(artist_id);
                     tracklistAdapter = new TracklistAdapter(context, tracklists);
                     rc_tracklist.setAdapter(tracklistAdapter);
                     sliderAdapter = new SliderAdapter(context, masterResponse);
@@ -526,13 +584,13 @@ public class MasterInfoActivity extends AppCompatActivity implements
         Bundle bundle = new Bundle();
         switch (release.getType()) {
             case "master":
-                intent = new Intent(MasterInfoActivity.this, MasterInfoActivity.class);
+                intent = new Intent(MasterDetailsActivity.this, MasterDetailsActivity.class);
                 bundle.putInt("master_id", release.getId());
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case "release":
-                intent = new Intent(MasterInfoActivity.this, MasterInfoActivity.class);
+                intent = new Intent(MasterDetailsActivity.this, MasterDetailsActivity.class);
                 bundle.putInt("release_id", release.getId());
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -545,38 +603,37 @@ public class MasterInfoActivity extends AppCompatActivity implements
     private void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
-        navigationView.setCheckedItem(R.id.home);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.home:
-                        startActivity(new Intent(MasterInfoActivity.this, MainActivity.class));
-                        Toast.makeText(MasterInfoActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MasterDetailsActivity.this, MainActivity.class));
+                        Toast.makeText(MasterDetailsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.profile:
-                        startActivity(new Intent(MasterInfoActivity.this, ProfileActivity.class));
-                        Toast.makeText(MasterInfoActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MasterDetailsActivity.this, ProfileActivity.class));
+                        Toast.makeText(MasterDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(MasterInfoActivity.this, WishlistActivity.class));
-                        Toast.makeText(MasterInfoActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MasterDetailsActivity.this, WishlistActivity.class));
+                        Toast.makeText(MasterDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.buy_music:
-                        startActivity(new Intent(MasterInfoActivity.this, BuyMusicActivity.class));
-                        Toast.makeText(MasterInfoActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MasterDetailsActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(MasterDetailsActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
-                        startActivity(new Intent(MasterInfoActivity.this, SellMusicActivity.class));
-                        Toast.makeText(MasterInfoActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MasterDetailsActivity.this, SellMusicActivity.class));
+                        Toast.makeText(MasterDetailsActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(MasterInfoActivity.this, SettingsActivity.class));
-                        Toast.makeText(MasterInfoActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MasterDetailsActivity.this, SettingsActivity.class));
+                        Toast.makeText(MasterDetailsActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(MasterInfoActivity.this, ExploreActivity.class));
-                        Toast.makeText(MasterInfoActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MasterDetailsActivity.this, ExploreActivity.class));
+                        Toast.makeText(MasterDetailsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;
@@ -593,7 +650,7 @@ public class MasterInfoActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
             case R.id.search:
-                Intent intent = new Intent(MasterInfoActivity.this, ExploreActivity.class);
+                Intent intent = new Intent(MasterDetailsActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }

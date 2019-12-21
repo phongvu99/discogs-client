@@ -7,11 +7,12 @@
     android:layout_height="match_parent"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:context=".album.MasterInfoActivity">
+    tools:context=".album.MasterDetailsActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/delicate">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
@@ -33,12 +34,11 @@
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/slider_view"
                     android:layout_width="match_parent"
-                    android:layout_height="360dp"
-                    android:background="@color/white"
-                    android:visibility="invisible"
+                    android:layout_height="400dp"
+                    android:visibility="visible"
                     app:sliderAnimationDuration="600"
                     app:sliderAutoCycleDirection="right"
-                    app:sliderAutoCycleEnabled="false"
+                    app:sliderAutoCycleEnabled="true"
                     app:sliderCircularHandlerEnabled="true"
                     app:sliderIndicatorAnimationDuration="600"
                     app:sliderIndicatorGravity="center_horizontal|bottom"
@@ -48,7 +48,7 @@
                     app:sliderIndicatorRadius="1dp"
                     app:sliderIndicatorSelectedColor="#5A5A5A"
                     app:sliderIndicatorUnselectedColor="#FFF"
-                    app:sliderScrollTimeInSec="1"
+                    app:sliderScrollTimeInSec="3"
                     app:sliderStartAutoCycle="true" />
 
                 <androidx.appcompat.widget.Toolbar
@@ -59,6 +59,7 @@
                     app:layout_collapseMode="pin">
 
                 </androidx.appcompat.widget.Toolbar>
+
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
 
@@ -67,12 +68,11 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <include layout="@layout/fragment_master_info" />
-
+            <include layout="@layout/fragment_master_details" />
         </FrameLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
