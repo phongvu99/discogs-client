@@ -64,15 +64,24 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         progressDrawable.setCenterRadius(30f);
         progressDrawable.start();
         MoreByViewHolder moreByViewHolder = (MoreByViewHolder) holder;
-        TextView title = moreByViewHolder.card_title;
-        title.setText(releases.get(position).getTitle());
         TextView artist = moreByViewHolder.card_artist;
-        artist.setText(releases.get(position).getArtist());
+        TextView title = moreByViewHolder.card_title;
         ImageView image_release = moreByViewHolder.card_image;
-        Glide.with(context).load(releases.get(position).getThumb())
-                .placeholder(R.drawable.discogs_vinyl_record_mark)
-                .error(R.drawable.discogs_vinyl_record_mark)
-                .into(image_release);
+
+        // More by this artist in Master and Release Details Activity
+        try {
+            title.setText(releases.get(position).getTitle());
+            artist.setText(releases.get(position).getArtist());
+            Glide.with(context).load(releases.get(position).getThumb())
+                    .placeholder(R.drawable.discogs_vinyl_record_mark)
+                    .error(R.drawable.discogs_vinyl_record_mark)
+                    .into(image_release);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+
+        // Future Collection and Wantlist implementation should be put here
+        // try {} catch something here
     }
 
 

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.naughtybitch.POJO.ArtistResponse;
+import com.naughtybitch.POJO.LabelResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
 import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.discogsclient.R;
@@ -17,6 +19,8 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
     private Context context;
     private MasterReleaseResponse masterResponse;
     private ReleaseResponse releaseResponse;
+    private ArtistResponse artistResponse;
+    private LabelResponse labelResponse;
 
     public SliderAdapter(Context context, MasterReleaseResponse masterResponse) {
         this.context = context;
@@ -26,6 +30,16 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
     public SliderAdapter(Context context, ReleaseResponse releaseResponse) {
         this.context = context;
         this.releaseResponse = releaseResponse;
+    }
+
+    public SliderAdapter(Context context, ArtistResponse artistResponse) {
+        this.context = context;
+        this.artistResponse = artistResponse;
+    }
+
+    public SliderAdapter(Context context, LabelResponse labelResponse) {
+        this.context = context;
+        this.labelResponse = labelResponse;
     }
 
     @Override
@@ -39,9 +53,9 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
         try {
             Glide.with(context)
                     .load(masterResponse.getImages().get(position).getResourceUrl())
-                    .override(600, 600)
-                    .error(R.color.light_black)
-                    .placeholder(R.color.light_black)
+                    .override(300, 300)
+                    .error(R.drawable.discogs_vinyl_record_mark)
+                    .placeholder(R.drawable.discogs_vinyl_record_mark)
                     .into(viewHolder.imageViewBackground);
         } catch (NullPointerException e) {
             // Do smt
@@ -49,9 +63,29 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
         try {
             Glide.with(context)
                     .load(releaseResponse.getImages().get(position).getResourceUrl())
-                    .override(600, 600)
-                    .error(R.color.light_black)
-                    .placeholder(R.color.light_black)
+                    .override(300, 300)
+                    .error(R.drawable.discogs_vinyl_record_mark)
+                    .placeholder(R.drawable.discogs_vinyl_record_mark)
+                    .into(viewHolder.imageViewBackground);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        try {
+            Glide.with(context)
+                    .load(artistResponse.getImages().get(position).getResourceUrl())
+                    .override(300, 300)
+                    .error(R.drawable.discogs_vinyl_record_mark)
+                    .placeholder(R.drawable.discogs_vinyl_record_mark)
+                    .into(viewHolder.imageViewBackground);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        try {
+            Glide.with(context)
+                    .load(labelResponse.getImages().get(position).getResourceUrl())
+                    .override(300, 300)
+                    .error(R.drawable.discogs_vinyl_record_mark)
+                    .placeholder(R.drawable.discogs_vinyl_record_mark)
                     .into(viewHolder.imageViewBackground);
         } catch (NullPointerException e) {
             // Do smt
@@ -71,7 +105,17 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
         } catch (NullPointerException e) {
             // Do smt
         }
-        return 0;
+        try {
+            return artistResponse.getImages().size();
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        try {
+            return labelResponse.getImages().size();
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        return 1;
     }
 
     class SliderAdapterVH extends SliderViewAdapter.ViewHolder {

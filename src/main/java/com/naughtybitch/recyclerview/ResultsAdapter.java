@@ -133,11 +133,9 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 itemView = inflater.inflate(R.layout.card_row_artist, parent, false);
                 return new ArtistViewHolder(itemView, mOnResultListener);
             case 5: // Loading
+            default: // Default
                 itemView = inflater.inflate(R.layout.card_row_loading, parent, false);
                 return new LoadingViewHolder(itemView);
-            default: // Default
-                itemView = inflater.inflate(R.layout.card_row_default, parent, false);
-                return new EmptyViewHolder(itemView);
         }
     }
 
@@ -145,8 +143,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView title_master = masterViewHolder.card_title;
         title_master.setText(result.getTitle());
         ImageView image_master = masterViewHolder.card_image;
-        Glide.with(context).load(result.getCoverImage()).placeholder(progressDrawable)
-                .error(progressDrawable)
+        Glide.with(context).load(result.getCoverImage()).placeholder(R.drawable.discogs_vinyl_record_mark)
+                .error(R.drawable.discogs_vinyl_record_mark)
                 .into(image_master);
     }
 
@@ -184,7 +182,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         TextView labels = releaseViewHolder.card_labels;
         if (result.getLabel().size() > 1) {
-            labels.setText("Labels: " + result.getLabel().get(0) + " +" + (result.getLabel().size() - 1) + " more");
+            labels.setText("Labels: " + result.getLabel().get(0) + " + " + (result.getLabel().size() - 1) + " more");
         } else {
             labels.setText("Labels: " + result.getLabel().get(0));
         }
@@ -326,16 +324,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @Override
         public void onClick(View v) {
             onResultListener.onResultClick(getAdapterPosition(), mResults.get(getAdapterPosition()));
-        }
-    }
-
-    public class EmptyViewHolder extends RecyclerView.ViewHolder {
-        private TextView card_empty;
-
-        public EmptyViewHolder(View itemView) {
-            super(itemView);
-
-            card_empty = itemView.findViewById(R.id.card_empty);
         }
     }
 

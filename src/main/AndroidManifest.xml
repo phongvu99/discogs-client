@@ -79,11 +79,15 @@
 
                 <data
                     android:host="localhost:8000"
-                    android:scheme="http"></data>
+                    android:scheme="http">
+
+                </data>
             </intent-filter>
         </activity>
         <activity android:name=".SearchQuery" />
-        <activity android:name=".SearchableActivity">
+        <activity
+            android:name=".SearchableActivity"
+            android:label="@string/search">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -93,7 +97,9 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".album.MasterInfoActivity" />
+        <activity android:name=".album.MasterDetailsActivity" />
+        <activity android:name=".artist.ArtistDetailsActivity" />
+        <activity android:name="com.naughtybitch.label.LabelDetailsActivity" />
     </application>
 
 </manifest>

@@ -112,8 +112,10 @@ public class VersionAdapter extends ResultsAdapter {
         TextView label = releaseViewHolder.card_labels;
         label.setText("Label: " + version.getLabel() + " (#" + version.getCatno() + ")");
         TextView released = releaseViewHolder.card_released;
-        if (version.getReleased().equals("0")) {
+        if (version.getReleased().equals("0") && !version.getCountry().equals("")) {
             released.setText("Released in " + version.getCountry());
+        } else if (version.getCountry().equals("") && version.getReleased().equals("0")) {
+            released.setText("Released in " + "Unknown country " + "(Unknown year)");
         } else {
             released.setText("Released in " + version.getCountry() + " (" + version.getReleased() + ")");
         }
