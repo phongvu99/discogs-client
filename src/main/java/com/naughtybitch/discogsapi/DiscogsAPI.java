@@ -24,6 +24,9 @@ public interface DiscogsAPI {
     @GET("database/search")
     Call<SearchResponse> getSearchResult(@Query("q") String query, @Query("per_page") int per_page, @Query("page") int page);
 
+    @GET("database/search")
+    Call<SearchResponse> getSearchResult(@Query("per_page") int per_page, @Query("page") int page, @Query("genre") String genre);
+
     /*
     The Master resource represents a set of similar Releases.
     Masters (also known as “master releases”) have a “main release” which

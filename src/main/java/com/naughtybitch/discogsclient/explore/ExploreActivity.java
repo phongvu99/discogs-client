@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,12 +26,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.naughtybitch.discogsclient.MainActivity;
-import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.SearchableActivity;
-import com.naughtybitch.discogsclient.settings.SettingsActivity;
 import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
+import com.naughtybitch.discogsclient.settings.SettingsActivity;
 import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 
 public class ExploreActivity extends AppCompatActivity implements
@@ -176,6 +177,7 @@ public class ExploreActivity extends AppCompatActivity implements
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         searchView.setQueryHint(getResources().getText(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

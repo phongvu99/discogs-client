@@ -19,7 +19,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -139,15 +138,15 @@ public class ArtistDetailsActivity extends AppCompatActivity implements
         navigationViewHandler();
 
         // Disable AppBar scrolling in coordinator layout
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-        params.setBehavior(new AppBarLayout.Behavior());
-        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
-        behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
-            @Override
-            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
-                return false;
-            }
-        });
+//        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+//        params.setBehavior(new AppBarLayout.Behavior());
+//        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+//        behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+//            @Override
+//            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+//                return false;
+//            }
+//        });
 
         rc_member = findViewById(R.id.rc_members);
         rc_member.setLayoutManager(new LinearLayoutManager(context));

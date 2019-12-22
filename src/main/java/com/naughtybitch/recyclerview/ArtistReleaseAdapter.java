@@ -190,7 +190,7 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
     }
 
     // Provide a direct reference to each of the views within a data item
-// Used to cache the views within the item layout for fast access
+    // Used to cache the views within the item layout for fast access
     public class MasterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row

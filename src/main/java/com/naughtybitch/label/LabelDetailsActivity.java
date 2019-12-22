@@ -6,16 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
@@ -28,17 +31,24 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.GsonBuilder;
-import com.naughtybitch.POJO.Group;
+import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.LabelResponse;
-import com.naughtybitch.POJO.Member;
 import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.ParentLabel;
 import com.naughtybitch.POJO.Sublabel;
 import com.naughtybitch.adapter.SliderAdapter;
 import com.naughtybitch.discogsapi.DiscogsAPI;
+import com.naughtybitch.discogsapi.DiscogsClient;
+import com.naughtybitch.discogsapi.RetrofitClient;
+import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.SearchableActivity;
-import com.naughtybitch.discogsclient.artist.ArtistDetailsActivity;
+import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
+import com.naughtybitch.discogsclient.explore.ExploreActivity;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
+import com.naughtybitch.discogsclient.sell.SellMusicActivity;
+import com.naughtybitch.discogsclient.settings.SettingsActivity;
+import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 import com.naughtybitch.recyclerview.ArtistMGAdapter;
 import com.naughtybitch.recyclerview.LabelCompaniesAdapter;
 import com.naughtybitch.recyclerview.MoreByAdapter;
@@ -47,20 +57,26 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
-public class LabelDetailsActivity extends ArtistDetailsActivity implements LabelCompaniesAdapter.OnParentLabelListener,
-        LabelCompaniesAdapter.OnSublabelListener {
+public class LabelDetailsActivity extends AppCompatActivity implements LabelCompaniesAdapter.OnParentLabelListener,
+        LabelCompaniesAdapter.OnSublabelListener, View.OnClickListener {
 
+    private DiscogsAPI discogsAPI;
     private Pagination pagination;
     private TextView show_all, view_all;
     private int label_id;
-    private List<Group> groups;
-    private List<Member> members;
     private List<Sublabel> sublabels;
     private ParentLabel parentLabel;
     private TextView title, artist, year, genre, style, total_length, released, formats, labels, tracklist, label_title, label_status;
@@ -92,6 +108,7 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
             label_id = getIntent().getExtras().getInt("label_id");
             if (label_id != 0) {
                 fetchLabel(label_id);
+                fetchLabelReleases(label_id);
             }
             Log.i("label_id", "label id " + label_id);
         } catch (NullPointerException e) {
@@ -100,6 +117,23 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
 
     }
 
+    @Override
+    public void onParentLabelClick(int position, ParentLabel parentLabel) {
+        Intent intent = new Intent(LabelDetailsActivity.this, LabelDetailsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("label_id", parentLabel.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSublabelClick(int position, Sublabel sublabel) {
+        Intent intent = new Intent(LabelDetailsActivity.this, LabelDetailsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("label_id", sublabel.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private void updateLabelView(LabelResponse labelResponse) {
@@ -116,16 +150,15 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
         genre.setVisibility(View.VISIBLE);
         rc_moreby.setVisibility(View.GONE);
         rc_tracklist.setVisibility(View.GONE);
-        show_all.setVisibility(View.GONE);
+        show_all.setVisibility(View.VISIBLE);
         title.setVisibility(View.VISIBLE);
         title.setText(labelResponse.getName());
         CharSequence profile = labelResponse.getProfile();
         genre.setText(profile);
+        artist.setText("Label");
+        tracklist.setText("Companies");
         try { // Parent label
             sublabels = labelResponse.getSublabels();
-            Log.i("sublabel", "sublabel size" + sublabels.size());
-            artist.setText("Label");
-            tracklist.setText("Companies");
             // adapter here
             labelCompaniesAdapter = new LabelCompaniesAdapter(sublabels, this);
             rc_member.setAdapter(labelCompaniesAdapter);
@@ -134,15 +167,15 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
             try {
                 parentLabel = labelResponse.getParentLabel();
                 parent_label.setVisibility(View.VISIBLE);
+                parent_label.setOnClickListener(this);
                 label_title.setText(parentLabel.getName());
                 label_status.setText(R.string.label_status2);
-
-                Log.i("how2", "updateLabelView: ");
             } catch (NullPointerException e) {
                 // Do smt
                 tracklist.setVisibility(View.GONE);
                 parent_label.setVisibility(View.GONE);
                 rc_member.setVisibility(View.GONE);
+                return;
             }
             return;
         } catch (NullPointerException e) {
@@ -150,8 +183,6 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
         }
         try { // Sublabel
             parentLabel = labelResponse.getParentLabel();
-            artist.setText("Label");
-            tracklist.setText("Companies");
             // adapter here
             labelCompaniesAdapter = new LabelCompaniesAdapter(parentLabel, this);
             rc_member.setAdapter(labelCompaniesAdapter);
@@ -159,25 +190,35 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
             sliderView.setSliderAdapter(sliderAdapter);
         } catch (NullPointerException e) {
             // Do smt
-            Log.i("sublabel", "sublabel size" + parentLabel.getName());
             tracklist.setVisibility(View.GONE);
             parent_label.setVisibility(View.GONE);
             rc_member.setVisibility(View.GONE);
         }
     }
 
-    @Override
-    public void onParentLabelClick(int position, ParentLabel parentLabel) {
+    private void fetchLabelReleases(int label_id) {
+        Call<LabelReleasesResponse> call = discogsAPI.fetchLabelReleases(label_id, 1, 1);
+        call.enqueue(new Callback<LabelReleasesResponse>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<LabelReleasesResponse> call, Response<LabelReleasesResponse> response) {
+                Log.i("label releases", "response code " + response.code());
+                if (response.body() != null) {
+                    LabelReleasesResponse labelReleasesResponse = response.body();
+                    pagination = labelReleasesResponse.getPagination();
+                    show_all.setText("Show all " + pagination.getItems() + " releases");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LabelReleasesResponse> call, Throwable t) {
+                Log.i("label releases", "response code " + t.getMessage());
+            }
+        });
 
     }
-
-    @Override
-    public void onSublabelClick(int position, Sublabel sublabel) {
-
-    }
-
     private void fetchLabel(int label_id) {
-        DiscogsAPI discogsAPI = getDiscogsAPI();
+        discogsAPI = getDiscogsAPI();
         Call<LabelResponse> call = discogsAPI.fetchLabel(label_id);
         call.enqueue(new Callback<LabelResponse>() {
             @Override
@@ -187,6 +228,12 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
                 if (response.body() != null) {
                     LabelResponse labelResponse = response.body();
                     updateLabelView(labelResponse);
+                    try {
+                        parentLabel = labelResponse.getParentLabel();
+                        parentLabel = labelResponse.getParentLabel();
+                    } catch (NullPointerException e) {
+                        // Do smt
+                    }
                 }
             }
 
@@ -278,15 +325,22 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
     }
 
-    @Override
     public void onClick(View v) {
         Intent intent;
         Bundle bundle = new Bundle();
-        if (v.getId() == R.id.show_all) {
-            intent = new Intent(LabelDetailsActivity.this, SearchableActivity.class);
-            bundle.putInt("label_id", label_id);
-            intent.putExtras(bundle);
-            startActivity(intent);
+        switch (v.getId()) {
+            case R.id.show_all:
+                intent = new Intent(LabelDetailsActivity.this, SearchableActivity.class);
+                bundle.putInt("label_id", label_id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case R.id.parent_label_container:
+                intent = new Intent(LabelDetailsActivity.this, LabelDetailsActivity.class);
+                bundle.putInt("label_id", parentLabel.getId());
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -312,19 +366,104 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
         });
     }
 
-    @Override
+
     public DiscogsAPI getDiscogsAPI() {
-        return super.getDiscogsAPI();
+        final String auth = getCredentials();
+        // Define the interceptor, add authentication headers
+        Interceptor interceptor = new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request.Builder onGoing = chain.request().newBuilder();
+                onGoing.addHeader("Authorization", auth);
+                onGoing.addHeader("User-Agent", "Discogsnect/0.1 +http://discogsnect.com");
+                return chain.proceed(onGoing.build());
+            }
+        };
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.interceptors().add(interceptor);
+        OkHttpClient client = builder.build();
+
+        Retrofit retrofit = RetrofitClient.getRetrofitClient(client);
+
+        return retrofit.create(DiscogsAPI.class);
     }
 
-    @Override
     public String getCredentials() {
-        return super.getCredentials();
+        DiscogsClient instance = DiscogsClient.getInstance();
+        Timestamp currentTimestamp = instance.currentTimeStamp();
+        ArrayList<String> token = instance.getCredentials(this);
+        String auth = "OAuth oauth_consumer_key=\"" + instance.getConsumer_key() + "\", " +
+                "oauth_nonce=\"" + currentTimestamp.getTime() + "\", " +
+                "oauth_token=\"" + token.get(0) + "\", " +
+                "oauth_signature_method=\"PLAINTEXT\", " +
+                "oauth_timestamp=\"" + currentTimestamp.getTime() + "\", " +
+                "oauth_version=\"1.0\", " +
+                "oauth_signature=\"" + instance.getConsumer_secret() + token.get(1) + "\"";
+        return auth;
+    }
+
+    public void navigationViewHandler() {
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setItemIconTintList(null);
+        navigationView.setCheckedItem(R.id.home);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.home:
+                        startActivity(new Intent(LabelDetailsActivity.this, MainActivity.class));
+                        Toast.makeText(LabelDetailsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.profile:
+                        startActivity(new Intent(LabelDetailsActivity.this, ProfileActivity.class));
+                        Toast.makeText(LabelDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.wish_list:
+                        startActivity(new Intent(LabelDetailsActivity.this, WishlistActivity.class));
+                        Toast.makeText(LabelDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.buy_music:
+                        startActivity(new Intent(LabelDetailsActivity.this, BuyMusicActivity.class));
+                        Toast.makeText(LabelDetailsActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.sell_music:
+                        startActivity(new Intent(LabelDetailsActivity.this, SellMusicActivity.class));
+                        Toast.makeText(LabelDetailsActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        startActivity(new Intent(LabelDetailsActivity.this, SettingsActivity.class));
+                        Toast.makeText(LabelDetailsActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.explore:
+                        startActivity(new Intent(LabelDetailsActivity.this, ExploreActivity.class));
+                        Toast.makeText(LabelDetailsActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
     }
 
     @Override
-    public void navigationViewHandler() {
-        super.navigationViewHandler();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.search:
+                Intent intent = new Intent(LabelDetailsActivity.this, ExploreActivity.class);
+                startActivity(intent);
+                break;
+        }
+
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -338,12 +477,9 @@ public class LabelDetailsActivity extends ArtistDetailsActivity implements Label
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_main, menu);
+        return true;
     }
 
 }
