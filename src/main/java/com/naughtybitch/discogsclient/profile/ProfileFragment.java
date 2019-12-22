@@ -58,7 +58,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     private Context context = getActivity();
     private SharedPreferences sp;
     private ImageView profile_image, profile_banner;
-    private TextView profile, profile_name, seller_rating_star, seller_rating, buyer_rating_star, buyer_rating;
+    private TextView profile, profile_name, seller_rating_star, seller_rating, buyer_rating_star, buyer_rating, profile_location;
     private Button btn_order;
     private NestedScrollView profile_container;
     private RecyclerView profile_collection, profile_wishlist;
@@ -147,6 +147,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         profile_collection.setAdapter(collection_wishlist_adapter);
         profile_wishlist.setLayoutManager(new LinearLayoutManager(context));
         profile_wishlist.setAdapter(collection_wishlist_adapter);
+        profile_location = v.findViewById(R.id.location);
     }
 
     private void buttonOnClickListener(View v) {
@@ -179,17 +180,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         seller_rating_star.setText(String.valueOf(profileResponse.getSellerRatingStars()));
         buyer_rating_star.setText(String.valueOf(profileResponse.getBuyerRatingStars()));
         profile_container.setVisibility(View.VISIBLE);
+        profile_location.setText(profileResponse.getLocation());
     }
 
     private void updateCollection(CollectionResponse collectionResponse) {
-        collection_wishlist_adapter = new MoreByAdapter(context, collectionResponse.getReleases(), 0, this);
+        collection_wishlist_adapter = new MoreByAdapter(getActivity(), collectionResponse.getReleases(), 0, this);
         profile_collection.setAdapter(collection_wishlist_adapter);
     }
 
-    private void updateWishlist(CollectionResponse collectionResponse) {
-        collection_wishlist_adapter = new MoreByAdapter(context, collectionResponse.getReleases(), 0, this);
-        profile_wishlist.setAdapter(collection_wishlist_adapter);
-    }
+//    private void updateWishlist(CollectionResponse collectionResponse) {
+//        collection_wishlist_adapter = new MoreByAdapter(getActivity(), collectionResponse.getReleases(), 0, this);
+//        profile_wishlist.setAdapter(collection_wishlist_adapter);
+//    }
 
     private void fetchCollection(String username, int folder_id) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
@@ -199,14 +201,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
             public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {
                 if (response.body() != null) {
                     CollectionResponse collectionResponse = response.body();
-                    updateWishlist(collectionResponse);
                     updateCollection(collectionResponse);
                 }
             }
 
             @Override
             public void onFailure(Call<CollectionResponse> call, Throwable t) {
-
+                Log.e("COLLECTION_CAT", t.getMessage());
             }
         });
     }

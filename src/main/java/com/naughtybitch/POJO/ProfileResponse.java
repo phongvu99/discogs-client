@@ -53,6 +53,9 @@ public class ProfileResponse {
     @SerializedName("collection_fields_url")
     @Expose
     private String collectionFieldsUrl;
+    @SerializedName("email")
+    @Expose
+    private String email;
     @SerializedName("releases_contributed")
     @Expose
     private Integer releasesContributed;
@@ -234,6 +237,14 @@ public class ProfileResponse {
 
     public void setCollectionFieldsUrl(String collectionFieldsUrl) {
         this.collectionFieldsUrl = collectionFieldsUrl;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Integer getReleasesContributed() {

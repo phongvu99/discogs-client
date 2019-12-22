@@ -34,7 +34,10 @@
             android:parentActivityName=".sell.SellMusicActivity">
 
         </activity>
-        <activity android:name=".profile.ProfileActivity" />
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:label="@string/profile"
+            android:parentActivityName=".profile.ProfileActivity" />
         <activity
             android:name=".buy.BuyMusicActivity"
             android:label="@string/music_buy"
