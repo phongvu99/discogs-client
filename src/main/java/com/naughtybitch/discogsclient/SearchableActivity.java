@@ -105,7 +105,9 @@ public class SearchableActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         try {
             genre = intent.getExtras().getString("genre");
-            searchGenre(genre);
+            if (genre != null) {
+                searchGenre(genre);
+            }
             Log.i("genre", "genre " + genre);
         } catch (NullPointerException e) {
             // Do smt
@@ -187,7 +189,7 @@ public class SearchableActivity extends AppCompatActivity implements
                 /* This is the success callback. Though the response type is JSON, with Retrofit
                 we get the response in the form of SearchResponse POJO class
                  */
-                Log.i("response", "Status " + response.code());
+                Log.i("response search genre", "Status " + response.code());
                 if (response.body() != null) {
                     progressBar.setVisibility(View.GONE);
                     SearchResponse sResponse = response.body();
@@ -504,7 +506,7 @@ public class SearchableActivity extends AppCompatActivity implements
                 /* This is the success callback. Though the response type is JSON, with Retrofit
                 we get the response in the form of SearchResponse POJO class
                  */
-                Log.i("response", "Status " + response.code());
+                Log.i("response search query", "Status " + response.code());
                 if (response.body() != null) {
                     progressBar.setVisibility(View.GONE);
                     SearchResponse sResponse = response.body();

@@ -1,6 +1,7 @@
 package com.naughtybitch.discogsclient;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -54,6 +55,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void buttonOnClickListener(View v) {
         Button send_request = v.findViewById(R.id.send_request);
         Button token_request = v.findViewById(R.id.token_request);
+        Button sign_out = v.findViewById(R.id.sign_out);
+        sign_out.setOnClickListener(this);
         send_request.setOnClickListener(this);
         token_request.setOnClickListener(this);
     }
@@ -68,6 +71,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case (R.id.token_request):
                 Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
                 checkLoginStatus();
+                break;
+            case (R.id.sign_out):
+                Intent intent = new Intent(getActivity(), SignOutActivity.class);
+                startActivity(intent);
                 break;
         }
     }

@@ -3,12 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:visible="false"
         android:id="@+id/authorize"
-        android:icon="@drawable/arrow"
         android:iconTint="@color/light_black"
         android:orderInCategory="150"
-        android:title="@string/authorize"
+        android:title="@string/done"
         app:showAsAction="ifRoom">
 
     </item>

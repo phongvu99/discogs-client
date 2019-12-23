@@ -2,6 +2,7 @@ package com.naughtybitch.discogsapi;
 
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.ArtistResponse;
+import com.naughtybitch.POJO.IdentityResponse;
 import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.LabelResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
@@ -85,5 +86,15 @@ public interface DiscogsAPI {
      */
     @GET("users/{username}")
     Call<ProfileResponse> fetchProfile(@Path("username") String username);
+
+    /*
+    Retrieve basic information about the authenticated user.
+    You can use this resource to find out who you’re authenticated as,
+    and it also doubles as a good sanity check to ensure that you’re using OAuth correctly.
+    For more detailed information, make another request for the user’s Profile.
+     */
+    @GET("oauth/identity")
+    Call<IdentityResponse> getIdentity();
+
 
 }

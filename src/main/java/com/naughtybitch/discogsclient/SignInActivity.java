@@ -1,5 +1,6 @@
 package com.naughtybitch.discogsclient;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,20 +12,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.naughtybitch.POJO.User;
 import com.naughtybitch.discogsapi.DiscogsClient;
 
@@ -34,49 +34,40 @@ import java.util.regex.Pattern;
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private SharedPreferences user_preferences;
-    private Menu menu;
     private WebView webView;
     private ProgressDialog progressDialog;
+    private LinearLayout verifier_container;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_sign_in);
 
+
         // Custom ActionBar
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
-//        collapsingToolbarLayout.setTitle("Authorization");
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("Authorization");
         setSupportActionBar(myToolbar);
 
+        progressBar = findViewById(R.id.progress_webview);
+        verifier_container = findViewById(R.id.verifier_container);
         webView = (WebView) findViewById(R.id.web_view);
         webView.clearCache(true);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        progressDialog = ProgressDialog.show(SignInActivity.this, "Discogs Login", "Loading...");
         String url = DiscogsClient.getInstance().getAuthorize_url();
-        Toast.makeText(this, "URL " + url, Toast.LENGTH_LONG).show();
         webView.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return super.shouldOverrideUrlLoading(view, request);
-            }
-
-            @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
+                progressBar.setVisibility(ProgressBar.VISIBLE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-                super.onPageFinished(view, url);
+                verifier_container.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(ProgressBar.GONE);
             }
         });
         webView.loadUrl(url);
@@ -96,6 +87,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    @SuppressLint("ApplySharedPref")
     private void saveLogin() {
         DiscogsClient instance = DiscogsClient.getInstance();
         user_preferences = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
@@ -103,7 +95,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         editor.putBoolean("logged_in", true);
         editor.putString("access_token", instance.getAccess_token());
         editor.putString("access_token_secret", instance.getAccess_token_secret());
-        editor.apply();
+        editor.commit();
     }
 
     private void authorizeApp() {
@@ -111,7 +103,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         final DiscogsClient instance = DiscogsClient.getInstance();
         String client_id = instance.getConsumer_key();
         String client_secret = instance.getConsumer_secret();
-        EditText editText = findViewById(R.id.verfier_code);
+        EditText editText = findViewById(R.id.verifier_code);
         String oauth_verifier = editText.getText().toString();
         instance.setOauth_verifier(oauth_verifier);
         instance.setOauth_verifier(editText.getText().toString());
@@ -148,8 +140,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
                 saveLogin();
-                MenuItem item = menu.findItem(R.id.authorize);
-                item.setVisible(true);
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -168,10 +158,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         switch (item.getItemId()) {
             case R.id.authorize:
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                break;
+                super.onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -180,7 +167,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.toolbar_login, menu);
-        this.menu = menu;
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

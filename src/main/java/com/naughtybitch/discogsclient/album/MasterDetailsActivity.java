@@ -598,7 +598,6 @@ public class MasterDetailsActivity extends AppCompatActivity implements
         Log.i("release", "Release position " + position + " release title " + release.getTitle());
     }
 
-
     private void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);

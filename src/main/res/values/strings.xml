@@ -19,6 +19,7 @@
     <string name="lemon">Lemon</string>
     <string name="get_started">Get Started</string>
     <string name="authorize">Check Authorize</string>
+    <string name="done">Done</string>
     <string name="logo">Logo</string>
     <string name="get_started_desc">Discover music on Discogs, the largest online music database. Buy and sell music with collectors in the Marketplace.</string>
 
@@ -176,5 +177,6 @@
 
     <!-- Explore -->
     <string name="explore_genre">Explore Genres</string>
+    <string name="loading">Loading......</string>
 
 </resources>
