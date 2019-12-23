@@ -3,6 +3,7 @@ package com.naughtybitch.discogsclient.album;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -36,6 +39,7 @@ import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
 import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
 import com.naughtybitch.POJO.Pagination;
+import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.Release;
 import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.POJO.Tracklist;
@@ -96,6 +100,9 @@ public class MasterDetailsActivity extends AppCompatActivity implements
     private AppBarLayout appBarLayout;
     private Toolbar myToolbar;
     private Context context = this;
+    private SharedPreferences sp;
+    private ImageView profile_menu_image;
+    private TextView profile_menu_name, profile_menu_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +127,13 @@ public class MasterDetailsActivity extends AppCompatActivity implements
             Log.i("release_id", "release_id " + release_id);
         } catch (NullPointerException e) {
             // Do smt
+        }
+
+        sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        String username = sp.getString("user_name", null);
+        initView();
+        if (username != null) {
+            fetchProfile(username);
         }
 
     }
@@ -198,6 +212,40 @@ public class MasterDetailsActivity extends AppCompatActivity implements
         sliderView.startAutoCycle();
         sliderView.setIndicatorAnimation(IndicatorAnimations.FILL);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        navigationView = findViewById(R.id.navigation_view);
+        View nav_header = navigationView.getHeaderView(0);
+        profile_menu_email = nav_header.findViewById(R.id.profile_menu_email);
+        profile_menu_name = nav_header.findViewById(R.id.profile_menu_name);
+        profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
+    }
+
+    private void updateProfile(ProfileResponse profileResponse) {
+        Glide.with(this)
+                .load(profileResponse.getAvatarUrl())
+                .error(R.drawable.discogs_vinyl_record_mark)
+                .placeholder(R.drawable.discogs_vinyl_record_mark)
+                .into(profile_menu_image);
+        profile_menu_name.setText(profileResponse.getName());
+        profile_menu_email.setText(profileResponse.getEmail());
+    }
+
+    private void fetchProfile(String username) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<ProfileResponse> call = discogsAPI.fetchProfile(username);
+        call.enqueue(new Callback<ProfileResponse>() {
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                if (response.body() != null) {
+                    ProfileResponse profileResponse = response.body();
+                    updateProfile(profileResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                Log.e("PROFILE_CAT", t.getMessage());
+            }
+        });
     }
 
     @Override

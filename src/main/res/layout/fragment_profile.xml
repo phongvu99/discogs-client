@@ -54,6 +54,7 @@
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:alpha="0.5"
                 android:text="Location"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -68,6 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:alpha="0.5"
                 android:text="Fake name"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -80,9 +82,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@color/light_black"
             android:layout_height="wrap_content"
+            android:background="@color/light_black"
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
 
@@ -100,6 +101,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:alpha="0.5"
                     android:text="@string/seller_rating"
                     android:textColor="@color/white" />
 
@@ -111,6 +113,7 @@
                         android:id="@+id/seller_rating_stars"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:alpha="0.5"
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="48sp" />
@@ -129,12 +132,14 @@
                         android:id="@+id/seller_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:alpha="0.5"
                         android:text="0"
                         android:textColor="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:alpha="0.5"
                         android:text=" ratings"
                         android:textColor="@color/white" />
                 </LinearLayout>
@@ -154,6 +159,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:alpha="0.5"
                     android:text="@string/buyer_rating"
                     android:textColor="@color/white" />
 
@@ -165,6 +171,7 @@
                         android:id="@+id/buyer_rating_stars"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:alpha="0.5"
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="48sp" />
@@ -183,12 +190,14 @@
                         android:id="@+id/buyer_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:alpha="0.5"
                         android:text="0"
                         android:textColor="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:alpha="0.5"
                         android:text=" ratings"
                         android:textColor="@color/white" />
                 </LinearLayout>
@@ -198,7 +207,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:background="@color/light_black"
             android:orientation="vertical"
             android:paddingTop="10dp"
@@ -209,6 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:alpha="0.5"
                 android:text="@string/val"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
@@ -225,27 +234,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
+                    android:alpha="0.5"
                     android:text="@string/minimum"
                     android:textColor="@color/white"
-                    android:textSize="36sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/textView12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="100dp"
+                    android:alpha="0.5"
                     android:text="@string/median"
                     android:textColor="@color/white"
-                    android:textSize="36sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/textView13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="100dp"
+                    android:alpha="0.5"
                     android:text="@string/maximum"
                     android:textColor="@color/white"
-                    android:textSize="36sp" />
+                    android:textSize="30sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -260,9 +272,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:alpha="0.5"
                 android:text="Collection"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -272,9 +285,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
+                android:alpha="0.5"
                 android:text="@string/view_all"
                 android:textColor="@color/white"
-                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -290,10 +303,14 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/white" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:background="@color/light_black"
             android:paddingTop="10dp">
 
@@ -301,9 +318,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:alpha="0.5"
                 android:text="@string/wishlist"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -313,9 +331,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
+                android:alpha="0.5"
                 android:text="@string/view_all"
                 android:textColor="@color/white"
-                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -333,7 +351,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_marginTop="20dp"
             android:background="@color/dark_black" />
 
@@ -347,6 +365,7 @@
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
+                android:alpha="0.5"
                 android:contentDescription="@string/lemon"
                 android:src="@drawable/list" />
 
@@ -356,6 +375,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_marginStart="20dp"
+                android:alpha="0.5"
                 android:background="?android:attr/selectableItemBackground"
                 android:text="@string/lists"
                 android:textAlignment="textStart"
@@ -365,7 +385,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/dark_black" />
 
         <LinearLayout
@@ -379,6 +399,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
+                android:alpha="0.5"
                 android:contentDescription="@string/lemon"
                 android:src="@drawable/purchase" />
 
@@ -388,6 +409,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_marginStart="20dp"
+                android:alpha="0.5"
                 android:background="?android:attr/selectableItemBackground"
                 android:text="@string/orders"
                 android:textAlignment="textStart"
@@ -397,7 +419,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/dark_black" />
 
         <LinearLayout
@@ -410,6 +432,7 @@
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
+                android:alpha="0.5"
                 android:contentDescription="@string/lemon"
                 android:src="@drawable/contribution" />
 
@@ -419,6 +442,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_marginStart="20dp"
+                android:alpha="0.5"
                 android:background="?android:attr/selectableItemBackground"
                 android:text="@string/contributions"
                 android:textAlignment="textStart"
