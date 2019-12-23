@@ -277,8 +277,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/view_all_collection"
@@ -289,8 +288,7 @@
                 android:text="@string/view_all"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -323,8 +321,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/view_all_wishlist"
@@ -335,120 +332,19 @@
                 android:text="@string/view_all"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_view_all_wishlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
             android:background="@color/light_black"
             android:paddingTop="12dp"
             android:visibility="visible">
 
         </androidx.recyclerview.widget.RecyclerView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/dark_black" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:alpha="0.5"
-                android:contentDescription="@string/lemon"
-                android:src="@drawable/list" />
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="320dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:layout_marginStart="20dp"
-                android:alpha="0.5"
-                android:background="?android:attr/selectableItemBackground"
-                android:text="@string/lists"
-                android:textAlignment="textStart"
-                android:textColor="#000000" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/dark_black" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginStart="20dp"
-                android:alpha="0.5"
-                android:contentDescription="@string/lemon"
-                android:src="@drawable/purchase" />
-
-            <Button
-                android:id="@+id/button_order"
-                android:layout_width="320dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:layout_marginStart="20dp"
-                android:alpha="0.5"
-                android:background="?android:attr/selectableItemBackground"
-                android:text="@string/orders"
-                android:textAlignment="textStart"
-                android:textColor="#000000" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/dark_black" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:alpha="0.5"
-                android:contentDescription="@string/lemon"
-                android:src="@drawable/contribution" />
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="320dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:layout_marginStart="20dp"
-                android:alpha="0.5"
-                android:background="?android:attr/selectableItemBackground"
-                android:text="@string/contributions"
-                android:textAlignment="textStart"
-                android:textColor="#000000" />
-
-        </LinearLayout>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

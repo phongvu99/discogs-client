@@ -27,7 +27,6 @@ import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
-import com.naughtybitch.discogsclient.sell.OrderFragment;
 import com.naughtybitch.recyclerview.MoreByAdapter;
 
 import java.io.IOException;
@@ -134,7 +133,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         profile_name = v.findViewById(R.id.profile_name);
         profile = v.findViewById(R.id.profile);
         profile_banner = v.findViewById(R.id.profile_banner);
-        btn_order = v.findViewById(R.id.button_order);
         seller_rating = v.findViewById(R.id.seller_rating);
         seller_rating_star = v.findViewById(R.id.seller_rating_stars);
         buyer_rating = v.findViewById(R.id.buyer_rating);
@@ -143,23 +141,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         profile_collection = v.findViewById(R.id.rc_view_all_collection);
         profile_wishlist = v.findViewById(R.id.rc_view_all_wishlist);
         collection_wishlist_adapter = new MoreByAdapter();
-        profile_collection.setLayoutManager(new LinearLayoutManager(context));
+        profile_collection.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         profile_collection.setAdapter(collection_wishlist_adapter);
-        profile_wishlist.setLayoutManager(new LinearLayoutManager(context));
+        profile_wishlist.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         profile_wishlist.setAdapter(collection_wishlist_adapter);
         profile_location = v.findViewById(R.id.location);
     }
 
     private void buttonOnClickListener(View v) {
-        btn_order.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_order:
-                navigateToFragment(OrderFragment.newInstance());
-        }
+
     }
 
     private void updateProfile(ProfileResponse profileResponse) {
@@ -203,10 +197,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
                     CollectionResponse collectionResponse = response.body();
                     updateCollection(collectionResponse);
                 }
+                Log.i("CODE_RESPONSE", String.valueOf(response.code()));
             }
 
             @Override
             public void onFailure(Call<CollectionResponse> call, Throwable t) {
+                ;
                 Log.e("COLLECTION_CAT", t.getMessage());
             }
         });
