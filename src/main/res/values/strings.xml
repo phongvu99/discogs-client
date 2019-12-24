@@ -178,5 +178,6 @@
     <!-- Explore -->
     <string name="explore_genre">Explore Genres</string>
     <string name="loading">Loading......</string>
+    <string name="collection">Collection</string>
 
 </resources>

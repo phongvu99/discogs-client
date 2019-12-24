@@ -26,13 +26,14 @@ import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.Release;
 import com.naughtybitch.POJO.Want;
 import com.naughtybitch.POJO.WantlistResponse;
+import com.naughtybitch.collection.CollectionActivity;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
-import com.naughtybitch.discogsclient.SearchableActivity;
 import com.naughtybitch.discogsclient.SignOutActivity;
 import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
+import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
 
 import java.io.IOException;
@@ -172,12 +173,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         Intent intent;
-        Bundle bundle = new Bundle();
         switch (v.getId()) {
             case R.id.view_all_collection:
-                intent = new Intent(getActivity(), SearchableActivity.class);
-                bundle.putString("user_name", username);
-                intent.putExtras(bundle);
+                intent = new Intent(getActivity(), CollectionActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.view_all_wishlist:
+                intent = new Intent(getActivity(), WishlistActivity.class);
                 startActivity(intent);
                 break;
             case R.id.button_sign_out:
@@ -245,7 +247,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
 
     private void fetchWishlist(String username) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
-        Call<WantlistResponse> call = discogsAPI.fetchWishlist(username);
+        Call<WantlistResponse> call = discogsAPI.fetchWishlist(username, 5, 1);
         call.enqueue(new Callback<WantlistResponse>() {
             @Override
             public void onResponse(Call<WantlistResponse> call, Response<WantlistResponse> response) {

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
+import com.naughtybitch.POJO.Format;
 import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.Release;
 import com.naughtybitch.discogsclient.R;
@@ -148,7 +149,6 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
             title_master.setText(release.getTitle() + " (" + release.getFormat() + ")");
         } catch (NullPointerException e) {
             // Do smt
-
         }
         try {
             title_master.setText(release.getBasicInformation().getTitle());
@@ -165,6 +165,40 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
             artist.setText(release.getBasicInformation().getArtists().get(0).getName());
         } catch (NullPointerException e) {
             // Do smt
+        }
+        TextView format = masterViewHolder.card_formats;
+        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder temp = new StringBuilder();
+        try {
+            for (Format f : release.getBasicInformation().getFormats()) {
+                descriptions:
+                try {
+                    if (f.getDescriptions().size() == 0) {
+                        break descriptions;
+                    }
+                    temp.append(" (");
+                    for (String s : f.getDescriptions()) {
+                        temp.append(s);
+                        if (f.getDescriptions().indexOf(s) == (f.getDescriptions().size() - 1)) {
+                            temp.append(")");
+                            break;
+                        }
+                        temp.append(", ");
+                    }
+                } catch (NullPointerException e) {
+                    // Do smt
+                }
+                stringBuilder.append(f.getName());
+                stringBuilder.append(temp);
+                if (release.getBasicInformation().getFormats().indexOf(f) == (release.getBasicInformation().getFormats().size() - 1)) {
+                    break;
+                }
+                stringBuilder.append(", ");
+                temp = new StringBuilder();
+            }
+            format.setText("Format: " + stringBuilder);
+        } catch (NullPointerException e) {
+            format.setText("Format: Unknown");
         }
         TextView released = masterViewHolder.card_released;
         try {
@@ -231,7 +265,7 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
     public class MasterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        private TextView card_title, card_artist, card_released;
+        private TextView card_title, card_artist, card_released, card_formats;
         private ImageView card_image;
         private OnArtistReleaseListener onArtistReleaseListener;
 
@@ -246,6 +280,8 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
             card_title = (TextView) itemView.findViewById(R.id.card_title);
             card_image = (ImageView) itemView.findViewById(R.id.card_image);
             card_artist = itemView.findViewById(R.id.card_type);
+            card_formats = itemView.findViewById(R.id.card_formats);
+            card_formats.setVisibility(View.VISIBLE);
             card_released = itemView.findViewById(R.id.show_all);
             itemView.setOnClickListener(this);
         }

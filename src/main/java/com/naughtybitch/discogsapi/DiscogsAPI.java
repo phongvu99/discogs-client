@@ -2,9 +2,9 @@ package com.naughtybitch.discogsapi;
 
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.ArtistResponse;
-import com.naughtybitch.POJO.IdentityResponse;
 import com.naughtybitch.POJO.CollectionResponse;
 import com.naughtybitch.POJO.CollectionValueResponse;
+import com.naughtybitch.POJO.IdentityResponse;
 import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.LabelResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
@@ -114,7 +114,7 @@ public interface DiscogsAPI {
     The notes field will be visible if you are authenticated as the wantlist owner.
      */
     @GET("users/{username}/wants")
-    Call<WantlistResponse> fetchWishlist(@Path("username") String username);
+    Call<WantlistResponse> fetchWishlist(@Path("username") String username, @Query("per_page") int per_page, @Query("page") int page);
 
     /*
 

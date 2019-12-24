@@ -57,6 +57,18 @@
                 </TextView>
 
                 <TextView
+                    android:id="@+id/card_formats"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/formats"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:visibility="gone">
+
+                </TextView>
+
+                <TextView
                     android:id="@+id/show_all"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

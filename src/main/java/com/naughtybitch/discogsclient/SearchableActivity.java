@@ -96,7 +96,7 @@ public class SearchableActivity extends AppCompatActivity implements
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar myToolbar;
     private MenuItem searchItem;
-    private String query, genre, user_name;
+    private String query, genre, username;
     private SharedPreferences sp;
     private ImageView profile_menu_image;
     private TextView profile_menu_name, profile_menu_email;
@@ -110,11 +110,11 @@ public class SearchableActivity extends AppCompatActivity implements
         initViews();
         Intent intent = getIntent();
         try {
-            user_name = intent.getExtras().getString("user_name");
-            if (user_name != null) {
-                fetchCollection(user_name, 0);
+            username = intent.getExtras().getString("user_name");
+            if (username != null) {
+                fetchCollection(username, 0);
             }
-            Log.i("user_name", "user_name " + user_name);
+            Log.i("username", "username " + username);
         } catch (NullPointerException e) {
             // Do smt
         }
@@ -161,7 +161,7 @@ public class SearchableActivity extends AppCompatActivity implements
         }
 
         sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        String username = sp.getString("user_name", null);
+        String username = sp.getString("username", null);
         if (username != null) {
             fetchProfile(username);
         }
@@ -486,8 +486,6 @@ public class SearchableActivity extends AppCompatActivity implements
                             });
                         }
                     });
-
-
                     recyclerView.setAdapter(artistReleaseAdapter);
                 } else {
                     progressBar.setVisibility(View.GONE);

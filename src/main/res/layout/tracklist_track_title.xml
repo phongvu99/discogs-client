@@ -11,7 +11,7 @@
         android:id="@+id/track_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
+        android:layout_weight="1"
         android:gravity="center"
         android:text="@string/lemon"
         android:textColor="@color/light_black">
@@ -32,7 +32,7 @@
         android:id="@+id/track_length"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
+        android:layout_weight="1"
         android:gravity="center"
         android:text="@string/lemon"
         android:textColor="@color/light_black">
