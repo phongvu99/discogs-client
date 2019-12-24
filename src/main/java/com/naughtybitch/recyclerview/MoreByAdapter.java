@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.naughtybitch.POJO.Release;
+import com.naughtybitch.POJO.Want;
 import com.naughtybitch.discogsclient.R;
 
 import java.util.ArrayList;
@@ -23,15 +24,20 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private Context context;
     private List<Release> releases;
+    private List<Want> wants;
     private OnMoreByListener mOnMoreByListener;
     private CircularProgressDrawable progressDrawable;
-    private int artist_id;
 
-    public MoreByAdapter(Context context, List<Release> releases, int artist_id, OnMoreByListener onMoreByListener) {
+    public MoreByAdapter(OnMoreByListener onMoreByListener, Context context, List<Release> releases) {
         this.context = context;
         this.releases = releases;
         this.mOnMoreByListener = onMoreByListener;
-        this.artist_id = artist_id;
+    }
+
+    public MoreByAdapter(Context context, List<Want> wants, OnMoreByListener onMoreByListener) {
+        this.context = context;
+        this.wants = wants;
+        this.mOnMoreByListener = onMoreByListener;
     }
 
     public MoreByAdapter() {
@@ -45,7 +51,11 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return releases.size();
+        try {
+            return releases.size();
+        } catch (NullPointerException e) {
+            return wants.size();
+        }
     }
 
     @NonNull
@@ -89,11 +99,23 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } catch (NullPointerException e) {
             // Do smt
         }
+        try {
+            title.setText(wants.get(position).getBasicInformation().getTitle());
+            artist.setText(wants.get(position).getBasicInformation().getArtists().get(0).getName());
+            Glide.with(context).load(wants.get(position).getBasicInformation().getThumb())
+                    .placeholder(R.drawable.discogs_vinyl_record_mark)
+                    .error(R.drawable.discogs_vinyl_record_mark)
+                    .into(image_release);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
     }
 
 
     public interface OnMoreByListener {
-        void onReleaseClick(int position, Release release, List<Release> releases, int artist_id);
+        void onReleaseClick(int position, Release release);
+
+        void onReleaseClick(int position, Want want);
     }
 
     public class MoreByViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -113,7 +135,16 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View v) {
-            onMoreByListener.onReleaseClick(getAdapterPosition(), releases.get(getAdapterPosition()), releases, artist_id);
+            try {
+                onMoreByListener.onReleaseClick(getAdapterPosition(), releases.get(getAdapterPosition()));
+            } catch (NullPointerException e) {
+                // Do smt
+            }
+            try {
+                onMoreByListener.onReleaseClick(getAdapterPosition(), wants.get(getAdapterPosition()));
+            } catch (NullPointerException e) {
+                // Do smt
+            }
         }
     }
 }

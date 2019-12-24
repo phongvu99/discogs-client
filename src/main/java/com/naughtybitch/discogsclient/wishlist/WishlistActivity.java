@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -57,12 +60,15 @@ public class WishlistActivity extends AppCompatActivity implements
     private NavigationView navigationView;
     private SharedPreferences sp;
     private ImageView profile_menu_image;
-    private TextView profile_menu_name, profile_menu_email;
+    private TextView profile_menu_name, profile_menu_email, empty;
+    private ProgressBar progressBar;
+    private RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wishlist);
+        setContentView(R.layout.activity_searchable);
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -80,6 +86,11 @@ public class WishlistActivity extends AppCompatActivity implements
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        empty = (TextView) findViewById(R.id.card_empty);
+        progressBar = (ProgressBar) findViewById(R.id.progress_circular);
+        recyclerView = (RecyclerView) findViewById(R.id.rc_result);
+        recyclerView.setLayoutManager(new LinearLayoutManager(WishlistActivity.this));
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override

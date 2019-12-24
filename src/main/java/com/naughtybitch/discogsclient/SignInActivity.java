@@ -152,7 +152,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         user_preferences = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = user_preferences.edit();
                         editor.putString("user_name", object.getUsername());
-                        editor.apply();
+                        editor.commit();
                     }
 
                     @Override
