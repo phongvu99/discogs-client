@@ -15,9 +15,9 @@
             android:id="@+id/profile_banner"
             android:layout_width="match_parent"
             android:layout_height="140dp"
+            android:scaleType="centerCrop"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/description"
-            android:scaleType="centerCrop"
             android:src="@drawable/background" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

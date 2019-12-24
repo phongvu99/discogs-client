@@ -180,8 +180,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         profile.setText(profileResponse.getProfile());
         Glide.with(getActivity())
                 .load(profileResponse.getBannerUrl())
-                .error(R.drawable.discogs_logo)
-                .placeholder(R.drawable.discogs_logo)
+                .error(R.drawable.discogs_vinyl_record_mark)
+                .placeholder(R.drawable.discogs_vinyl_record_mark)
                 .into(profile_banner);
         seller_rating.setText(String.valueOf(profileResponse.getSellerNumRatings()));
         buyer_rating.setText(String.valueOf(profileResponse.getBuyerNumRatings()));
@@ -235,7 +235,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onFailure(Call<CollectionResponse> call, Throwable t) {
-                ;
                 Log.e("COLLECTION_CAT", t.getMessage());
             }
         });

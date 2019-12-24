@@ -11,8 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.inputmethod.EditorInfo;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,7 +132,7 @@ public class ExploreActivity extends AppCompatActivity implements
 
     private void updateProfile(ProfileResponse profileResponse) {
         Glide.with(this)
-                .load(profileResponse.getAvatarUrl())
+                .load(profileResponse.getAvatarUrl()).override(64, 64)
                 .error(R.drawable.discogs_vinyl_record_mark)
                 .placeholder(R.drawable.discogs_vinyl_record_mark)
                 .into(profile_menu_image);
