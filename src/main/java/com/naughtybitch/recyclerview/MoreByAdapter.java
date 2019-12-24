@@ -68,7 +68,7 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         TextView title = moreByViewHolder.card_title;
         ImageView image_release = moreByViewHolder.card_image;
 
-        // More by this artist in Master and Release Details Activity
+        // More by this artist in Master and Release Details Activity and Collection and Wishlist
         try {
             title.setText(releases.get(position).getTitle());
             artist.setText(releases.get(position).getArtist());
@@ -79,9 +79,6 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } catch (NullPointerException e) {
             // Do smt
         }
-
-        // Future Collection and Wantlist implementation should be put here
-        // try {} catch something here
     }
 
 

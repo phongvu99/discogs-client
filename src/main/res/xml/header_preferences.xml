@@ -14,22 +14,13 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         app:title="@string/settings"
         app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
-        app:iconSpaceReserved="false"
-        app:key="dark_mode"
-        app:summaryOff="@string/dark_mode_off"
-        app:summaryOn="@string/dark_mode_on"
-        app:title="@string/dark_mode" />
-
     <Preference
-        app:allowDividerAbove="true"
         app:fragment="com.naughtybitch.discogsclient.settings.SettingsActivity$ProfileSettingsFragment"
         app:iconSpaceReserved="false"
         app:key="profile_settings_header"

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,18 +15,24 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.naughtybitch.POJO.CollectionResponse;
+import com.naughtybitch.POJO.CollectionValueResponse;
 import com.naughtybitch.POJO.ProfileResponse;
+import com.naughtybitch.POJO.Release;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
-import com.naughtybitch.discogsclient.sell.OrderFragment;
+import com.naughtybitch.recyclerview.MoreByAdapter;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -46,13 +51,17 @@ import retrofit2.Retrofit;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class ProfileFragment extends Fragment implements View.OnClickListener,
+        MoreByAdapter.OnMoreByListener {
 
+    private Context context = getActivity();
     private SharedPreferences sp;
     private ImageView profile_image, profile_banner;
-    private TextView profile, profile_name, seller_rating_star, seller_rating, buyer_rating_star, buyer_rating;
-    private Button btn_order;
+    private TextView profile, profile_name, seller_rating_star, seller_rating, button_sign_out;
+    private TextView buyer_rating_star, buyer_rating, profile_location, min_value, med_value, max_value;
     private NestedScrollView profile_container;
+    private RecyclerView profile_collection, profile_wishlist;
+    private MoreByAdapter collection_wishlist_adapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -113,6 +122,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         initView(v);
         if (username != null) {
             fetchProfile(username);
+            fetchCollection(username, 0);
+            fetchCollectionValue(username);
         }
         buttonOnClickListener(v);
         return v;
@@ -123,24 +134,40 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         profile_name = v.findViewById(R.id.profile_name);
         profile = v.findViewById(R.id.profile);
         profile_banner = v.findViewById(R.id.profile_banner);
-        btn_order = v.findViewById(R.id.button_order);
         seller_rating = v.findViewById(R.id.seller_rating);
         seller_rating_star = v.findViewById(R.id.seller_rating_stars);
         buyer_rating = v.findViewById(R.id.buyer_rating);
         buyer_rating_star = v.findViewById(R.id.buyer_rating_stars);
         profile_container = v.findViewById(R.id.profile_container);
+        profile_collection = v.findViewById(R.id.rc_view_all_collection);
+        profile_wishlist = v.findViewById(R.id.rc_view_all_wishlist);
+        collection_wishlist_adapter = new MoreByAdapter();
+        profile_collection.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        profile_collection.setAdapter(collection_wishlist_adapter);
+        profile_wishlist.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        profile_wishlist.setAdapter(collection_wishlist_adapter);
+        profile_location = v.findViewById(R.id.location);
+        min_value = v.findViewById(R.id.min_value);
+        med_value = v.findViewById(R.id.med_value);
+        max_value = v.findViewById(R.id.max_value);
+        button_sign_out = v.findViewById(R.id.button_sign_out);
     }
 
     private void buttonOnClickListener(View v) {
-        btn_order.setOnClickListener(this);
+        button_sign_out.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_order:
-                navigateToFragment(OrderFragment.newInstance());
+        if (v.getId() == R.id.button_sign_out) {
+
         }
+    }
+
+    private void updateCollectionValue(CollectionValueResponse collectionValueResponse) {
+        min_value.setText(collectionValueResponse.getMinimum());
+        med_value.setText(collectionValueResponse.getMedian());
+        max_value.setText(collectionValueResponse.getMaximum());
     }
 
     private void updateProfile(ProfileResponse profileResponse) {
@@ -161,6 +188,57 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         seller_rating_star.setText(String.valueOf(profileResponse.getSellerRatingStars()));
         buyer_rating_star.setText(String.valueOf(profileResponse.getBuyerRatingStars()));
         profile_container.setVisibility(View.VISIBLE);
+        profile_location.setText(profileResponse.getLocation());
+    }
+
+    private void updateCollection(CollectionResponse collectionResponse) {
+        collection_wishlist_adapter = new MoreByAdapter(getActivity(), collectionResponse.getReleases(), 0, this);
+        profile_collection.setAdapter(collection_wishlist_adapter);
+    }
+
+//    private void updateWishlist(CollectionResponse collectionResponse) {
+//        collection_wishlist_adapter = new MoreByAdapter(getActivity(), collectionResponse.getReleases(), 0, this);
+//        profile_wishlist.setAdapter(collection_wishlist_adapter);
+//    }
+
+    private void fetchCollectionValue(final String username) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<CollectionValueResponse> call = discogsAPI.fetchCollectionValue(username);
+        call.enqueue(new Callback<CollectionValueResponse>() {
+            @Override
+            public void onResponse(Call<CollectionValueResponse> call, Response<CollectionValueResponse> response) {
+                if (response.body() != null) {
+                    CollectionValueResponse collectionValueResponse = response.body();
+                    updateCollectionValue(collectionValueResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CollectionValueResponse> call, Throwable t) {
+                Log.e("VALUE_CAT", t.getMessage());
+            }
+        });
+    }
+
+    private void fetchCollection(String username, int folder_id) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, folder_id, 5, 1);
+        call.enqueue(new Callback<CollectionResponse>() {
+            @Override
+            public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {
+                if (response.body() != null) {
+                    CollectionResponse collectionResponse = response.body();
+                    updateCollection(collectionResponse);
+                }
+                Log.i("CODE_RESPONSE", String.valueOf(response.code()));
+            }
+
+            @Override
+            public void onFailure(Call<CollectionResponse> call, Throwable t) {
+                ;
+                Log.e("COLLECTION_CAT", t.getMessage());
+            }
+        });
     }
 
     private void fetchProfile(String username) {
@@ -249,6 +327,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onReleaseClick(int position, Release release, List<Release> releases, int artist_id) {
+
     }
 
     /**

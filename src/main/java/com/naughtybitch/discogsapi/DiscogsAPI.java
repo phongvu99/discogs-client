@@ -3,6 +3,8 @@ package com.naughtybitch.discogsapi;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.ArtistResponse;
 import com.naughtybitch.POJO.IdentityResponse;
+import com.naughtybitch.POJO.CollectionResponse;
+import com.naughtybitch.POJO.CollectionValueResponse;
 import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.LabelResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
@@ -10,6 +12,7 @@ import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
 import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.POJO.SearchResponse;
+import com.naughtybitch.POJO.WantlistResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -77,7 +80,7 @@ public interface DiscogsAPI {
      */
     @GET("labels/{label_id}/releases")
     Call<LabelReleasesResponse> fetchLabelReleases(@Path("label_id") int label_id, @Query("per_page") int per_page, @Query("page") int page);
-    
+
     /*
     Retrieve a user by username.
     If authenticated as the requested user, the email key will be visible, and the num_list count will include
@@ -95,6 +98,28 @@ public interface DiscogsAPI {
      */
     @GET("oauth/identity")
     Call<IdentityResponse> getIdentity();
+  
+    /*
+    Retrieve metadata about a folder in a user’s collection.
+    If folder_id is not 0, authentication as the collection owner is required.
+     */
+    @GET("users/{username}/collection/folders/{folder_id}/releases")
+    Call<CollectionResponse> fetchCollection(@Path("username") String username, @Path("folder_id") int folder_id, @Query("per_page") int per_page, @Query("page") int page);
 
+    /*
+    Returns the list of releases in a user’s wantlist. Accepts Pagination parameters.
+    Basic information about each release is provided, suitable for display in a list. For detailed information,
+    make another API call to fetch the corresponding release.
+    If the wantlist has been made private by its owner, you must be authenticated as the owner to view it.
+    The notes field will be visible if you are authenticated as the wantlist owner.
+     */
+    @GET("users/{username}/wants")
+    Call<WantlistResponse> fetchWishlist(@Path("username") String username);
+
+    /*
+
+     */
+    @GET("users/{username}/collection/value")
+    Call<CollectionValueResponse> fetchCollectionValue(@Path("username") String username);
 
 }
