@@ -3,6 +3,7 @@ package com.naughtybitch.discogsapi;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.ArtistResponse;
 import com.naughtybitch.POJO.CollectionResponse;
+import com.naughtybitch.POJO.CollectionValueResponse;
 import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.LabelResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
@@ -86,7 +87,8 @@ public interface DiscogsAPI {
     Call<ProfileResponse> fetchProfile(@Path("username") String username);
 
     /*
-
+    Retrieve metadata about a folder in a user’s collection.
+    If folder_id is not 0, authentication as the collection owner is required.
      */
     @GET("users/{username}/collection/folders/{folder_id}/releases")
     Call<CollectionResponse> fetchCollection(@Path("username") String username, @Path("folder_id") int folder_id, @Query("per_page") int per_page, @Query("page") int page);
@@ -100,4 +102,10 @@ public interface DiscogsAPI {
      */
     @GET("users/{username}/wants")
     Call<WantlistResponse> fetchWishlist(@Path("username") String username);
+
+    /*
+
+     */
+    @GET("users/{username}/collection/value")
+    Call<CollectionValueResponse> fetchCollectionValue(@Path("username") String username);
 }

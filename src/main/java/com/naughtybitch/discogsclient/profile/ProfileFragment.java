@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.naughtybitch.POJO.CollectionResponse;
+import com.naughtybitch.POJO.CollectionValueResponse;
 import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.Release;
 import com.naughtybitch.discogsapi.DiscogsAPI;
@@ -57,7 +58,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     private Context context = getActivity();
     private SharedPreferences sp;
     private ImageView profile_image, profile_banner;
-    private TextView profile, profile_name, seller_rating_star, seller_rating, buyer_rating_star, buyer_rating, profile_location;
+    private TextView profile, profile_name, seller_rating_star, seller_rating;
+    private TextView buyer_rating_star, buyer_rating, profile_location, min_value, med_value, max_value;
     private Button btn_order;
     private NestedScrollView profile_container;
     private RecyclerView profile_collection, profile_wishlist;
@@ -123,6 +125,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         if (username != null) {
             fetchProfile(username);
             fetchCollection(username, 0);
+            fetchCollectionValue(username);
         }
         buttonOnClickListener(v);
         return v;
@@ -146,6 +149,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         profile_wishlist.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         profile_wishlist.setAdapter(collection_wishlist_adapter);
         profile_location = v.findViewById(R.id.location);
+        min_value = v.findViewById(R.id.min_value);
+        med_value = v.findViewById(R.id.med_value);
+        max_value = v.findViewById(R.id.max_value);
     }
 
     private void buttonOnClickListener(View v) {
@@ -154,6 +160,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
 
+    }
+
+    private void updateCollectionValue(CollectionValueResponse collectionValueResponse) {
+        min_value.setText(collectionValueResponse.getMinimum());
+        med_value.setText(collectionValueResponse.getMedian());
+        max_value.setText(collectionValueResponse.getMaximum());
     }
 
     private void updateProfile(ProfileResponse profileResponse) {
@@ -186,6 +198,25 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
 //        collection_wishlist_adapter = new MoreByAdapter(getActivity(), collectionResponse.getReleases(), 0, this);
 //        profile_wishlist.setAdapter(collection_wishlist_adapter);
 //    }
+
+    private void fetchCollectionValue(final String username) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<CollectionValueResponse> call = discogsAPI.fetchCollectionValue(username);
+        call.enqueue(new Callback<CollectionValueResponse>() {
+            @Override
+            public void onResponse(Call<CollectionValueResponse> call, Response<CollectionValueResponse> response) {
+                if (response.body() != null) {
+                    CollectionValueResponse collectionValueResponse = response.body();
+                    updateCollectionValue(collectionValueResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CollectionValueResponse> call, Throwable t) {
+                Log.e("VALUE_CAT", t.getMessage());
+            }
+        });
+    }
 
     private void fetchCollection(String username, int folder_id) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
