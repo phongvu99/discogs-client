@@ -38,7 +38,6 @@ import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.SearchableActivity;
-import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
@@ -242,10 +241,6 @@ public class ExploreActivity extends AppCompatActivity implements
                         break;
                     case R.id.explore:
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.buy_music:
-                        startActivity(new Intent(ExploreActivity.this, BuyMusicActivity.class));
-                        Toast.makeText(ExploreActivity.this, "BuyMusicFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
                         startActivity(new Intent(ExploreActivity.this, SellMusicActivity.class));

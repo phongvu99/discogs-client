@@ -110,24 +110,18 @@ public class ExploreFragment extends Fragment implements GenreAdapter.OnGenreLis
         items1 = new Integer[]{4211787, 1335772, 655560, 354870, 214975};
         items2 = new Integer[]{3518015, 998719, 643235, 326361, 94732};
         items3 = new Integer[]{2349623, 909136, 438480, 266159, 34922};
-//        covers1 = new Integer[]{R.drawable.rock_cover, R.drawable.folk_cover,
-//                R.drawable.classical_cover, R.drawable.reggae_cover, R.drawable.non_music_cover};
-//        covers2 = new Integer[]{R.drawable.electronic_cover, R.drawable.jazz_cover,
-//                R.drawable.hip_hop_cover, R.drawable.stage_screen_cover, R.drawable.childrens_music_cover};
-//        covers3 = new Integer[]{R.drawable.pop_cover, R.drawable.soul_cover,
-//                R.drawable.latin_cover, R.drawable.blues_cover, R.drawable.military_cover};
-//        icons1 = new Integer[]{R.drawable.rock, R.drawable.folk,
-//                R.drawable.classical, R.drawable.reggae, R.drawable.non_music};
-//        icons2 = new Integer[]{R.drawable.edm, R.drawable.jazz,
-//                R.drawable.hip_hop, R.drawable.stage_screen, R.drawable.childrens_music};
-//        icons3 = new Integer[]{R.drawable.pop, R.drawable.funk,
-//                R.drawable.latin, R.drawable.blues, R.drawable.military};
-        covers1 = new Integer[]{R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock};
-        covers2 = new Integer[]{R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock};
-        covers3 = new Integer[]{R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock};
-        icons1 = new Integer[]{R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock};
-        icons2 = new Integer[]{R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock};
-        icons3 = new Integer[]{R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock, R.drawable.rock};
+        covers1 = new Integer[]{R.drawable.rock_cover, R.drawable.folk_cover,
+                R.drawable.classical_cover, R.drawable.reggae_cover, R.drawable.non_music_cover};
+        covers2 = new Integer[]{R.drawable.electronic_cover, R.drawable.jazz_cover,
+                R.drawable.hip_hop_cover, R.drawable.stage_screen_cover, R.drawable.childrens_music_cover};
+        covers3 = new Integer[]{R.drawable.pop_cover, R.drawable.soul_cover,
+                R.drawable.latin_cover, R.drawable.blues_cover, R.drawable.military_cover};
+        icons1 = new Integer[]{R.drawable.rock, R.drawable.folk,
+                R.drawable.classical, R.drawable.reggae, R.drawable.non_music};
+        icons2 = new Integer[]{R.drawable.edm, R.drawable.jazz,
+                R.drawable.hip_hop, R.drawable.stage_screen, R.drawable.childrens_music};
+        icons3 = new Integer[]{R.drawable.pop, R.drawable.funk,
+                R.drawable.latin, R.drawable.blues, R.drawable.military};
         adapter1 = new GenreAdapter(getContext(), genres1, items1, covers1, icons1, this);
         adapter2 = new GenreAdapter(getContext(), genres2, items2, covers2, icons2, this);
         adapter3 = new GenreAdapter(getContext(), genres3, items3, covers3, icons3, this);

@@ -48,7 +48,6 @@ import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
 import com.naughtybitch.discogsclient.artist.ArtistDetailsActivity;
-import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
@@ -707,10 +706,6 @@ public class SearchableActivity extends AppCompatActivity implements
                     case R.id.wish_list:
                         startActivity(new Intent(SearchableActivity.this, WishlistActivity.class));
                         Toast.makeText(SearchableActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.buy_music:
-                        startActivity(new Intent(SearchableActivity.this, BuyMusicActivity.class));
-                        Toast.makeText(SearchableActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
                         startActivity(new Intent(SearchableActivity.this, SellMusicActivity.class));
