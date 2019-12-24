@@ -71,11 +71,9 @@ public class GetStartedActivity extends AppCompatActivity {
                 instance.setRequest_token_secret(request_token_response.get(1));
                 Log.i("request_token", "Request_token " + instance.getRequest_token());
                 Log.i("request_token_secret", "Request_token_secret " + instance.getRequest_token_secret());
-                Toast.makeText(GetStartedActivity.this, "Successfully authenticated, redirecting...", Toast.LENGTH_SHORT).show();
-                Toast.makeText(GetStartedActivity.this, "Request token " + result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(GetStartedActivity.this, "Loading...", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(GetStartedActivity.this, SignInActivity.class);
                 startActivity(intent);
-                finish();
             }
 
             @Override

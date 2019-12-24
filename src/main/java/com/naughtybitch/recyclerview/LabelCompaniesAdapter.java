@@ -39,15 +39,17 @@ public class LabelCompaniesAdapter extends ArtistMGAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        int type = 0, size;
+        int type = 0;
         try { // Parent label
-            size = mSublabels.size();
-            type = 1; // Parent label
-            return type;
+            if (mSublabels != null) {
+                type = 1; // Parent label
+                return type;
+            }
         } catch (NullPointerException e1) {
             // Do smt
             try {
                 if (mParentLabel != null) {
+                    Log.i("type2", "type2");
                     return 2;
                 }
             } catch (NullPointerException e2) {
@@ -69,7 +71,7 @@ public class LabelCompaniesAdapter extends ArtistMGAdapter {
                 return new SublabelViewHolder(itemView, mOnSublabelListener);
             case 2: // Sublabel
             default:
-                itemView = inflater.inflate(R.layout.artist_mg, parent, false);
+                itemView = inflater.inflate(R.layout.label_sp, parent, false);
                 return new ParentLabelViewHolder(itemView, mOnParentLabelListener);
 
         }
@@ -87,16 +89,15 @@ public class LabelCompaniesAdapter extends ArtistMGAdapter {
                 status.setText(R.string.label_status1);
                 break;
             case 2: // Sublabel
-            default:
                 ParentLabelViewHolder parentLabelViewHolder = (ParentLabelViewHolder) holder;
                 title = parentLabelViewHolder.parent_title;
                 status = parentLabelViewHolder.parent_status;
+                status.setText(R.string.label_status2);
                 try {
                     title.setText(mParentLabel.getName());
                 } catch (NullPointerException e) {
                     // Do smt
                 }
-                status.setText(R.string.label_status2);
                 break;
         }
     }
@@ -109,11 +110,10 @@ public class LabelCompaniesAdapter extends ArtistMGAdapter {
             // Do smt
             try {
                 if (mParentLabel != null) {
-                    Log.i("parent_label", "not_null");
                     return 1;
                 }
             } catch (NullPointerException e2) {
-                Log.i("parent_label", "null");
+                // Do smt
             }
         }
         return 0;

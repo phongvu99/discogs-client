@@ -1,0 +1,60 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/border_land">
+
+    <ImageView
+        android:id="@+id/genre_cover"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/lemon"
+        android:src="@drawable/discogs_vinyl_record_mark">
+
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/genre_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="@string/lemon"
+        android:src="@drawable/discogs_vinyl_record_mark">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/genre_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="@string/lemon"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/genre_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="6dp"
+        android:gravity="center"
+        android:text="@string/lemon"
+        android:textColor="@color/white"
+        android:textSize="12sp">
+
+    </TextView>
+
+</FrameLayout>
+
+
+
+
+

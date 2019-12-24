@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".SignOutActivity"></activity>
         <activity
             android:name=".welcome.WelcomeActivity"
             android:label="@string/welcome"></activity>

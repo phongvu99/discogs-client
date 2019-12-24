@@ -1,5 +1,6 @@
 package com.naughtybitch.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +79,7 @@ public class TracklistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         track_header.setText(tracklist.getTitle());
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateBody(BodyViewHolder bodyViewHolder, Tracklist tracklist) {
         TextView track_number = bodyViewHolder.track_number;
         track_number.setText(tracklist.getPosition());

@@ -1,5 +1,6 @@
 package com.naughtybitch.discogsclient;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
+import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
 import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.ProfileResponse;
@@ -53,6 +56,7 @@ import com.naughtybitch.discogsclient.settings.SettingsActivity;
 import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
 import com.naughtybitch.label.LabelDetailsActivity;
 import com.naughtybitch.recyclerview.ArtistReleaseAdapter;
+import com.naughtybitch.recyclerview.LabelReleaseAdapter;
 import com.naughtybitch.recyclerview.ResultsAdapter;
 import com.naughtybitch.recyclerview.VersionAdapter;
 
@@ -72,10 +76,11 @@ import retrofit2.Retrofit;
 public class SearchableActivity extends AppCompatActivity implements
         ResultsAdapter.OnResultListener,
         VersionAdapter.OnVersionListener,
-        ArtistReleaseAdapter.OnArtistReleaseListener {
+        ArtistReleaseAdapter.OnArtistReleaseListener,
+        LabelReleaseAdapter.OnLabelReleaseListener {
 
     private String view;
-    private int master_id, artist_id;
+    private int master_id, artist_id, label_id;
     private Context context = this;
     private List<Result> results;
     private List<Version> versions;
@@ -84,6 +89,7 @@ public class SearchableActivity extends AppCompatActivity implements
     private ResultsAdapter resultsAdapter;
     private VersionAdapter versionAdapter;
     private ArtistReleaseAdapter artistReleaseAdapter;
+    private LabelReleaseAdapter labelReleaseAdapter;
     private ProgressBar progressBar;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -91,7 +97,7 @@ public class SearchableActivity extends AppCompatActivity implements
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar myToolbar;
     private MenuItem searchItem;
-    private String query;
+    private String query, genre;
     private SharedPreferences sp;
     private ImageView profile_menu_image;
     private TextView profile_menu_name, profile_menu_email;
@@ -105,12 +111,31 @@ public class SearchableActivity extends AppCompatActivity implements
         initViews();
         Intent intent = getIntent();
         try {
+            genre = intent.getExtras().getString("genre");
+            if (genre != null) {
+                searchGenre(genre);
+            }
+            Log.i("genre", "genre " + genre);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        try {
+            label_id = intent.getExtras().getInt("label_id");
+            if (label_id != 0) {
+                fetchLabelReleases(label_id);
+            }
+            Log.i("label_id", "label_id " + label_id);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        try {
             artist_id = intent.getExtras().getInt("artist_id");
             view = intent.getExtras().getString("view_all");
             if (artist_id != 0) {
                 fetchArtistReleases(artist_id);
             }
             Log.i("artist_id", "artist id " + artist_id);
+            Log.i("view_all", "view_all " + view);
         } catch (NullPointerException e) {
             // Do smt
         }
@@ -203,6 +228,140 @@ public class SearchableActivity extends AppCompatActivity implements
         });
     }
 
+    public void searchGenre(final String genre) {
+        final DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<SearchResponse> call = discogsAPI.getSearchResult(50, 1, genre);
+        call.enqueue(new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(final Call<SearchResponse> call, Response<SearchResponse> response) {
+                /* This is the success callback. Though the response type is JSON, with Retrofit
+                we get the response in the form of SearchResponse POJO class
+                 */
+                Log.i("response search genre", "Status " + response.code());
+                if (response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+                    SearchResponse sResponse = response.body();
+                    results = sResponse.getResults();
+                    pagination = sResponse.getPagination();
+                    if (results.isEmpty()) {
+                        empty.setVisibility(View.VISIBLE);
+                    } else {
+                        empty.setVisibility(View.GONE);
+                    }
+                    resultsAdapter = new ResultsAdapter(context, results, pagination, SearchableActivity.this, recyclerView);
+                    resultsAdapter.setOnLoadMoreListener(new ResultsAdapter.OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            recyclerView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    results.add(null);
+                                    resultsAdapter.notifyItemInserted(results.size() - 1);
+                                }
+                            });
+                            Log.i("next_page", "next page " + next_page);
+                            Call<SearchResponse> newCall = discogsAPI.getSearchResult(50, next_page, genre);
+                            newCall.enqueue(new Callback<SearchResponse>() {
+                                @Override
+                                public void onResponse(Call<SearchResponse> call, final Response<SearchResponse> response) {
+                                    if (response.body() != null) {
+                                        recyclerView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                results.remove(results.size() - 1);
+                                                resultsAdapter.notifyItemRemoved(results.size());
+                                                results.addAll(response.body().getResults());
+                                                resultsAdapter.notifyItemRangeInserted(results.size(), 50);
+                                            }
+                                        });
+                                        resultsAdapter.setLoaded();
+                                        ++next_page;
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<SearchResponse> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+                    recyclerView.setAdapter(resultsAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.i("Error ", t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void fetchLabelReleases(final int label_id) {
+        final DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<LabelReleasesResponse> call = discogsAPI.fetchLabelReleases(label_id, 50, 1);
+        call.enqueue(new Callback<LabelReleasesResponse>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<LabelReleasesResponse> call, Response<LabelReleasesResponse> response) {
+                Log.i("label releases", "response code " + response.code());
+                if (response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+                    LabelReleasesResponse labelReleasesResponse = response.body();
+                    final List<Release> releases = labelReleasesResponse.getReleases();
+                    pagination = labelReleasesResponse.getPagination();
+                    labelReleaseAdapter = new LabelReleaseAdapter(context, releases, pagination, SearchableActivity.this, recyclerView);
+                    labelReleaseAdapter.setOnLoadMoreListener(new LabelReleaseAdapter.OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            recyclerView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    releases.add(null);
+                                    labelReleaseAdapter.notifyItemInserted(releases.size() - 1);
+                                }
+                            });
+                            Log.i("next_page", "next page " + next_page);
+                            Call<LabelReleasesResponse> newCall = discogsAPI.fetchLabelReleases(label_id, 50, next_page);
+                            newCall.enqueue(new Callback<LabelReleasesResponse>() {
+                                @Override
+                                public void onResponse(Call<LabelReleasesResponse> call, final Response<LabelReleasesResponse> response) {
+                                    if (response.body() != null) {
+                                        recyclerView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                releases.remove(releases.size() - 1);
+                                                labelReleaseAdapter.notifyItemRemoved(releases.size());
+                                                releases.addAll(response.body().getReleases());
+                                                labelReleaseAdapter.notifyItemRangeInserted(releases.size(), 50);
+                                            }
+                                        });
+                                        labelReleaseAdapter.setLoaded();
+                                        ++next_page;
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<LabelReleasesResponse> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+                    recyclerView.setAdapter(labelReleaseAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LabelReleasesResponse> call, Throwable t) {
+                Log.i("label releases", "response code " + t.getMessage());
+            }
+        });
+
+    }
+
     private void fetchArtistReleases(final int artist_id) {
         final DiscogsAPI discogsAPI = getDiscogsAPI();
         Call<ArtistReleasesResponse> call = discogsAPI.fetchArtistReleases(artist_id, "year", "asc"
@@ -260,7 +419,6 @@ public class SearchableActivity extends AppCompatActivity implements
                             });
                         }
                     } catch (NullPointerException e) {
-                        Log.i("sucks", "sucks");
                         // Do smt
                     }
                     recyclerView.setAdapter(artistReleaseAdapter);
@@ -396,7 +554,7 @@ public class SearchableActivity extends AppCompatActivity implements
                 /* This is the success callback. Though the response type is JSON, with Retrofit
                 we get the response in the form of SearchResponse POJO class
                  */
-                Log.i("response", "Status " + response.code());
+                Log.i("response search query", "Status " + response.code());
                 if (response.body() != null) {
                     progressBar.setVisibility(View.GONE);
                     SearchResponse sResponse = response.body();
@@ -502,6 +660,15 @@ public class SearchableActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void OnLabelReleaseClick(int position, Release release) {
+        Intent intent = new Intent(SearchableActivity.this, MasterDetailsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("release_id", release.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
     public void onArtistReleaseClick(int position, Release release) {
         Intent intent;
         Bundle bundle = new Bundle();
@@ -603,6 +770,7 @@ public class SearchableActivity extends AppCompatActivity implements
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         searchView.setQueryHint(getResources().getText(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -625,6 +793,7 @@ public class SearchableActivity extends AppCompatActivity implements
         });
         return true;
     }
+
 }
 
 

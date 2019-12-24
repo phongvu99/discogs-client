@@ -74,14 +74,6 @@ public class DiscogsClient {
         return token;
     }
 
-//    public void removeLogin() {
-//        SharedPreferences.Editor editor = user_preferences.edit();
-//        editor.remove("logged_in");
-//        editor.remove("access_token");
-//        editor.remove("access_token_secret");
-//        editor.apply();
-//    }
-
     public Timestamp currentTimeStamp() {
         // 1) create a java calendar instance
         Calendar calendar = Calendar.getInstance();

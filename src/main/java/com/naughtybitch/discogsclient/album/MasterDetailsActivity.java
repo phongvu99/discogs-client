@@ -21,7 +21,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -164,15 +163,15 @@ public class MasterDetailsActivity extends AppCompatActivity implements
         navigationViewHandler();
 
         // Disable AppBar scrolling in coordinator layout
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-        params.setBehavior(new AppBarLayout.Behavior());
-        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
-        behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
-            @Override
-            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
-                return false;
-            }
-        });
+//        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+//        params.setBehavior(new AppBarLayout.Behavior());
+//        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+//        behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+//            @Override
+//            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+//                return false;
+//            }
+//        });
 
         moreby_holder = findViewById(R.id.more_by_holder);
         moreby_holder.setVisibility(View.INVISIBLE);
@@ -646,7 +645,6 @@ public class MasterDetailsActivity extends AppCompatActivity implements
         }
         Log.i("release", "Release position " + position + " release title " + release.getTitle());
     }
-
 
     private void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);

@@ -56,67 +56,18 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:fitsSystemWindows="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="24dp"
-                android:orientation="vertical">
+            <include layout="@layout/fragment_webview" />
+        </FrameLayout>
 
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/verification_code"
-                    android:textAlignment="center"
-                    android:textColor="@color/light_black"
-                    android:textSize="24sp" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                <EditText
-                    android:id="@+id/verfier_code"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:autofillHints="@string/code_hint"
-                    android:gravity="center"
-                    android:hint="@string/code_hint"
-                    android:inputType="text">
 
-                </EditText>
-
-                <Button
-                    android:id="@+id/oauth_verify"
-                    style="?attr/materialButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/check">
-
-                </Button>
-
-            </LinearLayout>
-
-            <WebView
-                android:id="@+id/web_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </WebView>
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

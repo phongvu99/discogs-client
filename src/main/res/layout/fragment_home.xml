@@ -34,6 +34,15 @@
 
             </Button>
 
+            <Button
+                android:id="@+id/sign_out"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Touch me!">
+
+            </Button>
+
             <EditText
                 android:id="@+id/response"
                 android:layout_width="match_parent"

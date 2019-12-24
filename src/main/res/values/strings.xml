@@ -19,6 +19,7 @@
     <string name="lemon">Lemon</string>
     <string name="get_started">Get Started</string>
     <string name="authorize">Check Authorize</string>
+    <string name="done">Done</string>
     <string name="logo">Logo</string>
     <string name="get_started_desc">Discover music on Discogs, the largest online music database. Buy and sell music with collectors in the Marketplace.</string>
 
@@ -166,11 +167,16 @@
     <string name="formats">Formats: 2xVinyl, LP, Album</string>
     <string name="card_country">Europe (2019)</string>
     <string name="label">Labels: Parlophone + 3 more</string>
+    <string name="catno">Cat# WPCR-18299, DBSOCD50, 019029540...</string>
     <string name="released">Released 22 Nov 2019 Europe</string>
     <string name="artist_profile">Coldplay is an English rock band from London, England. They\'\ve been a band since January 16, 1998 when they lost a demotap...</string>
     <string name="label_profile">Label Code: LC 0299 Please note, many Parlophone issues also carry an EMI logo. This is not a label and EMI should not be add...</string>
     <string name="no_item">Could not find any items</string>
     <string name="seller_rating">Seller rating</string>
     <string name="buyer_rating">Buyer rating</string>
+
+    <!-- Explore -->
+    <string name="explore_genre">Explore Genres</string>
+    <string name="loading">Loading......</string>
 
 </resources>
