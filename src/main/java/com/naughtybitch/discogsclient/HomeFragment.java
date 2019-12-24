@@ -41,6 +41,8 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
+
+    private String lastfm_key;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -172,6 +174,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        lastfm_key = "API key: 89e03a93e5ad3a74913c27f806cf860b\n" +
+                "Shared secret: 926be997616ba4e29bcc06494c387750";
         buttonOnClickListener(view);
         return view;
     }
