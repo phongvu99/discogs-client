@@ -385,13 +385,14 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <Button
+        <TextView
             android:id="@+id/button_sign_out"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:gravity="center"
             android:text="Sign Out"
-            android:textColor="@color/red" />
+            android:textColor="@color/red"
+            android:textSize="24sp" />
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
