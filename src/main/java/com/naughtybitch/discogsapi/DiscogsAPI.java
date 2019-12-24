@@ -2,9 +2,9 @@ package com.naughtybitch.discogsapi;
 
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.ArtistResponse;
-import com.naughtybitch.POJO.IdentityResponse;
 import com.naughtybitch.POJO.CollectionResponse;
 import com.naughtybitch.POJO.CollectionValueResponse;
+import com.naughtybitch.POJO.IdentityResponse;
 import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.LabelResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
@@ -13,6 +13,7 @@ import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.POJO.SearchResponse;
 import com.naughtybitch.POJO.WantlistResponse;
+import com.naughtybitch.POJOlastfm.TopArtistsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -98,7 +99,7 @@ public interface DiscogsAPI {
      */
     @GET("oauth/identity")
     Call<IdentityResponse> getIdentity();
-  
+
     /*
     Retrieve metadata about a folder in a user’s collection.
     If folder_id is not 0, authentication as the collection owner is required.
@@ -117,9 +118,17 @@ public interface DiscogsAPI {
     Call<WantlistResponse> fetchWishlist(@Path("username") String username);
 
     /*
-
+    Returns the minimum, median, and maximum value of a user’s collection.
+    Authentication as the collection owner is required.
      */
     @GET("users/{username}/collection/value")
     Call<CollectionValueResponse> fetchCollectionValue(@Path("username") String username);
 
+    /*
+    page (Optional) : The page number to fetch. Defaults to first page.
+    limit (Optional) : The number of results to fetch per page. Defaults to 50.
+    api_key (Required) : A Last.fm API key.
+     */
+    @GET("2.0/?method=chart.gettopartists&api_key=YOUR_API_KEY&format=json")
+    Call<TopArtistsResponse> fetchTopArtist(@Query("YOUR_API_KEY") String api_key, @Query("perPage") int per_page, @Query("page") int page);
 }

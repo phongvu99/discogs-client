@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,12 +26,27 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.naughtybitch.POJO.Result;
 import com.naughtybitch.POJO.SearchResponse;
+import com.naughtybitch.POJOlastfm.Artist;
+import com.naughtybitch.POJOlastfm.TopArtistsResponse;
 import com.naughtybitch.discogsapi.AppController;
 import com.naughtybitch.discogsapi.CustomRequest;
+import com.naughtybitch.discogsapi.DiscogsAPI;
+import com.naughtybitch.discogsapi.DiscogsClient;
+import com.naughtybitch.discogsapi.RetrofitClient;
+import com.naughtybitch.recyclerview.ChartAdapter;
 
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
 
 
 /**
@@ -42,7 +59,12 @@ import java.util.Map;
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private String lastfm_key;
+    private String lastfm_api_key, lastfm_shared_secret_key, username;
+    private SharedPreferences sp;
+    private RecyclerView rv_chart;
+    private ChartAdapter chartAdapter;
+    private ArrayList<Artist> artists;
+    private Context context = getActivity();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -174,12 +196,82 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        lastfm_key = "API key: 89e03a93e5ad3a74913c27f806cf860b\n" +
-                "Shared secret: 926be997616ba4e29bcc06494c387750";
+        sp = getActivity().getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        username = sp.getString("user_name", null);
+        initView(view);
         buttonOnClickListener(view);
+        if (username != null) {
+            fetchChart(lastfm_api_key);
+        }
         return view;
     }
 
+    private void initView(View v) {
+        rv_chart = v.findViewById(R.id.rv_chart);
+        rv_chart.setLayoutManager(new LinearLayoutManager(context));
+        lastfm_api_key = "89e03a93e5ad3a74913c27f806cf860b";
+        lastfm_shared_secret_key = "926be997616ba4e29bcc06494c387750";
+    }
+
+    private void updateChart() {
+        chartAdapter = new ChartAdapter();
+        rv_chart.setAdapter(chartAdapter);
+    }
+
+    private void fetchChart(String lastfm_api_key) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<TopArtistsResponse> call = discogsAPI.fetchTopArtist(lastfm_api_key, 20, 1);
+        call.enqueue(new Callback<TopArtistsResponse>() {
+            @Override
+            public void onResponse(Call<TopArtistsResponse> call, retrofit2.Response<TopArtistsResponse> response) {
+                if (response.body() != null) {
+                    updateChart();
+                }
+                Log.i("CODE_RESPONSE", String.valueOf(response.code()));
+            }
+
+            @Override
+            public void onFailure(Call<TopArtistsResponse> call, Throwable t) {
+                Log.e("CHART_CAT", t.getMessage());
+            }
+        });
+    }
+
+    private DiscogsAPI getDiscogsAPI() {
+        final String auth = getCredentials();
+        // Define the interceptor, add authentication headers
+        Interceptor interceptor = new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                okhttp3.Request.Builder onGoing = chain.request().newBuilder();
+                onGoing.addHeader("Authorization", auth);
+                onGoing.addHeader("User-Agent", "Discogsnect/0.1 +http://discogsnect.com");
+                return chain.proceed(onGoing.build());
+            }
+        };
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.interceptors().add(interceptor);
+        OkHttpClient client = builder.build();
+
+        Retrofit retrofit = RetrofitClient.getRetrofitClient(client);
+
+        return retrofit.create(DiscogsAPI.class);
+    }
+
+    private String getCredentials() {
+        DiscogsClient instance = DiscogsClient.getInstance();
+        Timestamp currentTimestamp = instance.currentTimeStamp();
+        ArrayList<String> token = instance.getCredentials(getActivity());
+        String auth = "OAuth oauth_consumer_key=\"" + instance.getConsumer_key() + "\", " +
+                "oauth_nonce=\"" + currentTimestamp.getTime() + "\", " +
+                "oauth_token=\"" + token.get(0) + "\", " +
+                "oauth_signature_method=\"PLAINTEXT\", " +
+                "oauth_timestamp=\"" + currentTimestamp.getTime() + "\", " +
+                "oauth_version=\"1.0\", " +
+                "oauth_signature=\"" + instance.getConsumer_secret() + token.get(1) + "\"";
+        return auth;
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
