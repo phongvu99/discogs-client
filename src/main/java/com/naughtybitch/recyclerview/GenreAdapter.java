@@ -54,8 +54,8 @@ public class GenreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ImageView genre_cover = genreViewHolder.cover;
         genre_title.setText(genres[position]);
         genre_items.setText(Integer.toString(items[position]));
-        Glide.with(context).load(covers[position]).into(genre_cover);
-        Glide.with(context).load(icons[position]).into(genre_icon);
+        Glide.with(context).load(covers[position]).override(150, 150).into(genre_cover);
+        Glide.with(context).load(icons[position]).override(64, 64).into(genre_icon);
 
     }
 

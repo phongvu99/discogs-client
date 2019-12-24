@@ -79,6 +79,16 @@ public class MoreByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } catch (NullPointerException e) {
             // Do smt
         }
+        try {
+            title.setText(releases.get(position).getBasicInformation().getTitle());
+            artist.setText(releases.get(position).getBasicInformation().getArtists().get(0).getName());
+            Glide.with(context).load(releases.get(position).getBasicInformation().getThumb())
+                    .placeholder(R.drawable.discogs_vinyl_record_mark)
+                    .error(R.drawable.discogs_vinyl_record_mark)
+                    .into(image_release);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
     }
 
 

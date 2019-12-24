@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -39,6 +42,22 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout verifier_container;
     private ProgressBar progressBar;
 
+    public static void freeCookies(Context context) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } else {
+            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+            cookieSyncMngr.startSync();
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();
+            cookieManager.removeSessionCookie();
+            cookieSyncMngr.stopSync();
+            cookieSyncMngr.sync();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +73,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         verifier_container = findViewById(R.id.verifier_container);
         webView = (WebView) findViewById(R.id.web_view);
         webView.clearCache(true);
+        freeCookies(this);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
@@ -73,6 +93,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         webView.loadUrl(url);
         buttonOnClickListener();
     }
+
 
     private void buttonOnClickListener() {
         Button button = findViewById(R.id.oauth_verify);
