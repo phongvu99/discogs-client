@@ -1,6 +1,7 @@
 package com.naughtybitch.discogsclient.profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,16 +24,20 @@ import com.naughtybitch.POJO.CollectionResponse;
 import com.naughtybitch.POJO.CollectionValueResponse;
 import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.Release;
+import com.naughtybitch.POJO.Want;
+import com.naughtybitch.POJO.WantlistResponse;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.SearchableActivity;
+import com.naughtybitch.discogsclient.SignOutActivity;
+import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -57,11 +62,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     private Context context = getActivity();
     private SharedPreferences sp;
     private ImageView profile_image, profile_banner;
-    private TextView profile, profile_name, seller_rating_star, seller_rating, button_sign_out;
+    private TextView profile, profile_name, seller_rating_star, seller_rating, button_sign_out, view_all_collection,
+            view_all_wishlist;
     private TextView buyer_rating_star, buyer_rating, profile_location, min_value, med_value, max_value;
     private NestedScrollView profile_container;
     private RecyclerView profile_collection, profile_wishlist;
     private MoreByAdapter collection_wishlist_adapter;
+    private String username;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -118,18 +125,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         // Inflate the layout for this fragment
         sp = getActivity().getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        String username = sp.getString("user_name", null);
+        username = sp.getString("user_name", null);
         initView(v);
         if (username != null) {
             fetchProfile(username);
             fetchCollection(username, 0);
             fetchCollectionValue(username);
+            fetchWishlist(username);
         }
-        buttonOnClickListener(v);
+        buttonOnClickListener();
         return v;
     }
 
     private void initView(View v) {
+        view_all_collection = v.findViewById(R.id.view_all_collection);
+        view_all_wishlist = v.findViewById(R.id.view_all_wishlist);
         profile_image = v.findViewById(R.id.profile_image);
         profile_name = v.findViewById(R.id.profile_name);
         profile = v.findViewById(R.id.profile);
@@ -139,8 +149,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         buyer_rating = v.findViewById(R.id.buyer_rating);
         buyer_rating_star = v.findViewById(R.id.buyer_rating_stars);
         profile_container = v.findViewById(R.id.profile_container);
-        profile_collection = v.findViewById(R.id.rc_view_all_collection);
-        profile_wishlist = v.findViewById(R.id.rc_view_all_wishlist);
+        profile_collection = v.findViewById(R.id.rc_collection);
+        profile_wishlist = v.findViewById(R.id.rc_wishlist);
         collection_wishlist_adapter = new MoreByAdapter();
         profile_collection.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         profile_collection.setAdapter(collection_wishlist_adapter);
@@ -153,14 +163,27 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         button_sign_out = v.findViewById(R.id.button_sign_out);
     }
 
-    private void buttonOnClickListener(View v) {
+    private void buttonOnClickListener() {
         button_sign_out.setOnClickListener(this);
+        view_all_collection.setOnClickListener(this);
+        view_all_wishlist.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.button_sign_out) {
-
+        Intent intent;
+        Bundle bundle = new Bundle();
+        switch (v.getId()) {
+            case R.id.view_all_collection:
+                intent = new Intent(getActivity(), SearchableActivity.class);
+                bundle.putString("user_name", username);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case R.id.button_sign_out:
+                intent = new Intent(getActivity(), SignOutActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -192,14 +215,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     }
 
     private void updateCollection(CollectionResponse collectionResponse) {
-        collection_wishlist_adapter = new MoreByAdapter(getActivity(), collectionResponse.getReleases(), 0, this);
+        collection_wishlist_adapter = new MoreByAdapter(this, getActivity(), collectionResponse.getReleases());
         profile_collection.setAdapter(collection_wishlist_adapter);
     }
 
-//    private void updateWishlist(CollectionResponse collectionResponse) {
-//        collection_wishlist_adapter = new MoreByAdapter(getActivity(), collectionResponse.getReleases(), 0, this);
-//        profile_wishlist.setAdapter(collection_wishlist_adapter);
-//    }
+    private void updateWishlist(WantlistResponse wantlistResponse) {
+        collection_wishlist_adapter = new MoreByAdapter(getActivity(), wantlistResponse.getWants(), this);
+        profile_wishlist.setAdapter(collection_wishlist_adapter);
+    }
 
     private void fetchCollectionValue(final String username) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
@@ -216,6 +239,25 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onFailure(Call<CollectionValueResponse> call, Throwable t) {
                 Log.e("VALUE_CAT", t.getMessage());
+            }
+        });
+    }
+
+    private void fetchWishlist(String username) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<WantlistResponse> call = discogsAPI.fetchWishlist(username);
+        call.enqueue(new Callback<WantlistResponse>() {
+            @Override
+            public void onResponse(Call<WantlistResponse> call, Response<WantlistResponse> response) {
+                if (response.body() != null) {
+                    WantlistResponse wantlistResponse = response.body();
+                    updateWishlist(wantlistResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WantlistResponse> call, Throwable t) {
+
             }
         });
     }
@@ -329,8 +371,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onReleaseClick(int position, Release release, List<Release> releases, int artist_id) {
+    public void onReleaseClick(int position, Release release) {
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(getActivity(), MasterDetailsActivity.class);
+        bundle.putInt("release_id", release.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 
+    @Override
+    public void onReleaseClick(int position, Want want) {
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(getActivity(), MasterDetailsActivity.class);
+        bundle.putInt("release_id", want.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     /**

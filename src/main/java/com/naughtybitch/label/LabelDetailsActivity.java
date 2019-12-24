@@ -296,7 +296,7 @@ public class LabelDetailsActivity extends AppCompatActivity implements LabelComp
                 return true;
             }
         });
-        view_all = findViewById(R.id.more_by_all);
+        view_all = findViewById(R.id.view_all);
         tracklist = findViewById(R.id.tracklist);
         released = findViewById(R.id.master_released);
         formats = findViewById(R.id.master_formats);

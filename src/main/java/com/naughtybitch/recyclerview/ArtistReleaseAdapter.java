@@ -74,15 +74,21 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
         if (mReleases.get(position) == null) {
             return 0;
         }
-        String viewType = mReleases.get(position).getType();
-        switch (viewType) {
-            case "master":
-                type = 1;
-                break;
-            case "release":
-                type = 2;
-                break;
+        try {
+            String viewType = mReleases.get(position).getType();
+            switch (viewType) {
+                case "master":
+                    type = 1;
+                    break;
+                case "release":
+                    type = 2;
+                    break;
+            }
+        } catch (NullPointerException e) {
+            // Do smt
+            return 2;
         }
+
         return type;
     }
 
@@ -138,12 +144,36 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
     @SuppressLint("SetTextI18n")
     private void updateRelease(MasterViewHolder masterViewHolder, Release release) {
         TextView title_master = masterViewHolder.card_title;
-        title_master.setText(release.getTitle() + " (" + release.getFormat() + ")");
+        try {
+            title_master.setText(release.getTitle() + " (" + release.getFormat() + ")");
+        } catch (NullPointerException e) {
+            // Do smt
+
+        }
+        try {
+            title_master.setText(release.getBasicInformation().getTitle());
+        } catch (NullPointerException e) {
+            // Do smt
+        }
         TextView artist = masterViewHolder.card_artist;
-        artist.setText(release.getArtist());
+        try {
+            artist.setText(release.getArtist());
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        try {
+            artist.setText(release.getBasicInformation().getArtists().get(0).getName());
+        } catch (NullPointerException e) {
+            // Do smt
+        }
         TextView released = masterViewHolder.card_released;
         try {
             released.setText("Released in " + release.getYear());
+        } catch (NullPointerException e) {
+            released.setText("Released in " + "unknown");
+        }
+        try {
+            released.setText("Released in " + release.getBasicInformation().getYear());
         } catch (NullPointerException e) {
             released.setText("Released in " + "unknown");
         }
@@ -151,6 +181,13 @@ public class ArtistReleaseAdapter extends MoreByAdapter {
         Glide.with(context).load(release.getThumb()).placeholder(R.drawable.discogs_vinyl_record_mark)
                 .error(R.drawable.discogs_vinyl_record_mark)
                 .into(image_master);
+        try {
+            Glide.with(context).load(release.getBasicInformation().getThumb()).placeholder(R.drawable.discogs_vinyl_record_mark)
+                    .error(R.drawable.discogs_vinyl_record_mark)
+                    .into(image_master);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
     }
 
     // Involves populating data into the item through holder

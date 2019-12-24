@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
+import com.naughtybitch.POJO.CollectionResponse;
 import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
 import com.naughtybitch.POJO.Pagination;
@@ -78,7 +79,6 @@ public class SearchableActivity extends AppCompatActivity implements
         ArtistReleaseAdapter.OnArtistReleaseListener,
         LabelReleaseAdapter.OnLabelReleaseListener {
 
-    private String view;
     private int master_id, artist_id, label_id;
     private Context context = this;
     private List<Result> results;
@@ -96,7 +96,7 @@ public class SearchableActivity extends AppCompatActivity implements
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar myToolbar;
     private MenuItem searchItem;
-    private String query, genre;
+    private String query, genre, user_name;
     private SharedPreferences sp;
     private ImageView profile_menu_image;
     private TextView profile_menu_name, profile_menu_email;
@@ -109,6 +109,15 @@ public class SearchableActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_searchable);
         initViews();
         Intent intent = getIntent();
+        try {
+            user_name = intent.getExtras().getString("user_name");
+            if (user_name != null) {
+                fetchCollection(user_name, 0);
+            }
+            Log.i("user_name", "user_name " + user_name);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
         try {
             genre = intent.getExtras().getString("genre");
             if (genre != null) {
@@ -129,12 +138,10 @@ public class SearchableActivity extends AppCompatActivity implements
         }
         try {
             artist_id = intent.getExtras().getInt("artist_id");
-            view = intent.getExtras().getString("view_all");
             if (artist_id != 0) {
                 fetchArtistReleases(artist_id);
             }
             Log.i("artist_id", "artist id " + artist_id);
-            Log.i("view_all", "view_all " + view);
         } catch (NullPointerException e) {
             // Do smt
         }
@@ -196,6 +203,71 @@ public class SearchableActivity extends AppCompatActivity implements
         profile_menu_email = nav_header.findViewById(R.id.profile_menu_email);
         profile_menu_name = nav_header.findViewById(R.id.profile_menu_name);
         profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
+    }
+
+    private void fetchCollection(final String username, final int folder_id) {
+        final DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, folder_id, 50, 1);
+        call.enqueue(new Callback<CollectionResponse>() {
+            @Override
+            public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {
+                if (response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+                    CollectionResponse collectionResponse = response.body();
+                    pagination = collectionResponse.getPagination();
+                    final List<Release> releases = collectionResponse.getReleases();
+                    artistReleaseAdapter = new ArtistReleaseAdapter(context, releases, pagination, SearchableActivity.this, recyclerView);
+                    artistReleaseAdapter.setOnLoadMoreListener(new ArtistReleaseAdapter.OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            recyclerView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    releases.add(null);
+                                    artistReleaseAdapter.notifyItemInserted(releases.size() - 1);
+                                }
+                            });
+                            Log.i("next_page", "next page " + next_page);
+                            Call<CollectionResponse> newCall = discogsAPI.fetchCollection(username, folder_id, 50, next_page);
+                            newCall.enqueue(new Callback<CollectionResponse>() {
+                                @Override
+                                public void onResponse(Call<CollectionResponse> call, final Response<CollectionResponse> response) {
+                                    if (response.body() != null) {
+                                        recyclerView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                releases.remove(releases.size() - 1);
+                                                artistReleaseAdapter.notifyItemRemoved(releases.size());
+                                                releases.addAll(response.body().getReleases());
+                                                artistReleaseAdapter.notifyItemRangeInserted(releases.size(), 50);
+                                            }
+                                        });
+                                        artistReleaseAdapter.setLoaded();
+                                        ++next_page;
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<CollectionResponse> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+                    recyclerView.setAdapter(artistReleaseAdapter);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CollectionResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                empty.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     private void updateProfile(ProfileResponse profileResponse) {
@@ -377,53 +449,48 @@ public class SearchableActivity extends AppCompatActivity implements
                     Log.i("pagination", "pagination items" + pagination.getItems());
                     final List<Release> releases = artistResponse.getReleases();
                     artistReleaseAdapter = new ArtistReleaseAdapter(context, releases, pagination, SearchableActivity.this, recyclerView);
-                    try {
-                        if (view.equals("view_all")) {
-                            artistReleaseAdapter.setOnLoadMoreListener(new ArtistReleaseAdapter.OnLoadMoreListener() {
+                    artistReleaseAdapter.setOnLoadMoreListener(new ArtistReleaseAdapter.OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            recyclerView.post(new Runnable() {
                                 @Override
-                                public void onLoadMore() {
-                                    recyclerView.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            releases.add(null);
-                                            artistReleaseAdapter.notifyItemInserted(releases.size() - 1);
-                                        }
-                                    });
-                                    Log.i("next_page", "next page " + next_page);
-                                    Call<ArtistReleasesResponse> newCall = discogsAPI.fetchArtistReleases(artist_id, "year", "asc", 50, next_page);
-                                    newCall.enqueue(new Callback<ArtistReleasesResponse>() {
-                                        @Override
-                                        public void onResponse(Call<ArtistReleasesResponse> call, final Response<ArtistReleasesResponse> response) {
-                                            if (response.body() != null) {
-                                                recyclerView.post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        releases.remove(releases.size() - 1);
-                                                        artistReleaseAdapter.notifyItemRemoved(releases.size());
-                                                        releases.addAll(response.body().getReleases());
-                                                        artistReleaseAdapter.notifyItemRangeInserted(releases.size(), 50);
-                                                    }
-                                                });
-                                                artistReleaseAdapter.setLoaded();
-                                                ++next_page;
+                                public void run() {
+                                    releases.add(null);
+                                    artistReleaseAdapter.notifyItemInserted(releases.size() - 1);
+                                }
+                            });
+                            Log.i("next_page", "next page " + next_page);
+                            Call<ArtistReleasesResponse> newCall = discogsAPI.fetchArtistReleases(artist_id, "year", "asc", 50, next_page);
+                            newCall.enqueue(new Callback<ArtistReleasesResponse>() {
+                                @Override
+                                public void onResponse(Call<ArtistReleasesResponse> call, final Response<ArtistReleasesResponse> response) {
+                                    if (response.body() != null) {
+                                        recyclerView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                releases.remove(releases.size() - 1);
+                                                artistReleaseAdapter.notifyItemRemoved(releases.size());
+                                                releases.addAll(response.body().getReleases());
+                                                artistReleaseAdapter.notifyItemRangeInserted(releases.size(), 50);
                                             }
-                                        }
+                                        });
+                                        artistReleaseAdapter.setLoaded();
+                                        ++next_page;
+                                    }
+                                }
 
-                                        @Override
-                                        public void onFailure(Call<ArtistReleasesResponse> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<ArtistReleasesResponse> call, Throwable t) {
 
-                                        }
-                                    });
                                 }
                             });
                         }
-                    } catch (NullPointerException e) {
-                        // Do smt
-                    }
+                    });
+
+
                     recyclerView.setAdapter(artistReleaseAdapter);
                 } else {
                     progressBar.setVisibility(View.GONE);
-                    TextView empty = findViewById(R.id.card_empty);
                     empty.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
@@ -671,19 +738,26 @@ public class SearchableActivity extends AppCompatActivity implements
     public void onArtistReleaseClick(int position, Release release) {
         Intent intent;
         Bundle bundle = new Bundle();
-        switch (release.getType()) {
-            case "master":
-                intent = new Intent(SearchableActivity.this, MasterDetailsActivity.class);
-                bundle.putInt("master_id", release.getId());
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
-            case "release":
-                intent = new Intent(SearchableActivity.this, MasterDetailsActivity.class);
-                bundle.putInt("release_id", release.getId());
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
+        try {
+            switch (release.getType()) {
+                case "master":
+                    intent = new Intent(SearchableActivity.this, MasterDetailsActivity.class);
+                    bundle.putInt("master_id", release.getId());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    break;
+                case "release":
+                    intent = new Intent(SearchableActivity.this, MasterDetailsActivity.class);
+                    bundle.putInt("release_id", release.getId());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    break;
+            }
+        } catch (NullPointerException e) {
+            intent = new Intent(SearchableActivity.this, MasterDetailsActivity.class);
+            bundle.putInt("release_id", release.getId());
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
         Log.i("release", "Release position " + position + " release title " + release.getTitle());
     }

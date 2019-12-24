@@ -42,6 +42,7 @@ import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.Release;
 import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.POJO.Tracklist;
+import com.naughtybitch.POJO.Want;
 import com.naughtybitch.adapter.SliderAdapter;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
@@ -183,7 +184,7 @@ public class MasterDetailsActivity extends AppCompatActivity implements
                 return true;
             }
         });
-        view_all = findViewById(R.id.more_by_all);
+        view_all = findViewById(R.id.view_all);
         view_all.setOnClickListener(this);
         tracklist = findViewById(R.id.tracklist);
         released = findViewById(R.id.master_released);
@@ -257,10 +258,9 @@ public class MasterDetailsActivity extends AppCompatActivity implements
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.more_by_all:
+            case R.id.view_all:
                 intent = new Intent(MasterDetailsActivity.this, SearchableActivity.class);
                 bundle.putInt("artist_id", artist_id);
-                bundle.putString("view_all", "view_all");
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
@@ -487,7 +487,7 @@ public class MasterDetailsActivity extends AppCompatActivity implements
                 if (response.body() != null) {
                     ArtistReleasesResponse artistResponse = response.body();
                     List<Release> releases = artistResponse.getReleases();
-                    morebyAdapter = new MoreByAdapter(context, releases, artist_id, MasterDetailsActivity.this);
+                    morebyAdapter = new MoreByAdapter(MasterDetailsActivity.this, context, releases);
                     rc_moreby.setAdapter(morebyAdapter);
                 } else {
                     TextView empty = findViewById(R.id.card_empty);
@@ -625,7 +625,7 @@ public class MasterDetailsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onReleaseClick(int position, Release release, List<Release> releases, int artist_id) {
+    public void onReleaseClick(int position, Release release) {
         Intent intent;
         Bundle bundle = new Bundle();
         switch (release.getType()) {
@@ -643,6 +643,11 @@ public class MasterDetailsActivity extends AppCompatActivity implements
                 break;
         }
         Log.i("release", "Release position " + position + " release title " + release.getTitle());
+    }
+
+    @Override
+    public void onReleaseClick(int position, Want want) {
+
     }
 
     private void navigationViewHandler() {
