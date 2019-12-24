@@ -60,7 +60,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     private ImageView profile_image, profile_banner;
     private TextView profile, profile_name, seller_rating_star, seller_rating;
     private TextView buyer_rating_star, buyer_rating, profile_location, min_value, med_value, max_value;
-    private Button btn_order;
+    private Button btn_sign_out;
     private NestedScrollView profile_container;
     private RecyclerView profile_collection, profile_wishlist;
     private MoreByAdapter collection_wishlist_adapter;
@@ -152,14 +152,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         min_value = v.findViewById(R.id.min_value);
         med_value = v.findViewById(R.id.med_value);
         max_value = v.findViewById(R.id.max_value);
+        btn_sign_out = v.findViewById(R.id.button_sign_out);
     }
 
     private void buttonOnClickListener(View v) {
+        btn_sign_out.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.button_sign_out) {
 
+        }
     }
 
     private void updateCollectionValue(CollectionValueResponse collectionValueResponse) {
