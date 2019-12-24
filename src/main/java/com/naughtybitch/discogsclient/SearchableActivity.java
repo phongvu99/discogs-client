@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,12 +31,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
 import com.naughtybitch.POJO.Pagination;
+import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.Release;
 import com.naughtybitch.POJO.Result;
 import com.naughtybitch.POJO.SearchResponse;
@@ -94,6 +98,9 @@ public class SearchableActivity extends AppCompatActivity implements
     private Toolbar myToolbar;
     private MenuItem searchItem;
     private String query, genre;
+    private SharedPreferences sp;
+    private ImageView profile_menu_image;
+    private TextView profile_menu_name, profile_menu_email;
     TextView empty;
     int next_page = 2;
 
@@ -146,6 +153,12 @@ public class SearchableActivity extends AppCompatActivity implements
             Log.i("query", query);
             searchQuery(query);
         }
+
+        sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        String username = sp.getString("user_name", null);
+        if (username != null) {
+            fetchProfile(username);
+        }
     }
 
     private void initViews() {
@@ -178,6 +191,41 @@ public class SearchableActivity extends AppCompatActivity implements
         resultsAdapter = new ResultsAdapter();
         recyclerView.setAdapter(resultsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(SearchableActivity.this));
+
+        navigationView = findViewById(R.id.navigation_view);
+        View nav_header = navigationView.getHeaderView(0);
+        profile_menu_email = nav_header.findViewById(R.id.profile_menu_email);
+        profile_menu_name = nav_header.findViewById(R.id.profile_menu_name);
+        profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
+    }
+
+    private void updateProfile(ProfileResponse profileResponse) {
+        Glide.with(this)
+                .load(profileResponse.getAvatarUrl())
+                .error(R.drawable.discogs_vinyl_record_mark)
+                .placeholder(R.drawable.discogs_vinyl_record_mark)
+                .into(profile_menu_image);
+        profile_menu_name.setText(profileResponse.getName());
+        profile_menu_email.setText(profileResponse.getEmail());
+    }
+
+    private void fetchProfile(String username) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<ProfileResponse> call = discogsAPI.fetchProfile(username);
+        call.enqueue(new Callback<ProfileResponse>() {
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                if (response.body() != null) {
+                    ProfileResponse profileResponse = response.body();
+                    updateProfile(profileResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                Log.e("PROFILE_CAT", t.getMessage());
+            }
+        });
     }
 
     public void searchGenre(final String genre) {
