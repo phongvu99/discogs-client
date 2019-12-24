@@ -200,7 +200,6 @@ public class BuyMusicActivity extends AppCompatActivity implements
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
-        navigationView.setCheckedItem(R.id.buy_music);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -215,10 +214,6 @@ public class BuyMusicActivity extends AppCompatActivity implements
                     case R.id.wish_list:
                         startActivity(new Intent(BuyMusicActivity.this, WishlistActivity.class));
                         Toast.makeText(BuyMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.buy_music:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        Toast.makeText(BuyMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
                         startActivity(new Intent(BuyMusicActivity.this, SellMusicActivity.class));

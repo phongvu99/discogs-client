@@ -44,7 +44,6 @@ import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.SearchableActivity;
-import com.naughtybitch.discogsclient.buy.BuyMusicActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
@@ -450,10 +449,6 @@ public class ArtistDetailsActivity extends AppCompatActivity implements
                     case R.id.wish_list:
                         startActivity(new Intent(ArtistDetailsActivity.this, WishlistActivity.class));
                         Toast.makeText(ArtistDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.buy_music:
-                        startActivity(new Intent(ArtistDetailsActivity.this, BuyMusicActivity.class));
-                        Toast.makeText(ArtistDetailsActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
                         startActivity(new Intent(ArtistDetailsActivity.this, SellMusicActivity.class));

@@ -16,10 +16,6 @@
             android:icon="@drawable/eye"
             android:title="@string/wishlist" />
         <item
-            android:id="@+id/buy_music"
-            android:icon="@drawable/lemons"
-            android:title="@string/music_buy" />
-        <item
             android:id="@+id/sell_music"
             android:icon="@drawable/sell_icon"
             android:title="@string/music_sell" />
