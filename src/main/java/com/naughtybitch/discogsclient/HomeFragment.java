@@ -32,6 +32,8 @@ import com.naughtybitch.discogsapi.AppController;
 import com.naughtybitch.discogsapi.CustomRequest;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
+import com.naughtybitch.discogsapi.LastfmAPI;
+import com.naughtybitch.discogsapi.LastfmClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.recyclerview.ChartAdapter;
 
@@ -196,36 +198,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        sp = getActivity().getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        username = sp.getString("user_name", null);
         initView(view);
-        buttonOnClickListener(view);
-        if (username != null) {
-            fetchChart(lastfm_api_key);
-        }
+        fetchChart(lastfm_api_key);
+
         return view;
     }
 
     private void initView(View v) {
         rv_chart = v.findViewById(R.id.rv_chart);
         rv_chart.setLayoutManager(new LinearLayoutManager(context));
+        chartAdapter = new ChartAdapter();
+        rv_chart.setAdapter(chartAdapter);
         lastfm_api_key = "89e03a93e5ad3a74913c27f806cf860b";
         lastfm_shared_secret_key = "926be997616ba4e29bcc06494c387750";
     }
 
-    private void updateChart() {
-        chartAdapter = new ChartAdapter();
+    private void updateChart(TopArtistsResponse topArtistsResponse) {
+        chartAdapter = new ChartAdapter(topArtistsResponse.getArtists().getArtist());
         rv_chart.setAdapter(chartAdapter);
     }
 
     private void fetchChart(String lastfm_api_key) {
-        DiscogsAPI discogsAPI = getDiscogsAPI();
-        Call<TopArtistsResponse> call = discogsAPI.fetchTopArtist(lastfm_api_key, 20, 1);
+        Retrofit retrofit = LastfmClient.getRetrofitClient();
+        LastfmAPI lastfmAPI = retrofit.create(LastfmAPI.class);
+        Call<TopArtistsResponse> call = lastfmAPI.fetchTopArtist(lastfm_api_key, 50, 1);
         call.enqueue(new Callback<TopArtistsResponse>() {
             @Override
             public void onResponse(Call<TopArtistsResponse> call, retrofit2.Response<TopArtistsResponse> response) {
                 if (response.body() != null) {
-                    updateChart();
+                    TopArtistsResponse topArtistsResponse = response.body();
+                    updateChart(topArtistsResponse);
                 }
                 Log.i("CODE_RESPONSE", String.valueOf(response.code()));
             }
@@ -272,6 +274,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 "oauth_signature=\"" + instance.getConsumer_secret() + token.get(1) + "\"";
         return auth;
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

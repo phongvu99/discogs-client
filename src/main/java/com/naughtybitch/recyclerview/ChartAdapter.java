@@ -23,6 +23,10 @@ public class ChartAdapter extends RecyclerView.Adapter<ChartAdapter.ViewHolder> 
         artists = new ArrayList<>();
     }
 
+    public ChartAdapter(List<Artist> artists) {
+        this.artists = artists;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

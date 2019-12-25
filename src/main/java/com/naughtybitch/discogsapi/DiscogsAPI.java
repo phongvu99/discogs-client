@@ -13,7 +13,6 @@ import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.POJO.SearchResponse;
 import com.naughtybitch.POJO.WantlistResponse;
-import com.naughtybitch.POJOlastfm.TopArtistsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -124,11 +123,4 @@ public interface DiscogsAPI {
     @GET("users/{username}/collection/value")
     Call<CollectionValueResponse> fetchCollectionValue(@Path("username") String username);
 
-    /*
-    page (Optional) : The page number to fetch. Defaults to first page.
-    limit (Optional) : The number of results to fetch per page. Defaults to 50.
-    api_key (Required) : A Last.fm API key.
-     */
-    @GET("2.0/?method=chart.gettopartists&api_key=YOUR_API_KEY&format=json")
-    Call<TopArtistsResponse> fetchTopArtist(@Query("YOUR_API_KEY") String api_key, @Query("perPage") int per_page, @Query("page") int page);
 }
