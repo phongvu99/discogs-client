@@ -1,5 +1,8 @@
 package com.naughtybitch.discogsapi;
 
+import com.google.gson.JsonObject;
+import com.naughtybitch.POJO.AddToCollectionResponse;
+import com.naughtybitch.POJO.AddToWantlistResponse;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
 import com.naughtybitch.POJO.ArtistResponse;
 import com.naughtybitch.POJO.CollectionResponse;
@@ -15,7 +18,10 @@ import com.naughtybitch.POJO.SearchResponse;
 import com.naughtybitch.POJO.WantlistResponse;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -98,10 +104,22 @@ public interface DiscogsAPI {
      */
     @GET("oauth/identity")
     Call<IdentityResponse> getIdentity();
-  
+
     /*
-    Retrieve metadata about a folder in a user’s collection.
-    If folder_id is not 0, authentication as the collection owner is required.
+    Returns the list of item in a folder in a user’s collection. Accepts Pagination parameters.
+    Basic information about each release is provided, suitable for display in a list. For detailed information, make another API call to fetch the corresponding release.
+    If folder_id is not 0, or the collection has been made private by its owner, authentication as the collection owner is required.
+    If you are not authenticated as the collection owner, only public notes fields will be visible.
+
+    Valid sort keys are:
+    label
+    artist
+    title
+    catno
+    format
+    rating
+    added
+    year
      */
     @GET("users/{username}/collection/folders/{folder_id}/releases")
     Call<CollectionResponse> fetchCollection(@Path("username") String username, @Path("folder_id") int folder_id, @Query("per_page") int per_page, @Query("page") int page);
@@ -117,9 +135,32 @@ public interface DiscogsAPI {
     Call<WantlistResponse> fetchWishlist(@Path("username") String username, @Query("per_page") int per_page, @Query("page") int page);
 
     /*
-
+    Returns the minimum, median, and maximum value of a user’s collection.
+    Authentication as the collection owner is required.
      */
     @GET("users/{username}/collection/value")
     Call<CollectionValueResponse> fetchCollectionValue(@Path("username") String username);
+
+    /*
+    Add a release to a folder in a user’s collection.
+    The folder_id must be non-zero – you can use 1 for “Uncategorized”.
+    Authentication as the collection owner is required.
+     */
+    @POST("users/{username}/collection/folders/{folder_id}/releases/{release_id}")
+    Call<AddToCollectionResponse> addToCollectionFolder(@Path("username") String username, @Path("folder_id") int folder_id, @Path("release_id") int release_id);
+
+    /*
+    Add a release to a user’s wantlist.
+    Authentication as the wantlist owner is required.
+     */
+    @PUT("users/{username}/wants/{release_id}")
+    Call<AddToWantlistResponse> addToWantlist(@Path("username") String username, @Path("release_id") int release_id);
+
+    /*
+    Remove a release from a user's wantlist.
+    Authentication as the wantlist owner is required.
+     */
+    @DELETE("users/{username}/wants/{release_id}")
+    Call<JsonObject> removeFromWantlist(@Path("username") String username, @Path("release_id") int release_id);
 
 }

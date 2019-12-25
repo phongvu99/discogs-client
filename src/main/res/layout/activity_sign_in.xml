@@ -48,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:elevation="4dp"
+                    android:theme="@style/CustomToolbarStyle"
                     app:layout_collapseMode="pin">
 
                 </androidx.appcompat.widget.Toolbar>
@@ -67,7 +68,6 @@
         </FrameLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.naughtybitch.collection;
+package com.naughtybitch.discogsclient.wantlist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,13 +12,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -28,10 +28,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
-import com.naughtybitch.POJO.CollectionResponse;
 import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.ProfileResponse;
-import com.naughtybitch.POJO.Release;
+import com.naughtybitch.POJO.Want;
+import com.naughtybitch.POJO.WantlistResponse;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
@@ -42,7 +42,6 @@ import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.recyclerview.ArtistReleaseAdapter;
 import com.naughtybitch.recyclerview.WishlistAdapter;
 
 import java.io.IOException;
@@ -58,8 +57,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class CollectionActivity extends AppCompatActivity implements ArtistReleaseAdapter.OnArtistReleaseListener {
+public class WantlistActivity extends AppCompatActivity implements
+        WishlistAdapter.OnWishlistListener {
 
+    private CoordinatorLayout coordinatorLayout;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
@@ -70,7 +71,6 @@ public class CollectionActivity extends AppCompatActivity implements ArtistRelea
     private RecyclerView recyclerView;
     private String username;
     private WishlistAdapter wishlistAdapter;
-    private ArtistReleaseAdapter artistReleaseAdapter;
     private Pagination pagination;
     private Context context = this;
     private int next_page = 2;
@@ -84,7 +84,6 @@ public class CollectionActivity extends AppCompatActivity implements ArtistRelea
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
         collapsingToolbarLayout.setTitleEnabled(false);
-        myToolbar.setTitle("Collection");
         setSupportActionBar(myToolbar);
 
         // DrawerLayout
@@ -101,14 +100,14 @@ public class CollectionActivity extends AppCompatActivity implements ArtistRelea
         empty = (TextView) findViewById(R.id.card_empty);
         progressBar = (ProgressBar) findViewById(R.id.progress_circular);
         recyclerView = (RecyclerView) findViewById(R.id.rc_result);
-        recyclerView.setLayoutManager(new LinearLayoutManager(CollectionActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(WantlistActivity.this));
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
                     public void onBackStackChanged() {
                         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                             toggle.setDrawerIndicatorEnabled(true);
-                            setTitle(R.string.collection);
+                            setTitle(R.string.wantlist);
                         }
                         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                             toggle.setDrawerIndicatorEnabled(false);
@@ -124,73 +123,91 @@ public class CollectionActivity extends AppCompatActivity implements ArtistRelea
         initView();
         if (username != null) {
             fetchProfile(username);
-            fetchCollection(username, 0);
+            fetchWantlist(username);
         }
     }
 
-    private void fetchCollection(final String username, final int folder_id) {
+    private void initView() {
+        coordinatorLayout = findViewById(R.id.fragment_searchable);
+        recyclerView = findViewById(R.id.rc_result);
+        wishlistAdapter = new WishlistAdapter();
+        recyclerView.setAdapter(wishlistAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        navigationView = findViewById(R.id.navigation_view);
+        View nav_header = navigationView.getHeaderView(0);
+        profile_menu_email = nav_header.findViewById(R.id.profile_menu_email);
+        profile_menu_name = nav_header.findViewById(R.id.profile_menu_name);
+        profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
+    }
+
+    private void fetchWantlist(final String username) {
         final DiscogsAPI discogsAPI = getDiscogsAPI();
-        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, folder_id, 6, 1);
-        call.enqueue(new Callback<CollectionResponse>() {
+        Call<WantlistResponse> call = discogsAPI.fetchWishlist(username, 50, 1);
+        call.enqueue(new Callback<WantlistResponse>() {
             @Override
-            public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {
+            public void onResponse(Call<WantlistResponse> call, Response<WantlistResponse> response) {
                 if (response.body() != null) {
                     progressBar.setVisibility(View.GONE);
-                    CollectionResponse collectionResponse = response.body();
-                    pagination = collectionResponse.getPagination();
-                    final List<Release> releases = collectionResponse.getReleases();
-                    artistReleaseAdapter = new ArtistReleaseAdapter(context, releases, pagination, CollectionActivity.this, recyclerView);
-                    artistReleaseAdapter.setOnLoadMoreListener(new ArtistReleaseAdapter.OnLoadMoreListener() {
+                    WantlistResponse wantlistResponse = response.body();
+                    pagination = wantlistResponse.getPagination();
+                    if (pagination.getItems() == 0) {
+                        coordinatorLayout.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
+                    }
+                    final List<Want> wants = wantlistResponse.getWants();
+                    wishlistAdapter = new WishlistAdapter(context, wants, pagination, WantlistActivity.this, recyclerView);
+                    wishlistAdapter.setOnLoadMoreListener(new WishlistAdapter.OnLoadMoreListener() {
                         @Override
                         public void onLoadMore() {
                             recyclerView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    releases.add(null);
-                                    artistReleaseAdapter.notifyItemInserted(releases.size() - 1);
+                                    wants.add(null);
+                                    wishlistAdapter.notifyItemInserted(wants.size() - 1);
                                 }
                             });
                             Log.i("next_page", "next page " + next_page);
-                            Call<CollectionResponse> newCall = discogsAPI.fetchCollection(username, folder_id, 6, next_page);
-                            newCall.enqueue(new Callback<CollectionResponse>() {
+                            Call<WantlistResponse> newCall = discogsAPI.fetchWishlist(username, 50, next_page);
+                            newCall.enqueue(new Callback<WantlistResponse>() {
                                 @Override
-                                public void onResponse(Call<CollectionResponse> call, final Response<CollectionResponse> response) {
+                                public void onResponse(Call<WantlistResponse> call, final Response<WantlistResponse> response) {
+                                    Log.i("wish_list", "response code " + response.code());
                                     if (response.body() != null) {
                                         recyclerView.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                releases.remove(releases.size() - 1);
-                                                artistReleaseAdapter.notifyItemRemoved(releases.size());
-                                                releases.addAll(response.body().getReleases());
-                                                artistReleaseAdapter.notifyItemRangeInserted(releases.size(), 50);
+                                                wants.remove(wants.size() - 1);
+                                                wishlistAdapter.notifyItemRemoved(wants.size());
+                                                wants.addAll(response.body().getWants());
+                                                wishlistAdapter.notifyItemRangeInserted(wants.size(), 50);
                                             }
                                         });
-                                        artistReleaseAdapter.setLoaded();
+                                        wishlistAdapter.setLoaded();
                                         ++next_page;
                                     }
                                 }
 
                                 @Override
-                                public void onFailure(Call<CollectionResponse> call, Throwable t) {
-
+                                public void onFailure(Call<WantlistResponse> call, Throwable t) {
+                                    Log.i("wish_list", "response code " + t.getMessage());
                                 }
                             });
                         }
                     });
-                    recyclerView.setAdapter(artistReleaseAdapter);
+                    recyclerView.setAdapter(wishlistAdapter);
                 } else {
+                    coordinatorLayout.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
-                    empty.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                 }
             }
 
             @Override
-            public void onFailure(Call<CollectionResponse> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
-                empty.setVisibility(View.VISIBLE);
+            public void onFailure(Call<WantlistResponse> call, Throwable t) {
+
             }
         });
-
     }
 
     private void updateProfile(ProfileResponse profileResponse) {
@@ -267,26 +284,22 @@ public class CollectionActivity extends AppCompatActivity implements ArtistRelea
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.home:
-                        startActivity(new Intent(CollectionActivity.this, MainActivity.class));
+                        startActivity(new Intent(WantlistActivity.this, MainActivity.class));
                         break;
                     case R.id.profile:
-                        startActivity(new Intent(CollectionActivity.this, ProfileActivity.class));
-                        Toast.makeText(CollectionActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WantlistActivity.this, ProfileActivity.class));
                         break;
                     case R.id.wish_list:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.sell_music:
-                        startActivity(new Intent(CollectionActivity.this, SellMusicActivity.class));
-                        Toast.makeText(CollectionActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WantlistActivity.this, SellMusicActivity.class));
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(CollectionActivity.this, SettingsActivity.class));
-                        Toast.makeText(CollectionActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WantlistActivity.this, SettingsActivity.class));
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(CollectionActivity.this, ExploreActivity.class));
-                        Toast.makeText(CollectionActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WantlistActivity.this, ExploreActivity.class));
                         break;
                     default:
                         return true;
@@ -319,7 +332,7 @@ public class CollectionActivity extends AppCompatActivity implements ArtistRelea
                 }
                 break;
             case R.id.search:
-                Intent intent = new Intent(CollectionActivity.this, ExploreActivity.class);
+                Intent intent = new Intent(WantlistActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -338,23 +351,11 @@ public class CollectionActivity extends AppCompatActivity implements ArtistRelea
         return true;
     }
 
-    private void initView() {
-        recyclerView = findViewById(R.id.rc_result);
-        wishlistAdapter = new WishlistAdapter();
-        recyclerView.setAdapter(wishlistAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        navigationView = findViewById(R.id.navigation_view);
-        View nav_header = navigationView.getHeaderView(0);
-        profile_menu_email = nav_header.findViewById(R.id.profile_menu_email);
-        profile_menu_name = nav_header.findViewById(R.id.profile_menu_name);
-        profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
-    }
-
     @Override
-    public void onArtistReleaseClick(int position, Release release) {
+    public void onWishlistClick(int position, Want want) {
+        Intent intent = new Intent(WantlistActivity.this, MasterDetailsActivity.class);
         Bundle bundle = new Bundle();
-        Intent intent = new Intent(CollectionActivity.this, MasterDetailsActivity.class);
-        bundle.putInt("release_id", release.getId());
+        bundle.putInt("release_id", want.getId());
         intent.putExtras(bundle);
         startActivity(intent);
     }

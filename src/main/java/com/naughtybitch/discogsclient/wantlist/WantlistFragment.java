@@ -1,14 +1,13 @@
-package com.naughtybitch.discogsclient.wishlist;
+package com.naughtybitch.discogsclient.wantlist;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import com.naughtybitch.discogsclient.R;
 
@@ -16,12 +15,12 @@ import com.naughtybitch.discogsclient.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link WishlistFragment.OnFragmentInteractionListener} interface
+ * {@link WantlistFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link WishlistFragment#newInstance} factory method to
+ * Use the {@link WantlistFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WishlistFragment extends Fragment {
+public class WantlistFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,13 +32,13 @@ public class WishlistFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public WishlistFragment() {
+    public WantlistFragment() {
         // Required empty public constructor
     }
 
-    public static WishlistFragment newInstance() {
+    public static WantlistFragment newInstance() {
         Bundle args = new Bundle();
-        WishlistFragment fragment = new WishlistFragment();
+        WantlistFragment fragment = new WantlistFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,11 +49,11 @@ public class WishlistFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment WishlistFragment.
+     * @return A new instance of fragment WantlistFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WishlistFragment newInstance(String param1, String param2) {
-        WishlistFragment fragment = new WishlistFragment();
+    public static WantlistFragment newInstance(String param1, String param2) {
+        WantlistFragment fragment = new WantlistFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -75,7 +74,7 @@ public class WishlistFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wishlist, container, false);
+        return inflater.inflate(R.layout.fragment_wantlist, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

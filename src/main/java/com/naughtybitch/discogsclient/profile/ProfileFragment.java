@@ -26,14 +26,14 @@ import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.Release;
 import com.naughtybitch.POJO.Want;
 import com.naughtybitch.POJO.WantlistResponse;
-import com.naughtybitch.collection.CollectionActivity;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.SignOutActivity;
 import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.collection.CollectionActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
 
 import java.io.IOException;
@@ -130,7 +130,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         initView(v);
         if (username != null) {
             fetchProfile(username);
-            fetchCollection(username, 0);
+            fetchCollection(username);
             fetchCollectionValue(username);
             fetchWishlist(username);
         }
@@ -179,7 +179,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
                 startActivity(intent);
                 break;
             case R.id.view_all_wishlist:
-                intent = new Intent(getActivity(), WishlistActivity.class);
+                intent = new Intent(getActivity(), WantlistActivity.class);
                 startActivity(intent);
                 break;
             case R.id.button_sign_out:
@@ -264,9 +264,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         });
     }
 
-    private void fetchCollection(String username, int folder_id) {
+    private void fetchCollection(String username) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
-        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, folder_id, 5, 1);
+        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, 0, 5, 1);
         call.enqueue(new Callback<CollectionResponse>() {
             @Override
             public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {

@@ -19,7 +19,7 @@
             app:contentScrim="@color/light_black"
             app:expandedTitleGravity="top"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:titleEnabled="true">
+            app:titleEnabled="false">
 
             <ImageView
                 android:id="@+id/toolbar_background_image"
@@ -37,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="4dp"
+                android:theme="@style/CustomToolbarStyle"
                 app:layout_collapseMode="pin">
 
             </androidx.appcompat.widget.Toolbar>
@@ -49,7 +50,7 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/delicate"
+        android:background="@color/test"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

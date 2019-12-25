@@ -54,6 +54,7 @@ public class SignOutActivity extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         String url = "https://www.discogs.com/oauth/revoke?access_key=" + DiscogsClient.getInstance().getAccess_token();
+        Log.i("url", "url " + url);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

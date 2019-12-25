@@ -53,7 +53,7 @@ import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 import com.naughtybitch.label.LabelDetailsActivity;
 import com.naughtybitch.recyclerview.ArtistReleaseAdapter;
 import com.naughtybitch.recyclerview.LabelReleaseAdapter;
@@ -112,7 +112,7 @@ public class SearchableActivity extends AppCompatActivity implements
         try {
             username = intent.getExtras().getString("user_name");
             if (username != null) {
-                fetchCollection(username, 0);
+                fetchCollection(username);
             }
             Log.i("username", "username " + username);
         } catch (NullPointerException e) {
@@ -161,7 +161,7 @@ public class SearchableActivity extends AppCompatActivity implements
         }
 
         sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        String username = sp.getString("username", null);
+        String username = sp.getString("user_name", null);
         if (username != null) {
             fetchProfile(username);
         }
@@ -171,23 +171,21 @@ public class SearchableActivity extends AppCompatActivity implements
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
-        collapsingToolbarLayout.setTitleEnabled(false);
         myToolbar.setTitle(query);
         setSupportActionBar(myToolbar);
-
-        // DrawerLayout
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
 
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
         }
+
+        // DrawerLayout
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
         navigationViewHandler();
 
@@ -205,9 +203,9 @@ public class SearchableActivity extends AppCompatActivity implements
         profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
     }
 
-    private void fetchCollection(final String username, final int folder_id) {
+    private void fetchCollection(final String username) {
         final DiscogsAPI discogsAPI = getDiscogsAPI();
-        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, folder_id, 50, 1);
+        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, 0, 50, 1);
         call.enqueue(new Callback<CollectionResponse>() {
             @Override
             public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {
@@ -228,7 +226,7 @@ public class SearchableActivity extends AppCompatActivity implements
                                 }
                             });
                             Log.i("next_page", "next page " + next_page);
-                            Call<CollectionResponse> newCall = discogsAPI.fetchCollection(username, folder_id, 50, next_page);
+                            Call<CollectionResponse> newCall = discogsAPI.fetchCollection(username, 0, 50, next_page);
                             newCall.enqueue(new Callback<CollectionResponse>() {
                                 @Override
                                 public void onResponse(Call<CollectionResponse> call, final Response<CollectionResponse> response) {
@@ -710,7 +708,7 @@ public class SearchableActivity extends AppCompatActivity implements
                 startActivity(intent);
                 break;
         }
-        Log.i("onReleaseClick", "onReleaseClick: clicked" + position);
+        Log.i("onResultClick", "onResultClick: clicked" + position);
     }
 
     @Override
@@ -776,7 +774,7 @@ public class SearchableActivity extends AppCompatActivity implements
                         Toast.makeText(SearchableActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(SearchableActivity.this, WishlistActivity.class));
+                        startActivity(new Intent(SearchableActivity.this, WantlistActivity.class));
                         Toast.makeText(SearchableActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:

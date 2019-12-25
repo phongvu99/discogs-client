@@ -38,7 +38,7 @@ import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -212,7 +212,7 @@ public class BuyMusicActivity extends AppCompatActivity implements
                         Toast.makeText(BuyMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(BuyMusicActivity.this, WishlistActivity.class));
+                        startActivity(new Intent(BuyMusicActivity.this, WantlistActivity.class));
                         Toast.makeText(BuyMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:

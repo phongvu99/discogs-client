@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -41,7 +40,7 @@ import com.naughtybitch.discogsclient.SearchableActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -73,19 +72,21 @@ public class ExploreActivity extends AppCompatActivity implements
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("Explore");
         setSupportActionBar(myToolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // DrawerLayout
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
@@ -228,27 +229,22 @@ public class ExploreActivity extends AppCompatActivity implements
                 switch (menuItem.getItemId()) {
                     case R.id.home:
                         Intent intent_main = new Intent(ExploreActivity.this, MainActivity.class);
-                        Toast.makeText(ExploreActivity.this, "MainActivity", Toast.LENGTH_SHORT).show();
                         startActivity(intent_main);
                         break;
                     case R.id.profile:
                         startActivity(new Intent(ExploreActivity.this, ProfileActivity.class));
-                        Toast.makeText(ExploreActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(ExploreActivity.this, WishlistActivity.class));
-                        Toast.makeText(ExploreActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ExploreActivity.this, WantlistActivity.class));
                         break;
                     case R.id.explore:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.sell_music:
                         startActivity(new Intent(ExploreActivity.this, SellMusicActivity.class));
-                        Toast.makeText(ExploreActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(ExploreActivity.this, SettingsActivity.class));
-                        Toast.makeText(ExploreActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;

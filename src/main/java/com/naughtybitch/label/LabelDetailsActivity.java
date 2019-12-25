@@ -47,7 +47,7 @@ import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 import com.naughtybitch.recyclerview.ArtistMGAdapter;
 import com.naughtybitch.recyclerview.LabelCompaniesAdapter;
 import com.naughtybitch.recyclerview.MoreByAdapter;
@@ -344,25 +344,26 @@ public class LabelDetailsActivity extends AppCompatActivity implements LabelComp
     }
 
     private void updateToolbarTitle(final LabelResponse response) {
-        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;
 
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
-                if (scrollRange + i == 0) {
+                if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.setTitle(response.getName());
                     isShow = true;
                 } else if (isShow) {
-                    collapsingToolbarLayout.setTitle(" ");
+                    collapsingToolbarLayout.setTitle(" ");//careful there should a space between double quote otherwise it wont work
                     isShow = false;
                 }
             }
         });
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
     }
 
 
@@ -419,7 +420,7 @@ public class LabelDetailsActivity extends AppCompatActivity implements LabelComp
                         Toast.makeText(LabelDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(LabelDetailsActivity.this, WishlistActivity.class));
+                        startActivity(new Intent(LabelDetailsActivity.this, WantlistActivity.class));
                         Toast.makeText(LabelDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:

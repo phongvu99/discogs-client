@@ -4,7 +4,6 @@
     android:id="@+id/master_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/delicate"
     android:fillViewport="true"
     android:orientation="vertical"
     tools:context=".album.MasterDetailsActivity">
@@ -93,6 +92,49 @@
                 android:text="@string/year"
                 android:textColor="@color/white"
                 android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/collection_want"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/collection_want"
+                android:textColor="@color/white">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/collection"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/collection">
+
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/wantlist"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/wantlist">
+
+            </ImageButton>
+
         </LinearLayout>
 
         <TextView
@@ -101,6 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/show_all0"
+            android:textColor="@color/white"
             android:visibility="invisible">
 
         </TextView>
@@ -110,8 +153,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:background="@color/light_black"
             android:text="@string/track_list"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textSize="24sp"
             android:visibility="invisible" />
 
@@ -142,6 +187,7 @@
             android:id="@+id/rc_tracklist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/light_black"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:visibility="invisible">
@@ -152,9 +198,10 @@
             android:id="@+id/tracklist_total_length"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:background="@color/light_black"
             android:text="@string/total_length"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textSize="24sp"
             android:visibility="visible" />
 
@@ -171,6 +218,7 @@
                 android:layout_weight="2"
                 android:text="@string/more_by"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textSize="24sp"
                 android:visibility="visible" />
 
@@ -182,6 +230,7 @@
                 android:layout_weight="1"
                 android:text="@string/view_all"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textSize="24sp"
                 android:visibility="visible" />
         </LinearLayout>

@@ -15,9 +15,9 @@
             android:id="@+id/profile_banner"
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:scaleType="centerCrop"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/description"
+            android:scaleType="centerCrop"
             android:src="@drawable/background" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
                 android:contentDescription="@string/lemon"
-                android:src="@drawable/avatar"
+                android:src="@drawable/lemons"
                 app:civ_border_color="@color/dark_black"
                 app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Fake name"
+                android:text="Hello World!"
                 android:textColor="@color/white"
                 android:textSize="36sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:alpha="0.5"
-                android:text="Fake name"
+                android:text="Profile"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -244,7 +244,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Minimum"
+                        android:text="@string/min"
                         android:textColor="@color/white" />
                 </LinearLayout>
 
@@ -271,7 +271,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Median"
+                        android:text="@string/med"
                         android:textColor="@color/white" />
                 </LinearLayout>
 
@@ -298,7 +298,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Maximum"
+                        android:text="@string/max"
                         android:textColor="@color/white" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -314,8 +314,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Collection"
+                android:layout_marginStart="10dp"
+                android:text="@string/collection"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -325,8 +325,8 @@
                 android:id="@+id/view_all_collection"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_marginEnd="20dp"
                 android:gravity="bottom"
-                android:layout_marginRight="20dp"
                 android:text="@string/view_all"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -357,8 +357,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/wishlist"
+                android:layout_marginStart="10dp"
+                android:text="@string/wantlist"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -368,7 +368,7 @@
                 android:id="@+id/view_all_wishlist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/view_all"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -391,7 +391,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="Sign Out"
+            android:text="@string/sign_out"
             android:textColor="@color/red"
             android:textSize="24sp" />
     </LinearLayout>
