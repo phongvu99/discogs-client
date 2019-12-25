@@ -1,4 +1,4 @@
-package com.naughtybitch.discogsclient.profile;
+package com.naughtybitch.discogsclient.collection;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +22,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.discogsapi.DiscogsAPI;
@@ -33,9 +34,8 @@ import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
-import com.naughtybitch.discogsclient.collection.CollectionActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
-import com.naughtybitch.discogsclient.sell.OrderFragment;
+import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
 import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
@@ -52,24 +52,29 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ProfileActivity extends AppCompatActivity implements
-        ProfileFragment.OnFragmentInteractionListener,
-        OrderFragment.OnFragmentInteractionListener {
+public class CollectionActivity extends AppCompatActivity implements
+        CollectionFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private SharedPreferences sp;
     private ImageView profile_menu_image;
-    private TextView profile_menu_name, profile_menu_email;
+    private TextView profile_menu_name, profile_menu_email, empty;
+    private ProgressBar progressBar;
+    private RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_collection);
+
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
+        collapsingToolbarLayout.setTitleEnabled(false);
         setSupportActionBar(myToolbar);
 
         // DrawerLayout
@@ -81,26 +86,32 @@ public class ProfileActivity extends AppCompatActivity implements
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
         }
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    @Override
+                    public void onBackStackChanged() {
+                        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                            toggle.setDrawerIndicatorEnabled(true);
+                            setTitle(R.string.music_sell);
+                        }
+                        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                            toggle.setDrawerIndicatorEnabled(false);
+                            getSupportActionBar().setHomeButtonEnabled(true);
+                            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                        }
+                    }
+                });
 
-        // Create a new Fragment to be placed in the activity layout
-        ProfileFragment firstFragment = ProfileFragment.newInstance();
-
-        // In case this activity was started with special instructions from an
-        // Intent, pass the Intent's extras to the fragment as arguments
-        firstFragment.setArguments(getIntent().getExtras());
-
-        // Add the fragment to the 'fragment_container' FrameLayout
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
-
+        CollectionFragment firstfragment = CollectionFragment.newInstance();
+        firstfragment.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstfragment).commit();
         navigationViewHandler();
-
         sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
         String username = sp.getString("user_name", null);
         initView();
         if (username != null) {
-            fetchProfileMenu(username);
+            fetchProfile(username);
         }
     }
 
@@ -112,7 +123,7 @@ public class ProfileActivity extends AppCompatActivity implements
         profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
     }
 
-    private void updateProfileMenu(ProfileResponse profileResponse) {
+    private void updateProfile(ProfileResponse profileResponse) {
         Glide.with(this)
                 .load(profileResponse.getAvatarUrl())
                 .error(R.drawable.discogs_vinyl_record_mark)
@@ -122,7 +133,7 @@ public class ProfileActivity extends AppCompatActivity implements
         profile_menu_email.setText(profileResponse.getEmail());
     }
 
-    private void fetchProfileMenu(String username) {
+    private void fetchProfile(String username) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
         Call<ProfileResponse> call = discogsAPI.fetchProfile(username);
         call.enqueue(new Callback<ProfileResponse>() {
@@ -130,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity implements
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                 if (response.body() != null) {
                     ProfileResponse profileResponse = response.body();
-                    updateProfileMenu(profileResponse);
+                    updateProfile(profileResponse);
                 }
             }
 
@@ -180,36 +191,36 @@ public class ProfileActivity extends AppCompatActivity implements
     public void navigationViewHandler() {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
-        navigationView.setCheckedItem(R.id.profile);
+        navigationView.setCheckedItem(R.id.collection);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.home:
-                        startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                        startActivity(new Intent(CollectionActivity.this, MainActivity.class));
                         break;
                     case R.id.profile:
-                        drawerLayout.closeDrawer(GravityCompat.START);
+                        startActivity(new Intent(CollectionActivity.this, ProfileActivity.class));
+                        Toast.makeText(CollectionActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.collection:
-                        startActivity(new Intent(ProfileActivity.this, CollectionActivity.class));
-                        Toast.makeText(ProfileActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(ProfileActivity.this, WishlistActivity.class));
-                        Toast.makeText(ProfileActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(CollectionActivity.this, WishlistActivity.class));
+                        Toast.makeText(CollectionActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:
-                        startActivity(new Intent(ProfileActivity.this, SellMusicActivity.class));
-                        Toast.makeText(ProfileActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(CollectionActivity.this, SellMusicActivity.class));
+                        Toast.makeText(CollectionActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
-                        Toast.makeText(ProfileActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(CollectionActivity.this, SettingsActivity.class));
+                        Toast.makeText(CollectionActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(ProfileActivity.this, ExploreActivity.class));
-                        Toast.makeText(ProfileActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(CollectionActivity.this, ExploreActivity.class));
+                        Toast.makeText(CollectionActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;
@@ -219,15 +230,6 @@ public class ProfileActivity extends AppCompatActivity implements
                 return true;
             }
         });
-    }
-
-    private void navigateToFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -243,8 +245,15 @@ public class ProfileActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    fm.popBackStack();
+                    return true;
+                }
+                break;
             case R.id.search:
-                Intent intent = new Intent(ProfileActivity.this, ExploreActivity.class);
+                Intent intent = new Intent(CollectionActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }

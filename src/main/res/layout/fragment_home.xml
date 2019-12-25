@@ -1,76 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!--
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-    <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/send_request"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Touch me!">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/token_request"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Touch me!">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/sign_out"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Touch me!">
+
+                </Button>
+
+                <EditText
+                    android:id="@+id/response"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/a"
+                    android:textAlignment="center">
+
+                </EditText>
+
+                <ImageView
+                    android:id="@+id/album_cover"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/lemons">
+
+                </ImageView>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView> -->
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/send_request"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Touch me!">
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-        </Button>
-
-        <Button
-            android:id="@+id/token_request"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Touch me!">
-
-        </Button>
-
-        <Button
-            android:id="@+id/sign_out"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Touch me!">
-
-        </Button>
-
-        <EditText
-            android:id="@+id/response"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/a"
-            android:textAlignment="center">
-
-        </EditText>
-
-        <ImageView
-            android:id="@+id/album_cover"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:src="@drawable/lemons">
-
-        </ImageView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CHART 50 ARTISTS"
-            android:textSize="36sp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_chart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-    </LinearLayout>
-
-
-</androidx.core.widget.NestedScrollView>
-
-
-
-
+</LinearLayout>

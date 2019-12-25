@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LastfmClient {
 
-    public static final String BASE_URL = "http://ws.audioscrobbler.com";
+    public static final String BASE_URL = "https://ws.audioscrobbler.com";
 
     public static Retrofit retrofit;
 

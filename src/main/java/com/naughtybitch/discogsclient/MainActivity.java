@@ -33,6 +33,9 @@ import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
+import com.naughtybitch.discogsclient.chart.TopArtistsFragment;
+import com.naughtybitch.discogsclient.chart.TopTracksFragment;
+import com.naughtybitch.discogsclient.collection.CollectionActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
@@ -53,7 +56,9 @@ import retrofit2.Retrofit;
 
 
 public class MainActivity extends AppCompatActivity
-        implements HomeFragment.OnFragmentInteractionListener {
+        implements HomeFragment.OnFragmentInteractionListener,
+        TopTracksFragment.OnFragmentInteractionListener,
+        TopArtistsFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -240,6 +245,10 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case R.id.profile:
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                        Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.collection:
+                        startActivity(new Intent(MainActivity.this, CollectionActivity.class));
                         Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:

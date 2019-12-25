@@ -15,16 +15,18 @@ import com.naughtybitch.discogsclient.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChartAdapter extends RecyclerView.Adapter<ChartAdapter.ViewHolder> {
+public class TopArtistAdapter extends RecyclerView.Adapter<TopArtistAdapter.ViewHolder> {
 
     private List<Artist> artists;
+    private OnClickItemListener mOnClickItemListener;
 
-    public ChartAdapter() {
+    public TopArtistAdapter() {
         artists = new ArrayList<>();
     }
 
-    public ChartAdapter(List<Artist> artists) {
+    public TopArtistAdapter(List<Artist> artists, OnClickItemListener onClickItemListener) {
         this.artists = artists;
+        this.mOnClickItemListener = onClickItemListener;
     }
 
     @NonNull
@@ -35,7 +37,7 @@ public class ChartAdapter extends RecyclerView.Adapter<ChartAdapter.ViewHolder> 
 
         View view = inflater.inflate(R.layout.artist_item, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view, mOnClickItemListener);
         return viewHolder;
     }
 
@@ -50,13 +52,26 @@ public class ChartAdapter extends RecyclerView.Adapter<ChartAdapter.ViewHolder> 
         return artists.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public interface OnClickItemListener {
+        void onArtistClick(int position, Artist artist);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView artist_name;
+        OnClickItemListener onClickItemListener;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, OnClickItemListener onClickItemListener) {
             super(view);
             artist_name = view.findViewById(R.id.artist_name);
+            this.onClickItemListener = onClickItemListener;
+
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onClickItemListener.onArtistClick(getAdapterPosition(), artists.get(getAdapterPosition()));
         }
     }
 }
