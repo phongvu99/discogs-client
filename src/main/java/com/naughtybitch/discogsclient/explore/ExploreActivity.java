@@ -234,7 +234,6 @@ public class ExploreActivity extends AppCompatActivity implements
                         break;
                     case R.id.collection:
                         startActivity(new Intent(ExploreActivity.this, CollectionActivity.class));
-                        Toast.makeText(ExploreActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.profile:
                         startActivity(new Intent(ExploreActivity.this, ProfileActivity.class));

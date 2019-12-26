@@ -11,15 +11,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -63,6 +64,8 @@ import retrofit2.Retrofit;
 public class CollectionActivity extends AppCompatActivity implements ArtistReleaseAdapter.OnArtistReleaseListener, 
 CollectionFragment.OnFragmentInteractionListener  {
 
+    private LinearLayout fragment_wantlist;
+    private CoordinatorLayout coordinatorLayout;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
@@ -120,17 +123,13 @@ CollectionFragment.OnFragmentInteractionListener  {
                         }
                     }
                 });
-
-        CollectionFragment firstfragment = CollectionFragment.newInstance();
-        firstfragment.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstfragment).commit();
-        navigationViewHandler();
-        sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        String username = sp.getString("user_name", null);
         initView();
     }
 
     private void initView() {
+        fragment_wantlist = findViewById(R.id.fragment_wantlist);
+        fragment_wantlist.setVisibility(View.GONE);
+        coordinatorLayout = findViewById(R.id.fragment_searchable);
         recyclerView = findViewById(R.id.rc_result);
         wishlistAdapter = new WishlistAdapter();
         recyclerView.setAdapter(wishlistAdapter);
@@ -159,6 +158,9 @@ CollectionFragment.OnFragmentInteractionListener  {
                     progressBar.setVisibility(View.GONE);
                     CollectionResponse collectionResponse = response.body();
                     pagination = collectionResponse.getPagination();
+                    if (pagination.getItems() == 0) {
+                        coordinatorLayout.setVisibility(View.GONE);
+                    }
                     final List<Release> releases = collectionResponse.getReleases();
                     artistReleaseAdapter = new ArtistReleaseAdapter(context, releases, pagination, CollectionActivity.this, recyclerView);
                     artistReleaseAdapter.setOnLoadMoreListener(new ArtistReleaseAdapter.OnLoadMoreListener() {
@@ -200,15 +202,15 @@ CollectionFragment.OnFragmentInteractionListener  {
                     });
                     recyclerView.setAdapter(artistReleaseAdapter);
                 } else {
+                    coordinatorLayout.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
-                    empty.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(Call<CollectionResponse> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                empty.setVisibility(View.VISIBLE);
+                coordinatorLayout.setVisibility(View.GONE);
             }
         });
 
@@ -292,26 +294,21 @@ CollectionFragment.OnFragmentInteractionListener  {
                         break;
                     case R.id.profile:
                         startActivity(new Intent(CollectionActivity.this, ProfileActivity.class));
-                        Toast.makeText(CollectionActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.collection:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(CollectionActivity.this, WishlistActivity.class));
-                        Toast.makeText(CollectionActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(CollectionActivity.this, WantlistActivity.class));
                         break;
                     case R.id.sell_music:
                         startActivity(new Intent(CollectionActivity.this, SellMusicActivity.class));
-                        Toast.makeText(CollectionActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(CollectionActivity.this, SettingsActivity.class));
-                        Toast.makeText(CollectionActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         startActivity(new Intent(CollectionActivity.this, ExploreActivity.class));
-                        Toast.makeText(CollectionActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;

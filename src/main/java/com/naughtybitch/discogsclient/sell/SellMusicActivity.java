@@ -210,7 +210,6 @@ public class SellMusicActivity extends AppCompatActivity implements
                         break;
                     case R.id.collection:
                         startActivity(new Intent(SellMusicActivity.this, CollectionActivity.class));
-                        Toast.makeText(SellMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
                         startActivity(new Intent(SellMusicActivity.this, WantlistActivity.class));

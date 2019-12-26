@@ -192,7 +192,6 @@ public class ProfileActivity extends AppCompatActivity implements
                         break;
                     case R.id.collection:
                         startActivity(new Intent(ProfileActivity.this, CollectionActivity.class));
-                        Toast.makeText(ProfileActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
                         startActivity(new Intent(ProfileActivity.this, WantlistActivity.class));

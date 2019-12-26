@@ -56,7 +56,6 @@ import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
 import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
-import com.naughtybitch.label.LabelDetailsActivity;
 import com.naughtybitch.recyclerview.ArtistReleaseAdapter;
 import com.naughtybitch.recyclerview.LabelReleaseAdapter;
 import com.naughtybitch.recyclerview.ResultsAdapter;

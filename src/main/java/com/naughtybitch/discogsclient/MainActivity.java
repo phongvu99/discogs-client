@@ -225,7 +225,6 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case R.id.collection:
                         startActivity(new Intent(MainActivity.this, CollectionActivity.class));
-                        Toast.makeText(MainActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
                         startActivity(new Intent(MainActivity.this, WantlistActivity.class));

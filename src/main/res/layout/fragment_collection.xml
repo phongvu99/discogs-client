@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_collection"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,13 +11,13 @@
     <ImageView
         android:layout_width="132dp"
         android:layout_height="104dp"
-        android:src="@drawable/eye" />
+        android:src="@drawable/collection" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Catalog Your Wishlist"
+        android:text="Catalog Your Collection"
         android:textSize="24sp" />
 
     <TextView
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Search for the Release title, Artiest name." />
+        android:text="Search for the Release title, Artist name." />
 
     <TextView
         android:layout_width="match_parent"
@@ -45,12 +46,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Find the version you own, tap the three dots and then 'Add to wishlist'." />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="If the Release has a barcode, tap the search icon, then the barcode icon to scan the barcode. Find the version you want, then tap the three dots and Add to Wishlist." />
+        android:text="Find the version you own, tap the book icon then 'Add to Collection'." />
 
 </LinearLayout>

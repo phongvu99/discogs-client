@@ -235,7 +235,6 @@ public class SettingsActivity extends AppCompatActivity implements
                         break;
                     case R.id.collection:
                         startActivity(new Intent(SettingsActivity.this, CollectionActivity.class));
-                        Toast.makeText(SettingsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
                         startActivity(new Intent(SettingsActivity.this, WantlistActivity.class));
