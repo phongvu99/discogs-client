@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
+import com.naughtybitch.discogsclient.collection.CollectionActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
@@ -60,6 +62,7 @@ import retrofit2.Retrofit;
 public class WantlistActivity extends AppCompatActivity implements
         WishlistAdapter.OnWishlistListener {
 
+    private LinearLayout fragment_collection;
     private CoordinatorLayout coordinatorLayout;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -128,6 +131,8 @@ public class WantlistActivity extends AppCompatActivity implements
     }
 
     private void initView() {
+        fragment_collection = findViewById(R.id.fragment_collection);
+        fragment_collection.setVisibility(View.GONE);
         coordinatorLayout = findViewById(R.id.fragment_searchable);
         recyclerView = findViewById(R.id.rc_result);
         wishlistAdapter = new WishlistAdapter();
@@ -288,6 +293,9 @@ public class WantlistActivity extends AppCompatActivity implements
                         break;
                     case R.id.profile:
                         startActivity(new Intent(WantlistActivity.this, ProfileActivity.class));
+                        break;
+                    case R.id.collection:
+                        startActivity(new Intent(WantlistActivity.this, CollectionActivity.class));
                         break;
                     case R.id.wish_list:
                         drawerLayout.closeDrawer(GravityCompat.START);

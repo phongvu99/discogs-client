@@ -1,7 +1,6 @@
 package com.naughtybitch.discogsclient;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,27 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
-import com.naughtybitch.POJO.Result;
-import com.naughtybitch.POJO.SearchResponse;
-import com.naughtybitch.discogsapi.AppController;
-import com.naughtybitch.discogsapi.CustomRequest;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.android.material.tabs.TabLayout;
+import com.naughtybitch.adapter.HomeFragmentPagerAdapter;
 
 
 /**
@@ -41,6 +26,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,71 +38,71 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
-    public void buttonOnClickListener(View v) {
-        Button send_request = v.findViewById(R.id.send_request);
-        Button token_request = v.findViewById(R.id.token_request);
-        Button sign_out = v.findViewById(R.id.sign_out);
-        sign_out.setOnClickListener(this);
-        send_request.setOnClickListener(this);
-        token_request.setOnClickListener(this);
-    }
+//    public void buttonOnClickListener(View v) {
+//        Button send_request = v.findViewById(R.id.send_request);
+//        Button token_request = v.findViewById(R.id.token_request);
+//        Button sign_out = v.findViewById(R.id.sign_out);
+//        sign_out.setOnClickListener(this);
+//        send_request.setOnClickListener(this);
+//        token_request.setOnClickListener(this);
+//    }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case (R.id.send_request):
-                Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
-                sendRequest();
-                break;
-            case (R.id.token_request):
-                Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
-                checkLoginStatus();
-                break;
-            case (R.id.sign_out):
-                Intent intent = new Intent(getActivity(), SignOutActivity.class);
-                startActivity(intent);
-                break;
-        }
+//        switch (v.getId()) {
+//            case (R.id.send_request):
+//                Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
+//                sendRequest();
+//                break;
+//            case (R.id.token_request):
+//                Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_SHORT).show();
+//                checkLoginStatus();
+//                break;
+//            case (R.id.sign_out):
+//                Intent intent = new Intent(getActivity(), SignOutActivity.class);
+//                startActivity(intent);
+//                break;
+//        }
     }
 
-    public void sendRequest() {
-        String tag_json_object = "json_object_request";
-        final EditText editText = (EditText) getActivity().findViewById(R.id.response);
-        final ImageView coverImage = (ImageView) getActivity().findViewById(R.id.album_cover);
-
-        String api_base_url = "https://api.discogs.com";
-        String search_url = api_base_url + "/database/search?release_title=everyday+life&artist=coldplay&per_page=3&page=1";
-        CustomRequest customRequest = new CustomRequest(Request.Method.GET, search_url, SearchResponse.class, new Response.Listener<SearchResponse>() {
-            @Override
-            public void onResponse(SearchResponse response) {
-                Log.i("response", "Response is " + response);
-                List<Result> list = response.getResults();
-                String coverImage_url = list.get(0).getCoverImage();
-                editText.setText("CoverImage url: " + coverImage_url + "\nHave a look at this amazing album cover by Coldplay!", TextView.BufferType.EDITABLE);
-                Glide.with(getActivity()).load(coverImage_url).override(600, 600).fitCenter()
-                        .placeholder(R.drawable.bigpump)
-                        .error(R.drawable.bigpump)
-                        .into(coverImage);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                editText.setText("That didn't work!");
-                editText.setText("Response is: " + error);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/x-www-form-urlencoded");
-//                headers.put("Authorization", "Discogs key=zrNFOdbKoUvMXDxixdPY" + "," + "secret=NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ");
-                headers.put("Authorization", "Discogs token=mbAGeTxLGrWvJLiEEYOUZSwxkiVJyFYDiqEoNyxt");
-                return headers;
-            }
-        };
-        // Add the request to the RequestQueue
-        AppController.getInstance().addToRequestQueue(customRequest, tag_json_object);
-    }
+//    public void sendRequest() {
+//        String tag_json_object = "json_object_request";
+//        final EditText editText = (EditText) getActivity().findViewById(R.id.response);
+//        final ImageView coverImage = (ImageView) getActivity().findViewById(R.id.album_cover);
+//
+//        String api_base_url = "https://api.discogs.com";
+//        String search_url = api_base_url + "/database/search?release_title=everyday+life&artist=coldplay&per_page=3&page=1";
+//        CustomRequest customRequest = new CustomRequest(Request.Method.GET, search_url, SearchResponse.class, new Response.Listener<SearchResponse>() {
+//            @Override
+//            public void onResponse(SearchResponse response) {
+//                Log.i("response", "Response is " + response);
+//                List<Result> list = response.getResults();
+//                String coverImage_url = list.get(0).getCoverImage();
+//                editText.setText("CoverImage url: " + coverImage_url + "\nHave a look at this amazing album cover by Coldplay!", TextView.BufferType.EDITABLE);
+//                Glide.with(getActivity()).load(coverImage_url).override(600, 600).fitCenter()
+//                        .placeholder(R.drawable.bigpump)
+//                        .error(R.drawable.bigpump)
+//                        .into(coverImage);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                editText.setText("That didn't work!");
+//                editText.setText("Response is: " + error);
+//            }
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<>();
+//                headers.put("Content-Type", "application/x-www-form-urlencoded");
+////                headers.put("Authorization", "Discogs key=zrNFOdbKoUvMXDxixdPY" + "," + "secret=NgFRwbmvWCwmIiIRjAaiUnWSutmlHDNJ");
+//                headers.put("Authorization", "Discogs token=mbAGeTxLGrWvJLiEEYOUZSwxkiVJyFYDiqEoNyxt");
+//                return headers;
+//            }
+//        };
+//        // Add the request to the RequestQueue
+//        AppController.getInstance().addToRequestQueue(customRequest, tag_json_object);
+//    }
 
     private void checkLoginStatus() {
         SharedPreferences user_preferences;
@@ -172,7 +158,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        buttonOnClickListener(view);
+
+        PagerAdapter adapter = new HomeFragmentPagerAdapter(getFragmentManager());
+        ViewPager pager = view.findViewById(R.id.pager);
+        pager.setOffscreenPageLimit(2);
+        pager.setAdapter(adapter);
+
+        TabLayout tabLayout = view.findViewById(R.id.tab);
+        tabLayout.setupWithViewPager(pager);
+
         return view;
     }
 

@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_wantlist"
+    android:id="@+id/fragment_collection"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".wantlist.WantlistFragment">
+    tools:context=".collection.CollectionFragment">
 
     <ImageView
         android:layout_width="132dp"
         android:layout_height="104dp"
-        android:src="@drawable/eye" />
+        android:src="@drawable/collection" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:gravity="center"
-        android:text="@string/catalog"
+        android:text="Catalog Your Collection"
         android:textSize="24sp" />
 
     <TextView
@@ -26,31 +25,27 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:text="@string/tap_search" />
+        android:text="Tap the search icon to get started." />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:text="@string/search_for" />
+        android:text="Search for the Release title, Artist name." />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:text="@string/search_for2" />
+        android:text="Label name, or other identifying details." />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:text="@string/search_for3" />
+        android:text="Find the version you own, tap the book icon then 'Add to Collection'." />
 
 </LinearLayout>

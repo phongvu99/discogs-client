@@ -1,8 +1,9 @@
-package com.naughtybitch.label;
+package com.naughtybitch.discogsclient.label;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -35,6 +38,7 @@ import com.naughtybitch.POJO.LabelReleasesResponse;
 import com.naughtybitch.POJO.LabelResponse;
 import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.ParentLabel;
+import com.naughtybitch.POJO.ProfileResponse;
 import com.naughtybitch.POJO.Sublabel;
 import com.naughtybitch.adapter.SliderAdapter;
 import com.naughtybitch.discogsapi.DiscogsAPI;
@@ -43,6 +47,7 @@ import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.SearchableActivity;
+import com.naughtybitch.discogsclient.collection.CollectionActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
@@ -96,12 +101,21 @@ public class LabelDetailsActivity extends AppCompatActivity implements LabelComp
     private AppBarLayout appBarLayout;
     private Toolbar myToolbar;
     private Context context = this;
+    private SharedPreferences sp;
+    private ImageView profile_menu_image;
+    private TextView profile_menu_name, profile_menu_email, empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_details);
+
+        sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        String username = sp.getString("user_name", null);
         initView();
+        if (username != null) {
+            fetchProfile(username);
+        }
 
         try {
             label_id = getIntent().getExtras().getInt("label_id");
@@ -195,6 +209,35 @@ public class LabelDetailsActivity extends AppCompatActivity implements LabelComp
         }
     }
 
+    private void updateProfile(ProfileResponse profileResponse) {
+        Glide.with(this)
+                .load(profileResponse.getAvatarUrl())
+                .error(R.drawable.discogs_vinyl_record_mark)
+                .placeholder(R.drawable.discogs_vinyl_record_mark)
+                .into(profile_menu_image);
+        profile_menu_name.setText(profileResponse.getName());
+        profile_menu_email.setText(profileResponse.getEmail());
+    }
+
+    private void fetchProfile(String username) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<ProfileResponse> call = discogsAPI.fetchProfile(username);
+        call.enqueue(new Callback<ProfileResponse>() {
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                if (response.body() != null) {
+                    ProfileResponse profileResponse = response.body();
+                    updateProfile(profileResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                Log.e("PROFILE_CAT", t.getMessage());
+            }
+        });
+    }
+
     private void fetchLabelReleases(int label_id) {
         Call<LabelReleasesResponse> call = discogsAPI.fetchLabelReleases(label_id, 1, 1);
         call.enqueue(new Callback<LabelReleasesResponse>() {
@@ -245,6 +288,11 @@ public class LabelDetailsActivity extends AppCompatActivity implements LabelComp
 
     @SuppressLint("ClickableViewAccessibility")
     public void initView() {
+        navigationView = findViewById(R.id.navigation_view);
+        View nav_header = navigationView.getHeaderView(0);
+        profile_menu_email = nav_header.findViewById(R.id.profile_menu_email);
+        profile_menu_name = nav_header.findViewById(R.id.profile_menu_name);
+        profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
@@ -417,6 +465,10 @@ public class LabelDetailsActivity extends AppCompatActivity implements LabelComp
                         break;
                     case R.id.profile:
                         startActivity(new Intent(LabelDetailsActivity.this, ProfileActivity.class));
+                        Toast.makeText(LabelDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.collection:
+                        startActivity(new Intent(LabelDetailsActivity.this, CollectionActivity.class));
                         Toast.makeText(LabelDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:

@@ -9,11 +9,15 @@
         android:orderInCategory="150">
         <item
             android:id="@+id/home"
-            android:icon="@drawable/collection_icon"
+            android:icon="@drawable/home_icon"
             android:title="@string/home" />
         <item
+            android:id="@+id/collection"
+            android:icon="@drawable/collection_icon"
+            android:title="Collection" />
+        <item
             android:id="@+id/wish_list"
-            android:icon="@drawable/eye"
+            android:icon="@drawable/eye_icon"
             android:title="@string/wantlist" />
         <item
             android:id="@+id/sell_music"

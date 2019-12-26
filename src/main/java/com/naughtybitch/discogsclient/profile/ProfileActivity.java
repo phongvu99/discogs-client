@@ -32,6 +32,7 @@ import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.collection.CollectionActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.sell.OrderFragment;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
@@ -188,6 +189,9 @@ public class ProfileActivity extends AppCompatActivity implements
                         break;
                     case R.id.profile:
                         drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case R.id.collection:
+                        startActivity(new Intent(ProfileActivity.this, CollectionActivity.class));
                         break;
                     case R.id.wish_list:
                         startActivity(new Intent(ProfileActivity.this, WantlistActivity.class));

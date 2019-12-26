@@ -137,6 +137,7 @@ public class SignOutActivity extends AppCompatActivity {
         editor.commit();
         Intent intent = new Intent(SignOutActivity.this, GetStartedActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

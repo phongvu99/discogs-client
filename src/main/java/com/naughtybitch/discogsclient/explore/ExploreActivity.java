@@ -37,6 +37,7 @@ import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.SearchableActivity;
+import com.naughtybitch.discogsclient.collection.CollectionActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
@@ -230,6 +231,9 @@ public class ExploreActivity extends AppCompatActivity implements
                     case R.id.home:
                         Intent intent_main = new Intent(ExploreActivity.this, MainActivity.class);
                         startActivity(intent_main);
+                        break;
+                    case R.id.collection:
+                        startActivity(new Intent(ExploreActivity.this, CollectionActivity.class));
                         break;
                     case R.id.profile:
                         startActivity(new Intent(ExploreActivity.this, ProfileActivity.class));

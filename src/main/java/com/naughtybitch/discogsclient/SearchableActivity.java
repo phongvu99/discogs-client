@@ -49,12 +49,13 @@ import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
 import com.naughtybitch.discogsclient.artist.ArtistDetailsActivity;
+import com.naughtybitch.discogsclient.collection.CollectionActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
+import com.naughtybitch.discogsclient.label.LabelDetailsActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
 import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
-import com.naughtybitch.label.LabelDetailsActivity;
 import com.naughtybitch.recyclerview.ArtistReleaseAdapter;
 import com.naughtybitch.recyclerview.LabelReleaseAdapter;
 import com.naughtybitch.recyclerview.ResultsAdapter;
@@ -79,6 +80,7 @@ public class SearchableActivity extends AppCompatActivity implements
         ArtistReleaseAdapter.OnArtistReleaseListener,
         LabelReleaseAdapter.OnLabelReleaseListener {
 
+    private String artist_chart, track_chart;
     private int master_id, artist_id, label_id;
     private Context context = this;
     private List<Result> results;
@@ -109,6 +111,24 @@ public class SearchableActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_searchable);
         initViews();
         Intent intent = getIntent();
+        try {
+            artist_chart = intent.getExtras().getString("artist_chart");
+            if (artist_chart != null) {
+                searchQuery(artist_chart);
+            }
+            Log.i("artist_chart", "artist_chart " + artist_chart);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        try {
+            track_chart = intent.getExtras().getString("track_chart");
+            if (track_chart != null) {
+                searchQuery(track_chart);
+            }
+            Log.i("track_chart", "track_chart " + track_chart);
+        } catch (NullPointerException e) {
+            // Do smt
+        }
         try {
             username = intent.getExtras().getString("user_name");
             if (username != null) {
@@ -771,6 +791,10 @@ public class SearchableActivity extends AppCompatActivity implements
                         break;
                     case R.id.profile:
                         startActivity(new Intent(SearchableActivity.this, ProfileActivity.class));
+                        Toast.makeText(SearchableActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.collection:
+                        startActivity(new Intent(SearchableActivity.this, CollectionActivity.class));
                         Toast.makeText(SearchableActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:

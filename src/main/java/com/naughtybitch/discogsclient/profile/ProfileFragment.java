@@ -185,6 +185,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
             case R.id.button_sign_out:
                 intent = new Intent(getActivity(), SignOutActivity.class);
                 startActivity(intent);
+                getActivity().finish();
                 break;
         }
     }
