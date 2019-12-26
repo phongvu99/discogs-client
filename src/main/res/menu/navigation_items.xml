@@ -18,7 +18,7 @@
         <item
             android:id="@+id/wish_list"
             android:icon="@drawable/eye_icon"
-            android:title="@string/wishlist" />
+            android:title="@string/wantlist" />
         <item
             android:id="@+id/sell_music"
             android:icon="@drawable/sell_icon"

@@ -19,11 +19,12 @@
         <item name="android:windowBackground">@drawable/bg_launcher</item>
     </style>
 
-    <style name="CustomToolbarStyle" parent="Widget.AppCompat.Toolbar">
+    <style name="CustomToolbarStyle" parent="Widget.Design.CollapsingToolbar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="actionMenuTextColor">@android:color/white</item>
         <item name="titleTextColor">@color/white</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:actionMenuTextColor">@color/white</item>
     </style>
 

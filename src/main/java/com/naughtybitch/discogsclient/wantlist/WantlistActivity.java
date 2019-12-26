@@ -1,9 +1,8 @@
-package com.naughtybitch.discogsclient.wishlist;
+package com.naughtybitch.discogsclient.wantlist;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,13 +12,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -29,21 +28,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.ProfileResponse;
+import com.naughtybitch.POJO.Want;
+import com.naughtybitch.POJO.WantlistResponse;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
 import com.naughtybitch.discogsclient.collection.CollectionActivity;
+import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
+import com.naughtybitch.recyclerview.WishlistAdapter;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -53,9 +58,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class WishlistActivity extends AppCompatActivity implements
-        WishlistFragment.OnFragmentInteractionListener {
+public class WantlistActivity extends AppCompatActivity implements
+        WishlistAdapter.OnWishlistListener {
 
+    private CoordinatorLayout coordinatorLayout;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
@@ -64,7 +70,11 @@ public class WishlistActivity extends AppCompatActivity implements
     private TextView profile_menu_name, profile_menu_email, empty;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
-
+    private String username;
+    private WishlistAdapter wishlistAdapter;
+    private Pagination pagination;
+    private Context context = this;
+    private int next_page = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +101,14 @@ public class WishlistActivity extends AppCompatActivity implements
         empty = (TextView) findViewById(R.id.card_empty);
         progressBar = (ProgressBar) findViewById(R.id.progress_circular);
         recyclerView = (RecyclerView) findViewById(R.id.rc_result);
-        recyclerView.setLayoutManager(new LinearLayoutManager(WishlistActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(WantlistActivity.this));
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
                     public void onBackStackChanged() {
                         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                             toggle.setDrawerIndicatorEnabled(true);
-                            setTitle(R.string.wishlist);
+                            setTitle(R.string.wantlist);
                         }
                         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                             toggle.setDrawerIndicatorEnabled(false);
@@ -108,24 +118,97 @@ public class WishlistActivity extends AppCompatActivity implements
                     }
                 });
 
-        WishlistFragment firstfragment = WishlistFragment.newInstance();
-        firstfragment.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstfragment).commit();
         navigationViewHandler();
         sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        String username = sp.getString("user_name", null);
+        username = sp.getString("user_name", null);
         initView();
         if (username != null) {
             fetchProfile(username);
+            fetchWantlist(username);
         }
     }
 
     private void initView() {
+        coordinatorLayout = findViewById(R.id.fragment_searchable);
+        recyclerView = findViewById(R.id.rc_result);
+        wishlistAdapter = new WishlistAdapter();
+        recyclerView.setAdapter(wishlistAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         navigationView = findViewById(R.id.navigation_view);
         View nav_header = navigationView.getHeaderView(0);
         profile_menu_email = nav_header.findViewById(R.id.profile_menu_email);
         profile_menu_name = nav_header.findViewById(R.id.profile_menu_name);
         profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
+    }
+
+    private void fetchWantlist(final String username) {
+        final DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<WantlistResponse> call = discogsAPI.fetchWishlist(username, 50, 1);
+        call.enqueue(new Callback<WantlistResponse>() {
+            @Override
+            public void onResponse(Call<WantlistResponse> call, Response<WantlistResponse> response) {
+                if (response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+                    WantlistResponse wantlistResponse = response.body();
+                    pagination = wantlistResponse.getPagination();
+                    if (pagination.getItems() == 0) {
+                        coordinatorLayout.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
+                    }
+                    final List<Want> wants = wantlistResponse.getWants();
+                    wishlistAdapter = new WishlistAdapter(context, wants, pagination, WantlistActivity.this, recyclerView);
+                    wishlistAdapter.setOnLoadMoreListener(new WishlistAdapter.OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            recyclerView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    wants.add(null);
+                                    wishlistAdapter.notifyItemInserted(wants.size() - 1);
+                                }
+                            });
+                            Log.i("next_page", "next page " + next_page);
+                            Call<WantlistResponse> newCall = discogsAPI.fetchWishlist(username, 50, next_page);
+                            newCall.enqueue(new Callback<WantlistResponse>() {
+                                @Override
+                                public void onResponse(Call<WantlistResponse> call, final Response<WantlistResponse> response) {
+                                    Log.i("wish_list", "response code " + response.code());
+                                    if (response.body() != null) {
+                                        recyclerView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                wants.remove(wants.size() - 1);
+                                                wishlistAdapter.notifyItemRemoved(wants.size());
+                                                wants.addAll(response.body().getWants());
+                                                wishlistAdapter.notifyItemRangeInserted(wants.size(), 50);
+                                            }
+                                        });
+                                        wishlistAdapter.setLoaded();
+                                        ++next_page;
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<WantlistResponse> call, Throwable t) {
+                                    Log.i("wish_list", "response code " + t.getMessage());
+                                }
+                            });
+                        }
+                    });
+                    recyclerView.setAdapter(wishlistAdapter);
+                } else {
+                    coordinatorLayout.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WantlistResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     private void updateProfile(ProfileResponse profileResponse) {
@@ -202,11 +285,10 @@ public class WishlistActivity extends AppCompatActivity implements
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.home:
-                        startActivity(new Intent(WishlistActivity.this, MainActivity.class));
+                        startActivity(new Intent(WantlistActivity.this, MainActivity.class));
                         break;
                     case R.id.profile:
-                        startActivity(new Intent(WishlistActivity.this, ProfileActivity.class));
-                        Toast.makeText(WishlistActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WantlistActivity.this, ProfileActivity.class));
                         break;
                     case R.id.collection:
                         startActivity(new Intent(WishlistActivity.this, CollectionActivity.class));
@@ -216,16 +298,13 @@ public class WishlistActivity extends AppCompatActivity implements
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.sell_music:
-                        startActivity(new Intent(WishlistActivity.this, SellMusicActivity.class));
-                        Toast.makeText(WishlistActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WantlistActivity.this, SellMusicActivity.class));
                         break;
                     case R.id.settings:
-                        startActivity(new Intent(WishlistActivity.this, SettingsActivity.class));
-                        Toast.makeText(WishlistActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WantlistActivity.this, SettingsActivity.class));
                         break;
                     case R.id.explore:
-                        startActivity(new Intent(WishlistActivity.this, ExploreActivity.class));
-                        Toast.makeText(WishlistActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(WantlistActivity.this, ExploreActivity.class));
                         break;
                     default:
                         return true;
@@ -258,7 +337,7 @@ public class WishlistActivity extends AppCompatActivity implements
                 }
                 break;
             case R.id.search:
-                Intent intent = new Intent(WishlistActivity.this, ExploreActivity.class);
+                Intent intent = new Intent(WantlistActivity.this, ExploreActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -278,7 +357,11 @@ public class WishlistActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        // Do smt
+    public void onWishlistClick(int position, Want want) {
+        Intent intent = new Intent(WantlistActivity.this, MasterDetailsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("release_id", want.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

@@ -49,7 +49,7 @@ import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 import com.naughtybitch.recyclerview.ArtistMGAdapter;
 import com.naughtybitch.recyclerview.MoreByAdapter;
 import com.naughtybitch.recyclerview.TracklistAdapter;
@@ -277,25 +277,26 @@ public class ArtistDetailsActivity extends AppCompatActivity implements
     }
 
     private void updateToolbarTitle(final ArtistResponse response) {
-        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;
 
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
-                if (scrollRange + i == 0) {
+                if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.setTitle(response.getName());
                     isShow = true;
                 } else if (isShow) {
-                    collapsingToolbarLayout.setTitle(" ");
+                    collapsingToolbarLayout.setTitle(" ");//careful there should a space between double quote otherwise it wont work
                     isShow = false;
                 }
             }
         });
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n", "NewApi"})
@@ -452,7 +453,7 @@ public class ArtistDetailsActivity extends AppCompatActivity implements
                         Toast.makeText(ArtistDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(ArtistDetailsActivity.this, WishlistActivity.class));
+                        startActivity(new Intent(ArtistDetailsActivity.this, WantlistActivity.class));
                         Toast.makeText(ArtistDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:

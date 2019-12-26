@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -38,7 +37,7 @@ import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.sell.OrderFragment;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -70,6 +69,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("Profile");
         setSupportActionBar(myToolbar);
 
         // DrawerLayout
@@ -77,11 +77,11 @@ public class ProfileActivity extends AppCompatActivity implements
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
         }
 
         // Create a new Fragment to be placed in the activity layout
@@ -90,7 +90,6 @@ public class ProfileActivity extends AppCompatActivity implements
         // In case this activity was started with special instructions from an
         // Intent, pass the Intent's extras to the fragment as arguments
         firstFragment.setArguments(getIntent().getExtras());
-
         // Add the fragment to the 'fragment_container' FrameLayout
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
 
@@ -196,20 +195,16 @@ public class ProfileActivity extends AppCompatActivity implements
                         Toast.makeText(ProfileActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(ProfileActivity.this, WishlistActivity.class));
-                        Toast.makeText(ProfileActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ProfileActivity.this, WantlistActivity.class));
                         break;
                     case R.id.sell_music:
                         startActivity(new Intent(ProfileActivity.this, SellMusicActivity.class));
-                        Toast.makeText(ProfileActivity.this, "SellMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
-                        Toast.makeText(ProfileActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         startActivity(new Intent(ProfileActivity.this, ExploreActivity.class));
-                        Toast.makeText(ProfileActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;

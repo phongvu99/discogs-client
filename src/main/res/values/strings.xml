@@ -75,6 +75,9 @@
     <string name="minimum">$0</string>
     <string name="median">$0</string>
     <string name="maximum">$0</string>
+    <string name="max">Maximum</string>
+    <string name="min">Minimum</string>
+    <string name="med">Median</string>
     <string name="lists">Lists</string>
     <string name="purchases">Purchases</string>
     <string name="orders">Orders</string>
@@ -132,6 +135,7 @@
     <string name="save">save</string>
     <string name="cancel">cancel</string>
     <string name="description">Description</string>
+    <string name="sign_out">Sign Out</string>
 
     <!-- Buy Music -->
     <string name="cart_text_view_1">Shop for Vinyl, CDs, and more in the Discogs Marketplace.</string>
@@ -152,7 +156,7 @@
     <string name="order_text_view_1">There are no order items.</string>
     <string name="offer_text_view_1">You have no offers with the status Pending.</string>
     <string name="inven_text_view_1">You have no items in your inventory with status For Sale,</string>
-    <string name="wishlist">Wishlist</string>
+    <string name="wantlist">Wantlist</string>
 
     <!-- CardView row item -->
     <string name="user">User</string>
@@ -178,5 +182,16 @@
     <!-- Explore -->
     <string name="explore_genre">Explore Genres</string>
     <string name="loading">Loading......</string>
+    <string name="collection">Collection</string>
+    <string name="add_another_collection">+ Add another to Collection</string>
+    <string name="remove_wantlist">- Remove from Wantlist </string>
+    <string name="collection_want">Add to Collection/Wantlist</string>
+
+    <!-- Wantlist -->
+    <string name="catalog">Catalog Your Wantlist</string>
+    <string name="tap_search">Tap the search icon to get started.</string>
+    <string name="search_for">Search for the release title, artist name.</string>
+    <string name="search_for2">Label name, or other identifying details.</string>
+    <string name="search_for3">Find the version you own, tap the eye icon and then \'\Add to wishlist\'\.</string>
 
 </resources>

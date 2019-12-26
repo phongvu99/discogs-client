@@ -23,26 +23,34 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.naughtybitch.POJO.CollectionResponse;
+import com.naughtybitch.POJO.Pagination;
 import com.naughtybitch.POJO.ProfileResponse;
+import com.naughtybitch.POJO.Release;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.MainActivity;
 import com.naughtybitch.discogsclient.R;
+import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
+import com.naughtybitch.recyclerview.ArtistReleaseAdapter;
+import com.naughtybitch.recyclerview.WishlistAdapter;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -52,8 +60,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class CollectionActivity extends AppCompatActivity implements
-        CollectionFragment.OnFragmentInteractionListener {
+public class CollectionActivity extends AppCompatActivity implements ArtistReleaseAdapter.OnArtistReleaseListener, 
+CollectionFragment.OnFragmentInteractionListener  {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -63,18 +71,23 @@ public class CollectionActivity extends AppCompatActivity implements
     private TextView profile_menu_name, profile_menu_email, empty;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
-
+    private String username;
+    private WishlistAdapter wishlistAdapter;
+    private ArtistReleaseAdapter artistReleaseAdapter;
+    private Pagination pagination;
+    private Context context = this;
+    private int next_page = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collection);
-
+        setContentView(R.layout.activity_searchable);
 
         // Custom ActionBar
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar_layout);
         collapsingToolbarLayout.setTitleEnabled(false);
+        myToolbar.setTitle("Collection");
         setSupportActionBar(myToolbar);
 
         // DrawerLayout
@@ -87,13 +100,18 @@ public class CollectionActivity extends AppCompatActivity implements
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        empty = (TextView) findViewById(R.id.card_empty);
+        progressBar = (ProgressBar) findViewById(R.id.progress_circular);
+        recyclerView = (RecyclerView) findViewById(R.id.rc_result);
+        recyclerView.setLayoutManager(new LinearLayoutManager(CollectionActivity.this));
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
                     public void onBackStackChanged() {
                         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                             toggle.setDrawerIndicatorEnabled(true);
-                            setTitle(R.string.music_sell);
+                            setTitle(R.string.collection);
                         }
                         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                             toggle.setDrawerIndicatorEnabled(false);
@@ -110,17 +128,90 @@ public class CollectionActivity extends AppCompatActivity implements
         sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
         String username = sp.getString("user_name", null);
         initView();
-        if (username != null) {
-            fetchProfile(username);
-        }
     }
 
     private void initView() {
+        recyclerView = findViewById(R.id.rc_result);
+        wishlistAdapter = new WishlistAdapter();
+        recyclerView.setAdapter(wishlistAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         navigationView = findViewById(R.id.navigation_view);
         View nav_header = navigationView.getHeaderView(0);
         profile_menu_email = nav_header.findViewById(R.id.profile_menu_email);
         profile_menu_name = nav_header.findViewById(R.id.profile_menu_name);
         profile_menu_image = nav_header.findViewById(R.id.profile_menu_image);
+        navigationViewHandler();
+        sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        username = sp.getString("user_name", null);
+        if (username != null) {
+            fetchProfile(username);
+            fetchCollection(username);
+        }
+    }
+
+    private void fetchCollection(final String username) {
+        final DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, 0, 50, 1);
+        call.enqueue(new Callback<CollectionResponse>() {
+            @Override
+            public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {
+                if (response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+                    CollectionResponse collectionResponse = response.body();
+                    pagination = collectionResponse.getPagination();
+                    final List<Release> releases = collectionResponse.getReleases();
+                    artistReleaseAdapter = new ArtistReleaseAdapter(context, releases, pagination, CollectionActivity.this, recyclerView);
+                    artistReleaseAdapter.setOnLoadMoreListener(new ArtistReleaseAdapter.OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            recyclerView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    releases.add(null);
+                                    artistReleaseAdapter.notifyItemInserted(releases.size() - 1);
+                                }
+                            });
+                            Log.i("next_page", "next page " + next_page);
+                            Call<CollectionResponse> newCall = discogsAPI.fetchCollection(username, 0, 6, next_page);
+                            newCall.enqueue(new Callback<CollectionResponse>() {
+                                @Override
+                                public void onResponse(Call<CollectionResponse> call, final Response<CollectionResponse> response) {
+                                    if (response.body() != null) {
+                                        recyclerView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                releases.remove(releases.size() - 1);
+                                                artistReleaseAdapter.notifyItemRemoved(releases.size());
+                                                releases.addAll(response.body().getReleases());
+                                                artistReleaseAdapter.notifyItemRangeInserted(releases.size(), 50);
+                                            }
+                                        });
+                                        artistReleaseAdapter.setLoaded();
+                                        ++next_page;
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<CollectionResponse> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+                    recyclerView.setAdapter(artistReleaseAdapter);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CollectionResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                empty.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     private void updateProfile(ProfileResponse profileResponse) {
@@ -275,5 +366,14 @@ public class CollectionActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
         // Do smt
+    }
+    
+    @Override
+    public void onArtistReleaseClick(int position, Release release) {
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(CollectionActivity.this, MasterDetailsActivity.class);
+        bundle.putInt("release_id", release.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

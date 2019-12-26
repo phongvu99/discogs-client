@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -38,7 +37,7 @@ import com.naughtybitch.discogsclient.collection.CollectionActivity;
 import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -208,27 +207,22 @@ public class SellMusicActivity extends AppCompatActivity implements
                         break;
                     case R.id.profile:
                         startActivity(new Intent(SellMusicActivity.this, ProfileActivity.class));
-                        Toast.makeText(SellMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.collection:
                         startActivity(new Intent(SellMusicActivity.this, CollectionActivity.class));
                         Toast.makeText(SellMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(SellMusicActivity.this, WishlistActivity.class));
-                        Toast.makeText(SellMusicActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SellMusicActivity.this, WantlistActivity.class));
                         break;
                     case R.id.sell_music:
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        Toast.makeText(SellMusicActivity.this, "BuyMusicActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         startActivity(new Intent(SellMusicActivity.this, SettingsActivity.class));
-                        Toast.makeText(SellMusicActivity.this, "SettingsActivity", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.explore:
                         startActivity(new Intent(SellMusicActivity.this, ExploreActivity.class));
-                        Toast.makeText(SellMusicActivity.this, "ExploreActivity", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return true;

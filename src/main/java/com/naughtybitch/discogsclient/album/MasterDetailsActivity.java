@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,7 +37,12 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.JsonObject;
+import com.naughtybitch.POJO.AddToCollectionResponse;
+import com.naughtybitch.POJO.AddToWantlistResponse;
 import com.naughtybitch.POJO.ArtistReleasesResponse;
+import com.naughtybitch.POJO.CollectionResponse;
 import com.naughtybitch.POJO.MasterReleaseResponse;
 import com.naughtybitch.POJO.MasterReleaseVersionsResponse;
 import com.naughtybitch.POJO.Pagination;
@@ -43,6 +51,7 @@ import com.naughtybitch.POJO.Release;
 import com.naughtybitch.POJO.ReleaseResponse;
 import com.naughtybitch.POJO.Tracklist;
 import com.naughtybitch.POJO.Want;
+import com.naughtybitch.POJO.WantlistResponse;
 import com.naughtybitch.adapter.SliderAdapter;
 import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
@@ -55,7 +64,7 @@ import com.naughtybitch.discogsclient.explore.ExploreActivity;
 import com.naughtybitch.discogsclient.profile.ProfileActivity;
 import com.naughtybitch.discogsclient.sell.SellMusicActivity;
 import com.naughtybitch.discogsclient.settings.SettingsActivity;
-import com.naughtybitch.discogsclient.wishlist.WishlistActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
 import com.naughtybitch.recyclerview.TracklistAdapter;
 import com.smarteist.autoimageslider.IndicatorAnimations;
@@ -65,7 +74,9 @@ import com.smarteist.autoimageslider.SliderView;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import okhttp3.Interceptor;
@@ -81,6 +92,10 @@ public class MasterDetailsActivity extends AppCompatActivity implements
         MoreByAdapter.OnMoreByListener,
         View.OnClickListener {
 
+    private String username;
+    private CoordinatorLayout coordinatorLayout;
+    private LinearLayout collection_want;
+    private ImageButton wantlist, collection;
     private TextView show_all, view_all;
     private int master_id, release_id, artist_id;
     private List<String> genres, styles;
@@ -100,15 +115,21 @@ public class MasterDetailsActivity extends AppCompatActivity implements
     private AppBarLayout appBarLayout;
     private Toolbar myToolbar;
     private Context context = this;
-    private SharedPreferences sp;
     private ImageView profile_menu_image;
     private TextView profile_menu_name, profile_menu_email;
+    private SharedPreferences user_pref, collection_pref, wantlist_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_details);
         initView();
+
+        user_pref = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
+        collection_pref = getSharedPreferences("collection", Context.MODE_PRIVATE);
+        wantlist_pref = getSharedPreferences("wantlist", Context.MODE_PRIVATE);
+        username = user_pref.getString("user_name", "null");
+
         try {
             master_id = getIntent().getExtras().getInt("master_id");
             if (master_id != 0) {
@@ -123,20 +144,260 @@ public class MasterDetailsActivity extends AppCompatActivity implements
             release_id = getIntent().getExtras().getInt("release_id");
             if (release_id != 0) {
                 fetchRelease(release_id);
+                fetchCollection(username);
+                fetchWantlist(username);
             }
             Log.i("release_id", "release_id " + release_id);
         } catch (NullPointerException e) {
             // Do smt
         }
 
-        sp = getSharedPreferences("userPreferences", Context.MODE_PRIVATE);
-        String username = sp.getString("user_name", null);
-        initView();
         if (username != null) {
             fetchProfile(username);
         }
 
     }
+
+    private void fetchWantlist(String username) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<WantlistResponse> call = discogsAPI.fetchWishlist(username, 100, 1);
+        call.enqueue(new Callback<WantlistResponse>() {
+            @Override
+            public void onResponse(Call<WantlistResponse> call, Response<WantlistResponse> response) {
+                Log.i("fetch_wantlist", "response code " + response.code());
+                if (response.body() != null) {
+                    WantlistResponse wantlistResponse = response.body();
+                    List<Want> wants = wantlistResponse.getWants();
+                    Set<String> set = new HashSet<>();
+                    SharedPreferences.Editor editor = wantlist_pref.edit();
+                    for (Want want : wants) {
+                        set.add(String.valueOf(want.getId()));
+                    }
+                    editor.putStringSet("in_wantlist", set);
+                    editor.commit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WantlistResponse> call, Throwable t) {
+                Log.i("fetch_wantlist", "response code " + t.getMessage());
+            }
+        });
+    }
+
+    public boolean inWantlist() {
+        Set<String> set = wantlist_pref.getStringSet("in_wantlist", null);
+        try {
+            for (String s : set) {
+                if (String.valueOf(release_id).equals(s)) {
+                    return true;
+                }
+            }
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        Snackbar snackbar;
+        switch (item.getItemId()) {
+            case R.id.option_1:
+                snackbar = Snackbar.make(coordinatorLayout, "Adding item to collection", Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+                addToCollection();
+                return true;
+            case R.id.option_2:
+                snackbar = Snackbar.make(coordinatorLayout, "Removing item from wantlist", Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+                removeFromWantlist();
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    public boolean inCollection() {
+        Set<String> set = collection_pref.getStringSet("in_collection", null);
+        try {
+            for (String s : set) {
+                if (String.valueOf(release_id).equals(s)) {
+                    return true;
+                }
+            }
+        } catch (NullPointerException e) {
+            // Do smt
+        }
+        return false;
+    }
+
+    private void addToWantlist() {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<AddToWantlistResponse> call = discogsAPI.addToWantlist(username, release_id);
+        call.enqueue(new Callback<AddToWantlistResponse>() {
+            @Override
+            public void onResponse(Call<AddToWantlistResponse> call, Response<AddToWantlistResponse> response) {
+                Log.i("add_wantlist", "response code " + response.code());
+
+                if (response.code() == 201) {
+                    SharedPreferences.Editor editor = wantlist_pref.edit();
+                    Set<String> set = new HashSet<>();
+                    set.add(String.valueOf(release_id));
+                    editor.putStringSet("in_wantlist", set);
+                    editor.commit();
+                }
+                if (response.body() != null) {
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Added release to your wantlist", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddToWantlistResponse> call, Throwable t) {
+                Log.i("add_wantlist", "response code " + t.getMessage());
+            }
+        });
+    }
+
+    private void removeFromWantlist() {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<JsonObject> call = discogsAPI.removeFromWantlist(username, release_id);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.i("remove_wantlist", "response code " + response.code());
+                if (response.code() == 204) {
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Removed release from your wantlist", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    Set<String> set = wantlist_pref.getStringSet("in_wantlist", null);
+                    try {
+                        for (String s : set) {
+                            if (String.valueOf(release_id).equals(s)) {
+                                set.remove(s);
+                                break;
+                            }
+                        }
+                    } catch (NullPointerException e) {
+                        // Do smt
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void fetchCollection(String username) {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, 0, 100, 1);
+        call.enqueue(new Callback<CollectionResponse>() {
+            @Override
+            public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {
+                Log.i("fetch_collection", "response code " + response.code());
+                if (response.body() != null) {
+                    Set<String> set = new HashSet<>();
+                    SharedPreferences.Editor editor = collection_pref.edit();
+                    CollectionResponse collectionResponse = response.body();
+                    List<Release> releases = collectionResponse.getReleases();
+                    for (Release release : releases) {
+                        set.add(String.valueOf(release.getId()));
+                    }
+                    editor.putStringSet("in_collection", set);
+                    editor.commit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CollectionResponse> call, Throwable t) {
+                Log.e("fetch_collection", "response code " + t.getMessage());
+            }
+        });
+    }
+
+    public void addToCollection() {
+        DiscogsAPI discogsAPI = getDiscogsAPI();
+        Call<AddToCollectionResponse> call = discogsAPI.addToCollectionFolder(username, 1, release_id);
+        call.enqueue(new Callback<AddToCollectionResponse>() {
+            @Override
+            public void onResponse(Call<AddToCollectionResponse> call, Response<AddToCollectionResponse> response) {
+                Log.i("add_collection", "response code " + response.code());
+                if (response.code() == 201) {
+                    SharedPreferences.Editor editor = collection_pref.edit();
+                    Set<String> set = new HashSet<>();
+                    set.add(String.valueOf(release_id));
+                    editor.putStringSet("in_collection", set);
+                    editor.commit();
+                }
+                if (response.body() != null) {
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Added release to your collection", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddToCollectionResponse> call, Throwable t) {
+                Log.i("add_collection", "response code " + t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        switch (v.getId()) {
+            case R.id.collection:
+                menu.setHeaderTitle("Adding to collection");
+                getMenuInflater().inflate(R.menu.collection_menu, menu);
+                break;
+            case R.id.wantlist:
+                menu.setHeaderTitle("In wantlist");
+                getMenuInflater().inflate(R.menu.wantlist_menu, menu);
+                break;
+        }
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        Bundle bundle = new Bundle();
+        switch (v.getId()) {
+            case R.id.collection:
+                if (inCollection()) {
+                    collection.showContextMenu();
+                } else {
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Adding item to collection", Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+                    addToCollection();
+                }
+                break;
+            case R.id.wantlist:
+                if (inWantlist()) {
+                    wantlist.showContextMenu();
+                } else {
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Adding item to wantlist", Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+                    addToWantlist();
+                }
+                break;
+            case R.id.show_all:
+                intent = new Intent(MasterDetailsActivity.this, SearchableActivity.class);
+                bundle.putInt("master_id", master_id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case R.id.view_all:
+                intent = new Intent(MasterDetailsActivity.this, SearchableActivity.class);
+                bundle.putInt("artist_id", artist_id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+        }
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     public void initView() {
@@ -174,6 +435,26 @@ public class MasterDetailsActivity extends AppCompatActivity implements
 //            }
 //        });
 
+        coordinatorLayout = findViewById(R.id.coordinator_master);
+        collection_want = findViewById(R.id.collection_want);
+        wantlist = findViewById(R.id.wantlist);
+        collection = findViewById(R.id.collection);
+        registerForContextMenu(collection);
+        registerForContextMenu(wantlist);
+        collection.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+        wantlist.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+        collection.setOnClickListener(this);
+        wantlist.setOnClickListener(this);
         moreby_holder = findViewById(R.id.more_by_holder);
         moreby_holder.setVisibility(View.INVISIBLE);
         rc_members = findViewById(R.id.rc_members);
@@ -248,46 +529,27 @@ public class MasterDetailsActivity extends AppCompatActivity implements
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent intent;
-        Bundle bundle = new Bundle();
-        switch (v.getId()) {
-            case R.id.show_all:
-                intent = new Intent(MasterDetailsActivity.this, SearchableActivity.class);
-                bundle.putInt("master_id", master_id);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
-            case R.id.view_all:
-                intent = new Intent(MasterDetailsActivity.this, SearchableActivity.class);
-                bundle.putInt("artist_id", artist_id);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
-        }
-    }
-
-
     public void updateToolbarTitle(final ReleaseResponse response) {
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;
 
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
-                if (scrollRange + i == 0) {
+                if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.setTitle(response.getTitle());
                     isShow = true;
                 } else if (isShow) {
-                    collapsingToolbarLayout.setTitle(" ");
+                    collapsingToolbarLayout.setTitle(" ");//careful there should a space between double quote otherwise it wont work
                     isShow = false;
                 }
             }
         });
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
     }
 
     public void updateToolbarTitle(final MasterReleaseResponse response) {
@@ -296,25 +558,28 @@ public class MasterDetailsActivity extends AppCompatActivity implements
             int scrollRange = -1;
 
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
-                if (scrollRange + i == 0) {
+                if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.setTitle(response.getTitle());
                     isShow = true;
                 } else if (isShow) {
-                    collapsingToolbarLayout.setTitle(" ");
+                    collapsingToolbarLayout.setTitle(" ");//careful there should a space between double quote otherwise it wont work
                     isShow = false;
                 }
             }
         });
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void updateReleaseView(ReleaseResponse releaseResponse) {
         // title, artist, year, genre, style, total_lengths
         updateToolbarTitle(releaseResponse);
+        collection_want.setVisibility(View.VISIBLE);
         moreby_holder.setVisibility(View.VISIBLE);
         rc_members.setVisibility(View.GONE);
         details_holder.setVisibility(View.VISIBLE);
@@ -671,7 +936,7 @@ public class MasterDetailsActivity extends AppCompatActivity implements
                         Toast.makeText(MasterDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.wish_list:
-                        startActivity(new Intent(MasterDetailsActivity.this, WishlistActivity.class));
+                        startActivity(new Intent(MasterDetailsActivity.this, WantlistActivity.class));
                         Toast.makeText(MasterDetailsActivity.this, "ProfileFragment", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.sell_music:

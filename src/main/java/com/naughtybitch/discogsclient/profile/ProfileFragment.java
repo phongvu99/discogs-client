@@ -30,9 +30,10 @@ import com.naughtybitch.discogsapi.DiscogsAPI;
 import com.naughtybitch.discogsapi.DiscogsClient;
 import com.naughtybitch.discogsapi.RetrofitClient;
 import com.naughtybitch.discogsclient.R;
-import com.naughtybitch.discogsclient.SearchableActivity;
 import com.naughtybitch.discogsclient.SignOutActivity;
 import com.naughtybitch.discogsclient.album.MasterDetailsActivity;
+import com.naughtybitch.discogsclient.collection.CollectionActivity;
+import com.naughtybitch.discogsclient.wantlist.WantlistActivity;
 import com.naughtybitch.recyclerview.MoreByAdapter;
 
 import java.io.IOException;
@@ -129,7 +130,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         initView(v);
         if (username != null) {
             fetchProfile(username);
-            fetchCollection(username, 0);
+            fetchCollection(username);
             fetchCollectionValue(username);
             fetchWishlist(username);
         }
@@ -172,12 +173,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         Intent intent;
-        Bundle bundle = new Bundle();
         switch (v.getId()) {
             case R.id.view_all_collection:
-                intent = new Intent(getActivity(), SearchableActivity.class);
-                bundle.putString("user_name", username);
-                intent.putExtras(bundle);
+                intent = new Intent(getActivity(), CollectionActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.view_all_wishlist:
+                intent = new Intent(getActivity(), WantlistActivity.class);
                 startActivity(intent);
                 break;
             case R.id.button_sign_out:
@@ -246,7 +248,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
 
     private void fetchWishlist(String username) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
-        Call<WantlistResponse> call = discogsAPI.fetchWishlist(username);
+        Call<WantlistResponse> call = discogsAPI.fetchWishlist(username, 5, 1);
         call.enqueue(new Callback<WantlistResponse>() {
             @Override
             public void onResponse(Call<WantlistResponse> call, Response<WantlistResponse> response) {
@@ -263,9 +265,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         });
     }
 
-    private void fetchCollection(String username, int folder_id) {
+    private void fetchCollection(String username) {
         DiscogsAPI discogsAPI = getDiscogsAPI();
-        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, folder_id, 5, 1);
+        Call<CollectionResponse> call = discogsAPI.fetchCollection(username, 0, 5, 1);
         call.enqueue(new Callback<CollectionResponse>() {
             @Override
             public void onResponse(Call<CollectionResponse> call, Response<CollectionResponse> response) {
