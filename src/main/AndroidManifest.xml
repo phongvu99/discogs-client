@@ -93,7 +93,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".album.MasterDetailsActivity" />
         <activity android:name=".artist.ArtistDetailsActivity" />
-        <activity android:name="com.naughtybitch.label.LabelDetailsActivity" />
+        <activity android:name=".label.LabelDetailsActivity" />
     </application>
 
 </manifest>

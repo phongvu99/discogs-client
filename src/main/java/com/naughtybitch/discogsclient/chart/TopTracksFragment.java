@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,13 +40,15 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  * Use the {@link TopTracksFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopTracksFragment extends Fragment implements TopTrackAdapter.OnClickItemListener {
+public class TopTracksFragment extends Fragment implements TopTrackAdapter.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String lastfm_api_key, lastfm_shared_secret_key;
+    private LinearLayout track_chart;
+    private ProgressBar progressBar;
     private RecyclerView rv_chart;
     private TopTrackAdapter chartAdapter;
     private Context context = getActivity();
@@ -104,6 +108,8 @@ public class TopTracksFragment extends Fragment implements TopTrackAdapter.OnCli
     }
 
     private void initView(View v) {
+        track_chart = v.findViewById(R.id.track_chart);
+        progressBar = v.findViewById(R.id.progress_circular);
         rv_chart = v.findViewById(R.id.rv_chart);
         rv_chart.setLayoutManager(new LinearLayoutManager(context));
         chartAdapter = new TopTrackAdapter();
@@ -124,6 +130,8 @@ public class TopTracksFragment extends Fragment implements TopTrackAdapter.OnCli
         call.enqueue(new Callback<TopTracksResponse>() {
             @Override
             public void onResponse(Call<TopTracksResponse> call, Response<TopTracksResponse> response) {
+                progressBar.setVisibility(View.GONE);
+                track_chart.setVisibility(View.VISIBLE);
                 if (response.body() != null) {
                     TopTracksResponse topTracksResponse = response.body();
                     updateChart(topTracksResponse);
@@ -133,6 +141,8 @@ public class TopTracksFragment extends Fragment implements TopTrackAdapter.OnCli
             @Override
             public void onFailure(Call<TopTracksResponse> call, Throwable t) {
                 Log.e("TRACK_LOG", t.getMessage());
+                progressBar.setVisibility(View.GONE);
+                track_chart.setVisibility(View.GONE);
             }
         });
     }
@@ -165,6 +175,9 @@ public class TopTracksFragment extends Fragment implements TopTrackAdapter.OnCli
     public void onTrackClick(int position, Track track) {
         Log.d(TAG, "onTrackClick: clicked");
         Intent intent = new Intent(getActivity(), SearchableActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("track_chart", (track.getArtist().getName() + " " + track.getName()));
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

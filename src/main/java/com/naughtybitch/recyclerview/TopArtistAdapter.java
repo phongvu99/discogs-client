@@ -43,8 +43,10 @@ public class TopArtistAdapter extends RecyclerView.Adapter<TopArtistAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TextView textView = holder.artist_name;
-        textView.setText(artists.get(position).getName());
+        TextView artist_name = holder.artist_name;
+        artist_name.setText(artists.get(position).getName());
+        TextView artist_position = holder.artist_position;
+        artist_position.setText(String.valueOf(position + 1));
     }
 
     @Override
@@ -58,11 +60,13 @@ public class TopArtistAdapter extends RecyclerView.Adapter<TopArtistAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView artist_name;
+        private TextView artist_name, artist_position;
+
         OnClickItemListener onClickItemListener;
 
         public ViewHolder(View view, OnClickItemListener onClickItemListener) {
             super(view);
+            artist_position = view.findViewById(R.id.artist_position);
             artist_name = view.findViewById(R.id.artist_name);
             this.onClickItemListener = onClickItemListener;
 

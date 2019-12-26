@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +46,8 @@ public class TopArtistsFragment extends Fragment implements TopArtistAdapter.OnC
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String lastfm_api_key, lastfm_shared_secret_key;
+    private LinearLayout artist_chart;
+    private ProgressBar progressBar;
     private RecyclerView rv_chart;
     private TopArtistAdapter topArtistAdapter;
     private Context context = getActivity();
@@ -103,6 +107,8 @@ public class TopArtistsFragment extends Fragment implements TopArtistAdapter.OnC
     }
 
     private void initView(View v) {
+        artist_chart = v.findViewById(R.id.artist_chart);
+        progressBar = v.findViewById(R.id.progress_circular);
         rv_chart = v.findViewById(R.id.rv_chart);
         rv_chart.setLayoutManager(new LinearLayoutManager(context));
         topArtistAdapter = new TopArtistAdapter();
@@ -123,6 +129,8 @@ public class TopArtistsFragment extends Fragment implements TopArtistAdapter.OnC
         call.enqueue(new Callback<TopArtistsResponse>() {
             @Override
             public void onResponse(Call<TopArtistsResponse> call, retrofit2.Response<TopArtistsResponse> response) {
+                artist_chart.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
                 if (response.body() != null) {
                     TopArtistsResponse topArtistsResponse = response.body();
                     updateChart(topArtistsResponse);
@@ -133,6 +141,8 @@ public class TopArtistsFragment extends Fragment implements TopArtistAdapter.OnC
             @Override
             public void onFailure(Call<TopArtistsResponse> call, Throwable t) {
                 Log.e("CHART_CAT", t.getMessage());
+                progressBar.setVisibility(View.GONE);
+                artist_chart.setVisibility(View.GONE);
             }
         });
     }
@@ -165,6 +175,9 @@ public class TopArtistsFragment extends Fragment implements TopArtistAdapter.OnC
     public void onArtistClick(int position, Artist artist) {
         Log.d(TAG, "onArtistClick: clicked");
         Intent intent = new Intent(getActivity(), SearchableActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("artist_chart", artist.getName());
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

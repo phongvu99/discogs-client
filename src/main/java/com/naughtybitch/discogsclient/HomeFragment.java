@@ -167,7 +167,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         TabLayout tabLayout = view.findViewById(R.id.tab);
         tabLayout.setupWithViewPager(pager);
 
-
         return view;
     }
 

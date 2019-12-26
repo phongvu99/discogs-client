@@ -1,4 +1,4 @@
-package com.naughtybitch.label;
+package com.naughtybitch.discogsclient.label;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
